@@ -1,7 +1,8 @@
-import App, { Application } from '../../Core/Application/Application';
+import { createApp } from '../../Application/Application';
+import IApp from '../../Interfaces/IApp';
 
 test('Application receives a correct instance', () => {
-  expect(App).toBeInstanceOf(Application);
+  expect(createApp({})).toBeInstanceOf(typeof IApp);
 });
 
 test('Application init test', async (done) => {

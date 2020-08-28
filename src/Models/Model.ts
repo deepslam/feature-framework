@@ -1,8 +1,13 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { IModel } from '../Interfaces/IModel';
 import Application from '../Application/Application';
 
-export default class AbstractModel {
+import { LoadedModelType, ModelField } from '../Types';
+
+export default class Model implements IModel {
   [key: string]: unknown;
+
+  fields: Record<string, ModelField<unknown>> = {};
 
   protected static asyncStorageKey: string = '';
 
@@ -60,8 +65,3 @@ export default class AbstractModel {
     return new Promise((resolve) => resolve(true));
   }
 }
-
-export type LoadedModelType<T> = {
-  isEmptyModel: boolean;
-  instance: T;
-};

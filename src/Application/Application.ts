@@ -1,14 +1,14 @@
-import NativeConfig from 'react-native-config';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { pick } from 'dot-object';
 import { Store, configureStore, Reducer, Slice } from '@reduxjs/toolkit';
 
-import { AppFeatures, AppReducers, Config, AppInitParams } from '../types';
+import { AppFeatures, AppReducers, AppConfig, AppInitParams } from '../Types';
 
 import IApp from '../Interfaces/IApp';
 
-class Application<F, R, C> implements IApp {
+class Application<F = AppFeatures, R = AppReducers, C = AppConfig>
+  implements IApp {
   private initialized: boolean = false;
 
   private languages: string[] = [];
@@ -84,13 +84,6 @@ class Application<F, R, C> implements IApp {
 
   public cfg(path: string): object | number | string {
     return pick(path, this.config);
-  }
-
-  public env(): string {
-    if (!NativeConfig.APP_ENVIRONMENT) {
-      throw Error('Environment is not set');
-    }
-    return NativeConfig.APP_ENVIRONMENT;
   }
 
   error(err: string): never {

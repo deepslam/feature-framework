@@ -1,8 +1,15 @@
-import Application from '../../Core/Application/Application';
-import AbstractFeature from '../../Core/Models/AbstractFeature';
-import IFeature from '../../Core/Interfaces/IFeature';
+import Feature from '../../Models/Feature';
 
-class TestFeature extends AbstractFeature implements IFeature {
+class TestFeature extends Feature<
+  {
+    name: string;
+    id: number;
+  },
+  {
+    loaded: (item: boolean) => void;
+  },
+  {}
+> {
   readonly id = 'TestFeature';
 
   getConfig() {
@@ -22,6 +29,8 @@ class TestFeature extends AbstractFeature implements IFeature {
   }
 }
 
-test('Features test', () => {});
+test('Features test', () => {
+  const feature = new TestFeature({});
+});
 
 it('Should be able to register a new feature', async () => {});
