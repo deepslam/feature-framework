@@ -1,5 +1,5 @@
 import { Reducer } from '@reduxjs/toolkit';
-import { AppFeatures } from './FeatureTypes';
+import { IFeature } from '../Interfaces';
 
 export type AppConfig =
   | number
@@ -15,3 +15,5 @@ export type AppInitParams<F = AppFeatures, R = AppReducers, C = AppConfig> = {
   config: R;
   reducers: C;
 };
+
+export type AppFeatures = Record<string, IFeature>;

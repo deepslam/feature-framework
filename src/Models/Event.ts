@@ -1,4 +1,3 @@
-import { IFeature } from '../Interfaces';
 import { EventPrivateType } from '../Types';
 import IEvent from '../Interfaces/IEvent';
 
@@ -7,12 +6,14 @@ const privateEvents: EventPrivateType<Function> = new WeakMap<
   Function[]
 >();
 
-export abstract class FeatureEvent<T = unknown> implements IEvent<T> {
+export default class Event<T = unknown> implements IEvent<T> {
   subscribe(func: (item: T) => void) {
     if (privateEvents.has(this)) {
-      privateEvents.set([...privateEvents.get(this), func]);
+      const events = privateEvents.get(this);
+      events?.push(func);
+      privateEvents.set(this, events!);
     } else {
-      privateEvents.set([func]);
+      privateEvents.set(this, [func]);
     }
   }
   unsubscribe() {}

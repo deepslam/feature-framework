@@ -1,10 +1,6 @@
 import { Slice } from '@reduxjs/toolkit';
-import { IFeature, IEvent } from '../Interfaces';
-import {
-  FeatureOptions,
-  FeatureComponentType,
-  FeatureConfigType,
-} from '../Types';
+import { IFeature, IEvent, IModel } from '../Interfaces';
+import { FeatureOptions, FeatureConfigType } from '../Types';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
@@ -17,17 +13,15 @@ const privateData = new WeakMap<
 
 export default abstract class Feature<
   C = Record<string, FeatureConfigType>,
-  E = Record<string, IEvent<() => void>>,
+  E = Record<string, IEvent<unknown>>,
   R = Record<string, Slice>
 > implements IFeature<C, E, R> {
-  protected slices: R;
   protected config: C;
-  protected events: E;
-
-  constructor(options: FeatureOptions<C, E, R>) {
-    this.slices = options.slices as R;
-    this.events = { ...options.events } as E;
-    this.config = options.config as C;
+  constructor(protected extendedConfig: Partial<C>) {
+    this.config = {
+      ...this.config,
+      ...extendedConfig,
+    };
   }
 
   init(this: IFeature): Promise<boolean> {
@@ -40,10 +34,22 @@ export default abstract class Feature<
   }
 
   abstract initFeature(): Promise<boolean>;
-  abstract components(): Record<string, FeatureComponentType>;
+  abstract getSubFeatures(): Record<string, IFeature>;
+  abstract getModels(): Record<string, IModel>;
 
-  getEvents(): E {
-    return this.events;
+  abstract getEvents(): E;
+
+  abstract getSlices(): R;
+
+  getConfig(): C {
+    return this.config;
+  }
+
+  extendConfig(newConfig: Partial<C>) {
+    this.config = {
+      ...this.config,
+      ...newConfig,
+    };
   }
 
   isInitialized(this: IFeature) {
@@ -59,9 +65,4 @@ export default abstract class Feature<
   hasSlice(this: IFeature): boolean {
     return Object.keys(this.slices).length > 0 && this.isInitialized();
   }
-
-  getConfig<K = Extract<C, keyof C>>(key: K): any {}
-
-  on(event, callback) {}
-  fireEvent(event) {}
 }

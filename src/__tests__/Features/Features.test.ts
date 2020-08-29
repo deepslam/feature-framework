@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable import/no-unresolved */
-import { FeatureEvent } from 'Models/FeatureEvent';
+import { FeatureEvent } from '../../Models/Event';
 import Feature from '../../Models/Feature';
 import { IFeature, IEvent } from '../../Interfaces';
 
@@ -12,28 +12,6 @@ type TestFeatureConfig = {
 type TestFeatureEvents = {
   loaded: IEvent<boolean>;
 };
-
-class TestFeature extends Feature<TestFeatureConfig, TestFeatureEvents, null> {
-  components() {
-    return {};
-  }
-
-  getConfig() {
-    return {};
-  }
-
-  initFeature() {
-    return new Promise((resolve) => resolve(true)) as Promise<boolean>;
-  }
-
-  models() {
-    return {};
-  }
-
-  screens() {
-    return {};
-  }
-}
 
 class LoadedTestFeatureEvent extends FeatureEvent<boolean> {}
 
