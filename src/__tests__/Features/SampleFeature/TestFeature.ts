@@ -10,11 +10,7 @@ type TestFeatureEvents = {
   loaded: IEvent<boolean>;
 };
 
-export default class TestFeature extends Feature<
-  TestFeatureConfig,
-  TestFeatureEvents,
-  null
-> {
+export default class TestFeature extends Feature<TestFeatureConfig> {
   components() {
     return {};
   }
@@ -26,13 +22,23 @@ export default class TestFeature extends Feature<
     };
   }
 
-  getSubFeatures(): {};
+  getSubFeatures() {
+    return {};
+  }
 
   initFeature() {
     return new Promise((resolve) => resolve(true)) as Promise<boolean>;
   }
 
   getModels() {
+    return {};
+  }
+
+  getSlices() {
+    return {};
+  }
+
+  getEvents() {
     return {};
   }
 }
