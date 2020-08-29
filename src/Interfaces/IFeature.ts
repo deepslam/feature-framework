@@ -1,33 +1,39 @@
 import { Slice } from '@reduxjs/toolkit';
-
+import IEvent from './IEvent';
 import {
   FeatureConfigType,
-  FeatureEvent,
   FeatureOptions,
   FeatureComponentType,
 } from '../Types';
 
 export default interface IFeature<
-  C = FeatureConfigType,
-  E = Record<string, FeatureEvent<() => void>>,
+  C = Record<string, FeatureConfigType>,
+  E = Record<string, IEvent<unknown>>,
   S = Record<string, Slice>
 > {
+  slices: S;
+  events: E;
+  config: C;
+
   constructor(options: FeatureOptions<C, E, S>): IFeature<C, E, S>;
 
   init(): Promise<boolean>;
   isInitialized(): boolean;
   setInitialized(val: boolean): void;
-  hasSlice(): boolean;
+
+  getEvents(): E;
 
   initFeature(): Promise<boolean>;
-  extendConfig<K extends keyof C>(key: K, value: C[K]): void;
 
-  on(event: keyof E, callback: () => void): void;
-  fireEvent(event: keyof E): void;
+  extendConfig<K = Extract<C, keyof C>>(key: K, value: C[K]): void;
+  getConfig<K = Extract<C, keyof C>>(key: K): any;
+
+  on<K extends keyof E>(event: K, callback: (item: E[K]) => void): void;
+  fireEvent<K extends keyof E>(event: K): void;
 
   // models(): Record<string, typeof AbstractModel>;
   components(): Record<string, FeatureComponentType>;
 
-  getConfig(): Record<string, FeatureConfigType>;
-  // getSlice(): Record<string, Slice>;
+  hasSlice(): boolean;
+  getSlices(): Record<string, Slice>;
 }

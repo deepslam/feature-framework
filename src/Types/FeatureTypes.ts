@@ -5,6 +5,7 @@ export type FeatureComponentType =
   | React.ElementType
   | FeatureComponentType[]
   | { [name: string]: FeatureComponentType };
+
 export type FeatureConfigType =
   | boolean
   | string
@@ -17,13 +18,13 @@ export type FeatureOptions<
   E = Record<string, FeatureEvent<() => void>>,
   S = Record<string, Slice>
 > = {
-  config?: C;
-  events?: E;
-  slices?: S;
+  config: C;
+  events: E;
+  slices: S;
 };
 
 export type FeatureInstance = IFeature;
 
 export type AppFeatures = Record<string, FeatureInstance>;
 
-export type FeatureEvent<C extends object> = C;
+export type FeatureEvent<C> = C;

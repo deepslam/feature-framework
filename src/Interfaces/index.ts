@@ -1,3 +1,6 @@
-export * from './IFeature';
-export * from './IAbsractFeature';
-export * from './IApp';
+import IFeature from './IFeature';
+import IModel from './IModel';
+import IApp from './IApp';
+import IEvent from './IEvent';
+
+export { IFeature, IModel, IApp, IEvent };

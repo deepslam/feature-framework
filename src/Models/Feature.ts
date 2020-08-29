@@ -1,5 +1,10 @@
-import IFeature from '../Interfaces/IFeature';
-import { FeatureOptions, FeatureComponentType } from '../Types';
+import { Slice } from '@reduxjs/toolkit';
+import { IFeature, IEvent } from '../Interfaces';
+import {
+  FeatureOptions,
+  FeatureComponentType,
+  FeatureConfigType,
+} from '../Types';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
@@ -10,15 +15,19 @@ const privateData = new WeakMap<
   Partial<AbstractFeaturePrivateDataType>
 >();
 
-export default abstract class Feature<C, E, R> implements IFeature {
-  public readonly slices?: R;
-  public readonly config?: C;
-  public readonly events?: E;
+export default abstract class Feature<
+  C = Record<string, FeatureConfigType>,
+  E = Record<string, IEvent<() => void>>,
+  R = Record<string, Slice>
+> implements IFeature<C, E, R> {
+  protected slices: R;
+  protected config: C;
+  protected events: E;
 
   constructor(options: FeatureOptions<C, E, R>) {
-    this.slices = options.slices;
-    this.events = options.events;
-    this.config = options.config;
+    this.slices = options.slices as R;
+    this.events = { ...options.events } as E;
+    this.config = options.config as C;
   }
 
   init(this: IFeature): Promise<boolean> {
@@ -33,19 +42,25 @@ export default abstract class Feature<C, E, R> implements IFeature {
   abstract initFeature(): Promise<boolean>;
   abstract components(): Record<string, FeatureComponentType>;
 
-  isInitialized() {
+  getEvents(): E {
+    return this.events;
+  }
+
+  isInitialized(this: IFeature) {
     return privateData.get(this)?.initialized || false;
   }
 
-  setInitialized(initialized: boolean) {
+  setInitialized(this: IFeature, initialized: boolean) {
     privateData.set(this, {
       initialized,
     });
   }
 
   hasSlice(this: IFeature): boolean {
-    return Object.keys(this.getSlice()).length > 0 && this.isInitialized();
+    return Object.keys(this.slices).length > 0 && this.isInitialized();
   }
+
+  getConfig<K = Extract<C, keyof C>>(key: K): any {}
 
   on(event, callback) {}
   fireEvent(event) {}
