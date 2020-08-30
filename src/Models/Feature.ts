@@ -1,4 +1,5 @@
 import { Slice } from '@reduxjs/toolkit';
+import SuccessFullyInitializedEvent from 'Events/SuccessfullyInitializedEvent';
 import { IFeature, IEvent, IModel } from '../Interfaces';
 import { FeatureConfigType } from '../Types';
 
@@ -15,19 +16,33 @@ export default abstract class Feature<C = Record<string, FeatureConfigType>>
   implements IFeature<C> {
   constructor(protected config: C) {}
 
-  init(this: IFeature): Promise<boolean> {
+  init(this: Feature & IFeature): Promise<boolean> {
     return new Promise((resolve) => {
       this.initFeature().then((result) => {
         this.setInitialized(true);
+        this.getBaseEvents().initialized.fire(true);
         resolve(result);
       });
     });
   }
 
+  getBaseEvents(): { initialized: IEvent<boolean> } {
+    return {
+      initialized: new SuccessFullyInitializedEvent(),
+    };
+  }
+
+  getEvents(): Record<string, IEvent<unknown>> {
+    return {
+      ...this.getBaseEvents(),
+      ...this.getFeatureEvents(),
+    };
+  }
+
   abstract initFeature(): Promise<boolean>;
   abstract getSubFeatures(): Record<string, IFeature>;
   abstract getModels(): Record<string, IModel>;
-  abstract getEvents(): Record<string, IEvent<unknown>>;
+  abstract getFeatureEvents(): Record<string, IEvent<unknown>>;
   abstract getSlices(): Record<string, Slice>;
 
   getConfig(): C {

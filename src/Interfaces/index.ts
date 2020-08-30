@@ -1,6 +1,5 @@
-import IFeature from './IFeature';
-import IModel from './IModel';
-import IApp from './IApp';
-import IEvent from './IEvent';
-
-export { IFeature, IModel, IApp, IEvent };
+export type { IFeature } from './IFeature';
+export type { IModel } from './IModel';
+export type { IApp } from './IApp';
+export type { IEvent } from './IEvent';
+export type { IFactory } from './IFactory';

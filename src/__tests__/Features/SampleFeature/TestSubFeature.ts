@@ -1,33 +1,29 @@
 import Feature from '../../../Models/Feature';
-import { IEvent } from '../../../Interfaces';
+import { IEvent, IFeature } from '../../../Interfaces';
 import TestFeatureLoadedEvent from '../Events/TestFeatureLoadedEvent';
-import TestSubFeature from './TestSubFeature';
 
-type TestFeatureConfig = {
-  name: string;
-  id: number;
+type TestSubFeatureConfig = {
+  enabled: boolean;
 };
 
-type TestFeatureEvents = {
+type TestSubFeatureEvents = {
   loaded: IEvent<boolean>;
+  created: IEvent<{ instance: IFeature; created: boolean }>;
 };
 
-export default class TestFeature extends Feature<TestFeatureConfig> {
+export default class TestSubFeature extends Feature<TestSubFeatureConfig> {
   components() {
     return {};
   }
 
-  getConfig(): TestFeatureConfig {
+  getConfig(): TestSubFeatureConfig {
     return {
-      name: 'test',
-      id: 2,
+      enabled: false,
     };
   }
 
   getSubFeatures() {
-    return {
-      SubFeature: new TestSubFeature({ enabled: false }),
-    };
+    return {};
   }
 
   initFeature() {
@@ -42,7 +38,7 @@ export default class TestFeature extends Feature<TestFeatureConfig> {
     return {};
   }
 
-  getEvents() {
+  getEvents(): TestSubFeatureEvents {
     return {
       loaded: new TestFeatureLoadedEvent(),
     };

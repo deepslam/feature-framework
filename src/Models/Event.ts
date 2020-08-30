@@ -16,7 +16,13 @@ export default class Event<T = unknown> implements IEvent<T> {
       privateEvents.set(this, [func]);
     }
   }
-  unsubscribe() {}
+  unsubscribe(func: (item: T) => void) {
+    if (privateEvents.has(this)) {
+      const events = privateEvents.get(this)!;
+      const filteredArray = events.filter((f) => f !== func)!;
+      privateEvents.set(this, filteredArray);
+    }
+  }
   fire(item: T) {
     if (privateEvents.has(this)) {
       privateEvents.get(this)!.forEach((func) => {

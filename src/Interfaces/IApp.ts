@@ -1,6 +1,6 @@
 import { AppFeatures, AppReducers, AppConfig, AppInitParams } from '../Types';
 
-export default interface IApp<F = AppFeatures, R = AppReducers, C = AppConfig> {
+export interface IApp<F = AppFeatures, R = AppReducers, C = AppConfig> {
   constructor(options: AppInitParams<F, R, C>): IApp<F, R, C>;
 
   features(): F;

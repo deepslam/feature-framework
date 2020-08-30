@@ -3,12 +3,13 @@ import IEvent from './IEvent';
 import IModel from './IModel';
 import { FeatureConfigType } from '../Types';
 
-export default interface IFeature<C = Record<string, FeatureConfigType>> {
+export interface IFeature<C = Record<string, FeatureConfigType>> {
   init(): Promise<boolean>;
   isInitialized(): boolean;
   setInitialized(val: boolean): void;
 
   getConfig(): C;
+  getBaseEvents(): Record<string, IEvent<unknown>>;
   getEvents(): Record<string, IEvent<unknown>>;
   getModels(): Record<string, IModel>;
   getSubFeatures(): Record<string, IFeature>;
