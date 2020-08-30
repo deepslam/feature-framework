@@ -42,7 +42,7 @@ export default class TestFeature extends Feature<TestFeatureConfig> {
     return {};
   }
 
-  getEvents() {
+  getFeatureEvents() {
     return {
       loaded: new TestFeatureLoadedEvent(),
     };

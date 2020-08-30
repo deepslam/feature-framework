@@ -1,9 +1,11 @@
 import { Slice } from '@reduxjs/toolkit';
-import IEvent from './IEvent';
-import IModel from './IModel';
+import { IEvent } from './IEvent';
+import { IModel } from './IModel';
 import { FeatureConfigType } from '../Types';
 
 export interface IFeature<C = Record<string, FeatureConfigType>> {
+  // new (config: C): IFeature;
+
   init(): Promise<boolean>;
   isInitialized(): boolean;
   setInitialized(val: boolean): void;

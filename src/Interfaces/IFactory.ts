@@ -1,11 +1,8 @@
-import { Feature, Model } from '../Models';
+import { IFeature } from './IFeature';
 
 export interface IFactory {
-  create<T extends Feature<Pick<T, 'getConfig'>> | Model>(
+  create<T extends IFeature<P>, P extends Pick<T, 'getConfig'>>(
     type: T,
-  ): new (...args: unknown[]) => T;
-  clone<T extends Feature<Pick<T, 'getConfig'>> | Model>(
-    type: T,
-    instance: new (...args: unknown[]) => T,
-  ): new (...args: unknown[]) => T;
+    params: P,
+  ): new (args: P) => T;
 }

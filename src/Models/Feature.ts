@@ -16,7 +16,7 @@ export default abstract class Feature<C = Record<string, FeatureConfigType>>
   implements IFeature<C> {
   constructor(protected config: C) {}
 
-  init(this: Feature & IFeature): Promise<boolean> {
+  init(this: IFeature): Promise<boolean> {
     return new Promise((resolve) => {
       this.initFeature().then((result) => {
         this.setInitialized(true);
