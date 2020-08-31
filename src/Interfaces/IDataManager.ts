@@ -1,4 +1,4 @@
 export interface IDataManager {
-  loadAsJSON(): Promise<string>;
-  saveAsJSON<T>(data: T | T[] | Record<string, T>): Promise<boolean>;
+  load(key: string): Promise<string>;
+  save<T>(key: string, data: T | T[] | Record<string, T>): Promise<boolean>;
 }

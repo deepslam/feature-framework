@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Slice } from '@reduxjs/toolkit';
 import { v4 as uuid4 } from 'uuid';
 import SuccessFullyInitializedEvent from '../Events/SuccessfullyInitializedEvent';

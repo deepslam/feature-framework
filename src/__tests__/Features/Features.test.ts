@@ -1,4 +1,3 @@
-import SuccessFullyInitializedEvent from '../../Events/SuccessfullyInitializedEvent';
 import TestFeature from '../TestData/SampleFeature/TestFeature';
 
 describe('Features test', () => {
@@ -55,6 +54,4 @@ describe('Features test', () => {
         done(e);
       });
   });
-
-  it('Events test', async () => {});
 });
