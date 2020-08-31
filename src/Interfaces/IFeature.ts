@@ -4,18 +4,19 @@ import { IModel } from './IModel';
 import { FeatureConfigType } from '../Types';
 
 export interface IFeature<C = Record<string, FeatureConfigType>> {
-  // new (config: C): IFeature;
+  baseEvents: Record<string, IEvent<unknown>>;
+  events: Record<string, IEvent<unknown>>;
+  features: Record<string, IFeature>;
+  slices: Record<string, Slice>;
 
   init(): Promise<boolean>;
   isInitialized(): boolean;
   setInitialized(val: boolean): void;
 
   getConfig(): C;
-  getBaseEvents(): Record<string, IEvent<unknown>>;
+
   getEvents(): Record<string, IEvent<unknown>>;
   getModels(): Record<string, IModel>;
-  getSubFeatures(): Record<string, IFeature>;
-  getSlices(): Record<string, Slice>;
 
   initFeature(): Promise<boolean>;
 

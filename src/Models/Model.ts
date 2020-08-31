@@ -1,4 +1,3 @@
-// import AsyncStorage from '@react-native-community/async-storage';
 import { IDataManager } from '../Interfaces/IDataManager';
 import { IModel } from '../Interfaces/IModel';
 
@@ -29,13 +28,15 @@ export default class Model implements IModel {
 
   public static loadAsJSON<T extends typeof Model>(
     this: T,
+    manager: IDataManager,
   ): Promise<LoadedModelType<InstanceType<T>>> {
     return new Promise((resolve, reject) => {
       if (!this.asyncStorageKey) {
         reject(new Error('Model does not have a storage key'));
       }
 
-      AsyncStorage.getItem(this.asyncStorageKey)
+      manager
+        .loadAsJSON()
         .then((json: string) => {
           if (json) {
             resolve({

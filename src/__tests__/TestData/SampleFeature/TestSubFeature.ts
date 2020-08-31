@@ -4,9 +4,11 @@ type TestSubFeatureConfig = {
   enabled: boolean;
 };
 
-type TestSubFeatureEvents = {};
-
 export default class TestSubFeature extends Feature<TestSubFeatureConfig> {
+  public readonly features = {};
+  public readonly events = {};
+  public readonly slices = {};
+
   components() {
     return {};
   }
@@ -17,23 +19,11 @@ export default class TestSubFeature extends Feature<TestSubFeatureConfig> {
     };
   }
 
-  getSubFeatures() {
-    return {};
-  }
-
   initFeature() {
     return new Promise((resolve) => resolve(true)) as Promise<boolean>;
   }
 
   getModels() {
-    return {};
-  }
-
-  getSlices() {
-    return {};
-  }
-
-  getFeatureEvents(): TestSubFeatureEvents {
     return {};
   }
 }

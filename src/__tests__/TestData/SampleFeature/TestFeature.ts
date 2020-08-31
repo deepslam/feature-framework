@@ -8,26 +8,17 @@ type TestFeatureConfig = {
   id: number;
 };
 
-type TestFeatureEvents = {
-  loaded: IEvent<boolean>;
-};
-
 export default class TestFeature extends Feature<TestFeatureConfig> {
+  public readonly features = {
+    SubFeature: new TestSubFeature({ enabled: false }),
+  };
+  public readonly slices = {};
+  public readonly events = {
+    loaded: new TestFeatureLoadedEvent(),
+  };
+
   components() {
     return {};
-  }
-
-  getConfig(): TestFeatureConfig {
-    return {
-      name: 'test',
-      id: 2,
-    };
-  }
-
-  getSubFeatures() {
-    return {
-      SubFeature: new TestSubFeature({ enabled: false }),
-    };
   }
 
   initFeature() {
@@ -36,15 +27,5 @@ export default class TestFeature extends Feature<TestFeatureConfig> {
 
   getModels() {
     return {};
-  }
-
-  getSlices() {
-    return {};
-  }
-
-  getFeatureEvents() {
-    return {
-      loaded: new TestFeatureLoadedEvent(),
-    };
   }
 }

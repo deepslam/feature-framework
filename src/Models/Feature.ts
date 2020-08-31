@@ -1,4 +1,5 @@
 import { Slice } from '@reduxjs/toolkit';
+import { v4 as uuid4 } from 'uuid';
 import SuccessFullyInitializedEvent from '../Events/SuccessfullyInitializedEvent';
 import { IFeature, IEvent, IModel } from '../Interfaces';
 import { FeatureConfigType } from '../Types';
@@ -7,43 +8,48 @@ type AbstractFeaturePrivateDataType = {
   initialized: boolean;
 };
 
-const privateData = new WeakMap<
-  IFeature,
-  Partial<AbstractFeaturePrivateDataType>
->();
+const privateData = new Map<string, Partial<AbstractFeaturePrivateDataType>>();
 
 export default abstract class Feature<C = Record<string, FeatureConfigType>>
   implements IFeature<C> {
-  constructor(protected config: C) {}
+  public readonly uuid: string;
+  public readonly baseEvents: { initialized: IEvent<boolean> } = {
+    initialized: new SuccessFullyInitializedEvent(),
+  };
+  abstract events: Record<string, IEvent<unknown>>;
+  abstract features: Record<string, IFeature>;
+  abstract slices: Record<string, Slice>;
+
+  constructor(protected config: C) {
+    this.uuid = uuid4();
+  }
 
   init(this: IFeature): Promise<boolean> {
     return new Promise((resolve) => {
-      this.initFeature().then((result) => {
-        this.setInitialized(true);
-        this.getBaseEvents().initialized.fire(true);
-        resolve(result);
+      const promises: unknown[] = [];
+      Object.keys(this.features).forEach((key) => {
+        const feature = this.features[key];
+        promises.push(feature.init());
+      });
+      Promise.all(promises).then(() => {
+        this.initFeature().then((result) => {
+          this.setInitialized(result);
+          this.baseEvents.initialized.fire(result);
+          resolve(result);
+        });
       });
     });
   }
 
-  getBaseEvents(): { initialized: IEvent<boolean> } {
-    return {
-      initialized: new SuccessFullyInitializedEvent(),
-    };
-  }
-
   getEvents(): Record<string, IEvent<unknown>> {
     return {
-      ...this.getBaseEvents(),
-      ...this.getFeatureEvents(),
+      ...this.baseEvents,
+      ...this.events,
     };
   }
 
   abstract initFeature(): Promise<boolean>;
-  abstract getSubFeatures(): Record<string, IFeature>;
   abstract getModels(): Record<string, IModel>;
-  abstract getFeatureEvents(): Record<string, IEvent<unknown>>;
-  abstract getSlices(): Record<string, Slice>;
 
   getConfig(): C {
     return this.config;
@@ -56,17 +62,17 @@ export default abstract class Feature<C = Record<string, FeatureConfigType>>
     };
   }
 
-  isInitialized(this: IFeature) {
-    return privateData.get(this)?.initialized || false;
+  isInitialized() {
+    return privateData.get(this.uuid)?.initialized || false;
   }
 
-  setInitialized(this: IFeature, initialized: boolean) {
-    privateData.set(this, {
+  setInitialized(initialized: boolean) {
+    privateData.set(this.uuid, {
       initialized,
     });
   }
 
   hasSlice(this: IFeature): boolean {
-    return Object.keys(this.getSlices()).length > 0 && this.isInitialized();
+    return Object.keys(this.slices).length > 0 && this.isInitialized();
   }
 }
