@@ -41,13 +41,6 @@ export default abstract class Feature<C = Record<string, FeatureConfigType>>
     });
   }
 
-  getEvents(): Record<string, IEvent<unknown>> {
-    return {
-      ...this.baseEvents,
-      ...this.events,
-    };
-  }
-
   abstract initFeature(): Promise<boolean>;
   abstract getModels(): Record<string, IModel>;
 

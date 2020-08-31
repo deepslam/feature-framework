@@ -14,8 +14,6 @@ export interface IFeature<C = Record<string, FeatureConfigType>> {
   setInitialized(val: boolean): void;
 
   getConfig(): C;
-
-  getEvents(): Record<string, IEvent<unknown>>;
   getModels(): Record<string, IModel>;
 
   initFeature(): Promise<boolean>;

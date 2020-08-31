@@ -1,3 +1,4 @@
+import SuccessFullyInitializedEvent from '../../Events/SuccessfullyInitializedEvent';
 import TestFeature from '../TestData/SampleFeature/TestFeature';
 
 describe('Features test', () => {
@@ -20,15 +21,6 @@ describe('Features test', () => {
       id: 222,
       name: 'edited',
     });
-
-    /*
-    feature.getSubFeatures().SubFeature.init();
-    feature.getEvents().loaded.subscribe((result) => {
-      console.log(result);
-    });
-
-    feature.getEvents().loaded.fire(true);
-    */
   });
 
   test('Init test', async (done) => {
@@ -37,9 +29,17 @@ describe('Features test', () => {
       name: 'test',
     });
 
+    const eventFeatureInitializedFunction = jest.fn();
+    const eventSubFeatureInitializedFunction = jest.fn();
+    feature.baseEvents.initialized.fire = eventFeatureInitializedFunction;
+    feature.features.SubFeature.baseEvents.initialized.fire = eventSubFeatureInitializedFunction;
+
     expect(feature.isInitialized()).toBeFalsy();
 
     expect(feature.features.SubFeature.isInitialized()).toBeFalsy();
+
+    expect(eventFeatureInitializedFunction).not.toHaveBeenCalled();
+    expect(eventSubFeatureInitializedFunction).not.toHaveBeenCalled();
 
     feature
       .init()
@@ -47,6 +47,8 @@ describe('Features test', () => {
         expect(result).toBeTruthy();
         expect(feature.isInitialized()).toBeTruthy();
         expect(feature.features.SubFeature.isInitialized()).toBeTruthy();
+        expect(eventFeatureInitializedFunction).toHaveBeenCalledTimes(1);
+        expect(eventSubFeatureInitializedFunction).toHaveBeenCalledTimes(1);
         done();
       })
       .catch((e) => {
