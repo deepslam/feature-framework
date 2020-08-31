@@ -1,5 +1,4 @@
 import Feature from '../../../Models/Feature';
-import { IEvent, IFeature } from '../../../Interfaces';
 
 type TestSubFeatureConfig = {
   enabled: boolean;

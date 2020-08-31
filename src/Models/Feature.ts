@@ -1,5 +1,5 @@
 import { Slice } from '@reduxjs/toolkit';
-import SuccessFullyInitializedEvent from 'Events/SuccessfullyInitializedEvent';
+import SuccessFullyInitializedEvent from '../Events/SuccessfullyInitializedEvent';
 import { IFeature, IEvent, IModel } from '../Interfaces';
 import { FeatureConfigType } from '../Types';
 

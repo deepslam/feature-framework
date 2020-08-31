@@ -1,12 +1,10 @@
-import TestFeature from './SampleFeature/TestFeature';
-import { Factory } from '../../Models';
+import TestFeature from '../TestData/SampleFeature/TestFeature';
 
 test('Features test', () => {
   const feature = new TestFeature({
     id: 222,
     name: 'test',
   });
-  Factory.createFeature(TestFeature, { log: 'test ' });
 
   feature.getSubFeatures().SubFeature.init();
 

@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
+import { IDataManager } from '../Interfaces/IDataManager';
 import { IModel } from '../Interfaces/IModel';
-import Application from '../Application/Application';
 
 import { LoadedModelType, ModelField } from '../Types';
 
@@ -11,7 +11,7 @@ export default class Model implements IModel {
 
   protected static asyncStorageKey: string = '';
 
-  public static restoreFromJSON<T extends typeof AbstractModel>(
+  public static restoreFromJSON<T extends typeof Model>(
     this: T,
     json: string,
   ): InstanceType<T> {
@@ -27,16 +27,16 @@ export default class Model implements IModel {
     return model as InstanceType<T>;
   }
 
-  public static load<T extends typeof AbstractModel>(
+  public static loadAsJSON<T extends typeof Model>(
     this: T,
   ): Promise<LoadedModelType<InstanceType<T>>> {
     return new Promise((resolve, reject) => {
       if (!this.asyncStorageKey) {
-        Application.error('Model does not have a storage key');
+        reject(new Error('Model does not have a storage key'));
       }
 
       AsyncStorage.getItem(this.asyncStorageKey)
-        .then((json) => {
+        .then((json: string) => {
           if (json) {
             resolve({
               instance: this.restoreFromJSON(json),
@@ -49,19 +49,19 @@ export default class Model implements IModel {
             isEmptyModel: true,
           });
         })
-        .catch((e) => reject(e));
+        .catch((e: Error) => reject(e));
     });
   }
 
-  public static getAsyncStorageKey(): string | undefined {
+  public static getAsyncStorageKey(): string | never {
     if (this.asyncStorageKey) return this.asyncStorageKey;
 
-    return Application.error(
+    throw new Error(
       `There is no async storage key in the model "${this.name}"`,
     );
   }
 
-  public static save(): Promise<boolean> {
-    return new Promise((resolve) => resolve(true));
+  public static saveAsJSON(manager: IDataManager): Promise<boolean> {
+    return manager.saveAsJSON(this);
   }
 }

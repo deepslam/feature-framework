@@ -1,5 +1,5 @@
 import { EventPrivateType } from '../Types';
-import IEvent from '../Interfaces/IEvent';
+import { IEvent } from '../Interfaces/IEvent';
 
 const privateEvents: EventPrivateType<Function> = new WeakMap<
   IEvent<unknown>,
