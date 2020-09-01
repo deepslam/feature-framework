@@ -24,9 +24,11 @@ module.exports = {
     jest: true,
   },
   extends: [
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
     'plugin:react/recommended',
-    'airbnb',
-    'react-native',
+    'plugin:jsx-a11y/recommended'
   ],
   globals: {
     Atomics: 'readonly',

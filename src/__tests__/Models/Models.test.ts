@@ -1,28 +1,20 @@
-import AbstractModel from '../../Core/Models/AbstractModel';
+import TestModel from '../TestData/TestModels/TestModel';
 
-class SampleModel extends AbstractModel {
-  public name: string = '';
+describe('Application models test', () => {
+  it('Should correctly store and read model fields', () => {
+    const instance = new TestModel({
+      id: 2,
+      name: 'test',
+    });
 
-  public email: string = '';
-}
+    expect(instance.fields.id).toBe(2);
+    expect(instance.fields.name).toBe('test');
 
-test('Try to store and restore the model', async (done) => {
-  const idealModel = new SampleModel();
-  idealModel.name = 'test';
-  idealModel.email = 'deepslam@gmail.com';
+    instance.update({
+      name: 'John',
+    });
 
-  const json = JSON.stringify(idealModel);
-
-  const restoredModel = SampleModel.restoreFromJSON(json);
-
-  expect(idealModel).toEqual(restoredModel);
-  expect(restoredModel).toBeInstanceOf(SampleModel);
-  expect(restoredModel.name).toBe('test');
-  expect(restoredModel.email).toBe('deepslam@gmail.com');
-
-  idealModel.name = 'new';
-  expect(restoredModel.name).toBe('test');
-  expect(idealModel.name).toBe('new');
-
-  done();
+    expect(instance.fields.name).toBe('John');
+    expect(instance.fields.id).toBe(2);
+  });
 });

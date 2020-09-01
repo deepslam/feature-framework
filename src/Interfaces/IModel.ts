@@ -1,8 +1,5 @@
-import { ModelField } from '../Types';
+export interface IModel<T = Record<string, unknown>> {
+  fields: T;
 
-export interface IModel<F = Record<string, ModelField<unknown>>> {
-  fields: F;
-
-  setFieldValue<K extends keyof F>(key: K): void;
-  getFieldValue<K extends keyof F>(key: K): void;
+  update(fields: Partial<T>): void;
 }

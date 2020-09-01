@@ -3,9 +3,9 @@ import { LoadedModelType } from '../Types/ModelTypes';
 import { IDataManager } from '../Interfaces/IDataManager';
 import Model from '../Models/Model';
 
-function Saveable<T extends Constructor>(Base: T) {
-  return class extends Base {
-    storageKey: string;
+export function Saveable<T extends Constructor>(Base: T) {
+  abstract class Mixin extends Base {
+    abstract storageKey: string;
     public static restoreFromJSON<T extends typeof Model>(
       this: T,
       json: string,
@@ -32,7 +32,7 @@ function Saveable<T extends Constructor>(Base: T) {
         }
 
         manager
-          .load()
+          .load(this.storageKey)
           .then((json: string) => {
             if (json) {
               resolve({
@@ -50,16 +50,10 @@ function Saveable<T extends Constructor>(Base: T) {
       });
     }
 
-    public static getStorageKey(): string | never {
-      if (this.asyncStorageKey) return this.asyncStorageKey;
-
-      throw new Error(
-        `There is no async storage key in the model "${this.name}"`,
-      );
-    }
-
     public static saveAsJSON(manager: IDataManager): Promise<boolean> {
-      return manager.saveAsJSON(this);
+      return manager.save(this.storageKey, this);
     }
-  };
+  }
+
+  return Mixin;
 }

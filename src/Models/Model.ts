@@ -1,19 +1,17 @@
-import { IDataManager } from '../Interfaces/IDataManager';
 import { IModel } from '../Interfaces/IModel';
 
-import { LoadedModelType, ModelField } from '../Types';
+export default abstract class Model<T = Record<string, unknown>>
+  implements IModel<T> {
+  public fields: T;
 
-export default class Model implements IModel {
-  [key: string]: unknown;
-
-  fields: Record<string, ModelField<unknown>> = {};
-
-  protected static asyncStorageKey: string = '';
-
-  setFieldValue<K extends string>(key: K): void {
-    throw new Error('Method not implemented.');
+  constructor(options: T) {
+    this.fields = options;
   }
-  getFieldValue<K extends string>(key: K): void {
-    throw new Error('Method not implemented.');
+
+  update(fields: Partial<T>): void {
+    this.fields = {
+      ...this.fields,
+      ...fields,
+    };
   }
 }
