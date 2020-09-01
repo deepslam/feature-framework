@@ -1,20 +1,9 @@
 module.exports = {
   settings: {
-    'import/extensions': [
-      '.ts',
-      '.tsx',
-      '.js',
-      '.jsx',
-    ],
+    'import/extensions': ['.ts', '.tsx', '.js', '.jsx'],
     'import/resolver': {
       node: {
-        extensions: [
-          '.ts',
-          '.tsx',
-          '.js',
-          '.jsx',
-          '.json',
-        ],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       },
     },
   },
@@ -28,7 +17,7 @@ module.exports = {
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
     'plugin:react/recommended',
-    'plugin:jsx-a11y/recommended'
+    'plugin:jsx-a11y/recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -42,11 +31,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-    'jest',
-  ],
+  plugins: ['react', '@typescript-eslint', 'jest'],
   rules: {
     'operator-linebreak': 0,
     'consistent-return': ['error', { treatUndefinedAsUnspecified: true }],
@@ -63,22 +48,13 @@ module.exports = {
     'class-methods-use-this': 0,
     'implicit-arrow-linebreak': 0,
     'import/no-namespace': 0,
-    'import/no-unresolved': [2, { ignore: ['detox'] }],
     'import/prefer-default-export': 0,
     'import/no-cycle': 0,
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
     semi: 'off',
     '@typescript-eslint/semi': ['error'],
     'no-use-before-define': 0,
     '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/no-explicit-any': 0,
   },
 };

@@ -1,9 +1,11 @@
 import { EventPrivateType } from '../Types';
 import { IEvent } from '../Interfaces/IEvent';
 
-const privateEvents: EventPrivateType<Function> = new WeakMap<
+type FunctionType = (...args: any) => any;
+
+const privateEvents: EventPrivateType<FunctionType> = new WeakMap<
   IEvent<unknown>,
-  Function[]
+  FunctionType[]
 >();
 
 export default class Event<T = unknown> implements IEvent<T> {
@@ -11,7 +13,9 @@ export default class Event<T = unknown> implements IEvent<T> {
     if (privateEvents.has(this)) {
       const events = privateEvents.get(this);
       events?.push(func);
-      privateEvents.set(this, events!);
+      if (events) {
+        privateEvents.set(this, events);
+      }
     } else {
       privateEvents.set(this, [func]);
     }
@@ -19,8 +23,10 @@ export default class Event<T = unknown> implements IEvent<T> {
   unsubscribe(func: (item: T) => void) {
     if (privateEvents.has(this)) {
       const events = privateEvents.get(this)!;
-      const filteredArray = events.filter((f) => f !== func)!;
-      privateEvents.set(this, filteredArray);
+      if (events) {
+        const filteredArray = events.filter((f) => f !== func)!;
+        privateEvents.set(this, filteredArray);
+      }
     }
   }
   fire(item: T) {

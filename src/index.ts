@@ -1,6 +1,6 @@
 import { createApp } from './Application/Application';
-import AbstractFeature from './Models/AbstractFeature';
-import AbstractModel from './Models/AbstractModel';
+import AbstractFeature from './Models/Feature';
+import AbstractModel from './Models/Model';
 
 import IApp from './Interfaces/IApp';
 import IFeature from './Interfaces/IFeature';

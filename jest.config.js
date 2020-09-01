@@ -1,14 +1,7 @@
-/* eslint-disable import/no-commonjs */
 module.exports = {
-  roots: [
-    '<rootDir>/src',
-  ],
-  modulePaths: [
-    '<rootDir>',
-  ],
-  testMatch: [
-    '**/?(*.)+(spec|test).+(ts|tsx|js)',
-  ],
+  roots: ['<rootDir>/src'],
+  modulePaths: ['<rootDir>'],
+  testMatch: ['**/?(*.)+(spec|test).+(ts|tsx|js)'],
   transform: { '\\.ts$': ['ts-jest'] },
   resetMocks: true,
   verbose: true,

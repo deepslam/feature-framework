@@ -49,18 +49,18 @@ export default abstract class Feature<C = Record<string, FeatureConfigType>>
     return this.config;
   }
 
-  extendConfig(newConfig: Partial<C>) {
+  extendConfig(newConfig: Partial<C>): void {
     this.config = {
       ...this.config,
       ...newConfig,
     };
   }
 
-  isInitialized() {
+  isInitialized(): boolean {
     return privateData.get(this.uuid)?.initialized || false;
   }
 
-  setInitialized(initialized: boolean) {
+  setInitialized(initialized: boolean): void {
     privateData.set(this.uuid, {
       initialized,
     });
