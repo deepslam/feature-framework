@@ -14,31 +14,47 @@ describe('Collections test', () => {
     });
     const itemAddedCallback = jest.fn();
     const itemRemovedCallback = jest.fn();
+    const collectionClearedCallback = jest.fn();
     collection.events.onItemAdded.subscribe(itemAddedCallback);
     collection.events.onItemRemoved.subscribe(itemRemovedCallback);
+    collection.events.onCollectionCleared.subscribe(collectionClearedCallback);
     collection.events.onItemAdded.subscribe((item) => {
       expect(item).toBeInstanceOf(TestModel);
     });
     collection.events.onItemRemoved.subscribe((item) => {
       expect(item).toBeInstanceOf(TestModel);
     });
+    collection.events.onCollectionCleared.subscribe((item) => {
+      expect(item).toStrictEqual(collection);
+    });
+
+    expect(collection.length()).toBe(0);
 
     collection.add(modelOne);
 
     expect(collection.length()).toBe(1);
+    expect(collection.contain(modelOne)).toBeTruthy();
     expect(itemAddedCallback).toHaveBeenCalled();
 
     collection.add(modelTwo);
 
     expect(itemAddedCallback).toHaveBeenCalledTimes(2);
-
+    expect(collection.contain(modelTwo)).toBeTruthy();
     expect(collection.getAll()).toBeInstanceOf(Map);
     expect(collection.length()).toBe(2);
 
     collection.remove(modelOne);
 
+    expect(collection.contain(modelOne)).toBeFalsy();
     expect(collection.length()).toBe(1);
 
     expect(itemAddedCallback).toHaveBeenCalled();
+
+    collection.clear();
+
+    expect(collectionClearedCallback).toHaveBeenCalled();
+    expect(collection.length()).toBe(0);
+    expect(collection.contain(modelOne)).toBeFalsy();
+    expect(collection.contain(modelTwo)).toBeFalsy();
   });
 });

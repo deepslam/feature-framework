@@ -9,11 +9,11 @@ export default class DataCollection<T, P = Record<string, string>>
   events: {
     onItemAdded: ItemAddedEvent<T>;
     onItemRemoved: ItemRemovedEvent<T>;
-    onItemsCleared: CollectionClearedEvent<IDataCollection<T, P>>;
+    onCollectionCleared: CollectionClearedEvent<IDataCollection<T, P>>;
   } = {
     onItemAdded: new ItemAddedEvent(),
     onItemRemoved: new ItemRemovedEvent(),
-    onItemsCleared: new CollectionClearedEvent(),
+    onCollectionCleared: new CollectionClearedEvent(),
   };
 
   add(item: T) {
@@ -34,7 +34,7 @@ export default class DataCollection<T, P = Record<string, string>>
 
   clear() {
     this.items.clear();
-    this.events.onItemsCleared.fire(this);
+    this.events.onCollectionCleared.fire(this);
   }
 
   getAll() {
