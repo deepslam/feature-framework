@@ -1,5 +1,4 @@
 import Feature from '../../../Models/Feature';
-import { IEvent } from '../../../Interfaces';
 import TestFeatureLoadedEvent from '../Events/TestFeatureLoadedEvent';
 import TestSubFeature from './TestSubFeature';
 
@@ -16,6 +15,8 @@ export default class TestFeature extends Feature<TestFeatureConfig> {
   public readonly events = {
     loaded: new TestFeatureLoadedEvent(),
   };
+  public translations = {};
+  public view = null;
 
   components() {
     return {};

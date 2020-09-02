@@ -1,4 +1,4 @@
-import { IDataCollection } from './../Interfaces/IDataCollection';
+import { IDataCollection } from '../Interfaces';
 import ItemAddedEvent from '../Events/DataCollections/ItemAddedEvent';
 import ItemRemovedEvent from '../Events/DataCollections/ItemRemovedEvent';
 import CollectionClearedEvent from '../Events/DataCollections/CollectionClearedEvent';

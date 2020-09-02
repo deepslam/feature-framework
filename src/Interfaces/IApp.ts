@@ -1,12 +1,13 @@
-import { AppFeatures, AppReducers, AppConfig, AppInitParams } from '../Types';
+import { Slice } from '@reduxjs/toolkit';
+import { IEvent, IFeature } from '../Interfaces';
+import { ConfigType, TranslationType } from '../Types';
 
-export interface IApp<F = AppFeatures, R = AppReducers, C = AppConfig> {
-  constructor(options: AppInitParams<F, R, C>): IApp<F, R, C>;
+export interface IApp<C = Record<string, ConfigType>> {
+  baseEvents: Record<string, IEvent<unknown>>;
+  events: Record<string, IEvent<unknown>>;
+  features: Record<string, IFeature>;
+  slices: Record<string, Slice>;
+  translations: TranslationType;
 
-  features(): F;
-  config(): C;
-  reducers(): R;
-  // store(): Store<R>;
-  // state(): Store<R>;
-  // on<F extends typeof FeatureInstance,E keysof F>()
+  getConfig(): C;
 }
