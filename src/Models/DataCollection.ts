@@ -1,21 +1,23 @@
 import { IDataCollection } from './../Interfaces/IDataCollection';
 import ItemAddedEvent from '../Events/DataCollections/ItemAddedEvent';
 import ItemRemovedEvent from '../Events/DataCollections/ItemRemovedEvent';
+import CollectionClearedEvent from '../Events/DataCollections/CollectionClearedEvent';
 
-export default class DataCollection<
-  T extends { new (...args: unknown[]): unknown }
-> implements IDataCollection<T> {
-  private items = new WeakMap();
+export default class DataCollection<T, P = Record<string, string>>
+  implements IDataCollection<T, P> {
+  public readonly items = new Map();
   events: {
     onItemAdded: ItemAddedEvent<T>;
     onItemRemoved: ItemRemovedEvent<T>;
+    onItemsCleared: CollectionClearedEvent<IDataCollection<T, P>>;
   } = {
     onItemAdded: new ItemAddedEvent(),
     onItemRemoved: new ItemRemovedEvent(),
+    onItemsCleared: new CollectionClearedEvent(),
   };
 
   add(item: T) {
-    this.items.set(this, item);
+    this.items.set(item, item);
     this.events.onItemAdded.fire(item);
   }
 
@@ -30,12 +32,23 @@ export default class DataCollection<
     return this.items.has(item);
   }
 
-  find<T extends new (...args: any[]) => any>(
-    item: T,
-    params: ConstructorParameters<T>,
-  ): boolean {
+  clear() {
+    this.items.clear();
+    this.events.onItemsCleared.fire(this);
+  }
+
+  getAll() {
+    return this.items;
+  }
+
+  length() {
+    return this.items.size;
+  }
+
+  find(params: P): T[] {
     throw new Error('Method not implemented.');
   }
+
   paginate(
     page: number,
     onPage: number,
