@@ -7,6 +7,8 @@ describe('Application models test', () => {
       name: 'test',
     });
 
+    const eventUpdatedFunc = jest.fn();
+    instance.baseEvents.updated.subscribe(eventUpdatedFunc);
     expect(instance.fields.id).toBe(2);
     expect(instance.fields.name).toBe('test');
 
@@ -14,6 +16,8 @@ describe('Application models test', () => {
       name: 'John',
     });
 
+    expect(eventUpdatedFunc).toBeCalledTimes(1);
+    expect(eventUpdatedFunc).toHaveBeenCalledWith(instance);
     expect(instance.fields.name).toBe('John');
     expect(instance.fields.id).toBe(2);
   });

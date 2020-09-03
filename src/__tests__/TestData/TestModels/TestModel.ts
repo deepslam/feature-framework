@@ -5,4 +5,6 @@ export type TestModelFieldsType = {
   name: string;
 };
 
-export default class TestModel extends Model<TestModelFieldsType> {}
+export default class TestModel extends Model<TestModelFieldsType> {
+  public readonly events = {};
+}

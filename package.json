@@ -1,6 +1,6 @@
 {
-	"name": "react-feature-framework",
-	"version": "0.1.2",
+	"name": "@feature-framework/core",
+	"version": "0.1.3",
 	"description": "Feature driven React/React-Native framework",
 	"main": "index.ts",
 	"scripts": {
@@ -12,13 +12,7 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/deepslam/feature-framework.git"
 	},
-	"keywords": [
-		"react",
-		"react",
-		"native",
-		"typescript",
-		"framework"
-	],
+	"keywords": [ "react", "react", "native", "typescript", "framework" ],
 	"author": "Dmitry Ivanov <deepslam@gmail.com>",
 	"license": "ISC",
 	"bugs": {
