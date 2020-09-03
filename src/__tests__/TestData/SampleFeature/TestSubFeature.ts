@@ -5,16 +5,6 @@ type TestSubFeatureConfig = {
 };
 
 export default class TestSubFeature extends Feature<TestSubFeatureConfig> {
-  public readonly features = {};
-  public readonly events = {};
-  public readonly slices = {};
-  public readonly translations = {};
-  public readonly view = null;
-
-  components() {
-    return {};
-  }
-
   getConfig(): TestSubFeatureConfig {
     return {
       enabled: false,
@@ -23,9 +13,5 @@ export default class TestSubFeature extends Feature<TestSubFeatureConfig> {
 
   initFeature() {
     return new Promise((resolve) => resolve(true)) as Promise<boolean>;
-  }
-
-  getModels() {
-    return {};
   }
 }

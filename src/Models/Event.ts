@@ -20,6 +20,7 @@ export default class Event<T = unknown> implements IEvent<T> {
       privateEvents.set(this, [func]);
     }
   }
+
   unsubscribe(func: (item: T) => void) {
     if (privateEvents.has(this)) {
       const events = privateEvents.get(this)!;
@@ -29,11 +30,18 @@ export default class Event<T = unknown> implements IEvent<T> {
       }
     }
   }
+
   fire(item: T) {
     if (privateEvents.has(this)) {
       privateEvents.get(this)!.forEach((func) => {
         func(item);
       });
+    }
+  }
+
+  clear(): void {
+    if (privateEvents.has(this)) {
+      privateEvents.delete(this);
     }
   }
 }

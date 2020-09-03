@@ -1,4 +1,9 @@
-export interface IDataManager {
-  load(key: string): Promise<string>;
-  save<T>(key: string, data: T | T[] | Record<string, T>): Promise<boolean>;
+import { IEvent } from './IEvent';
+
+export interface IDataManager<T = unknown> {
+  key: string;
+  events: Record<string, IEvent<unknown>>;
+
+  load(): Promise<T | false>;
+  save(data: T): Promise<boolean>;
 }

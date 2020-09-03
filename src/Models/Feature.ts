@@ -1,9 +1,8 @@
 /* eslint-disable indent */
-import { Slice } from '@reduxjs/toolkit';
 import { v4 as uuid4 } from 'uuid';
-import SuccessFullyInitializedEvent from '../Events/SuccessfullyInitializedEvent';
-import { IFeature, IEvent, IModel, IView } from '../Interfaces';
-import { ConfigType, TranslationType } from '../Types';
+import SuccessFullyInitializedEvent from '../Events/Features/SuccessfullyInitializedEvent';
+import { IFeature, IEvent } from '../Interfaces';
+import { ConfigType } from '../Types';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
@@ -17,11 +16,6 @@ export default abstract class Feature<C = Record<string, ConfigType>>
   public readonly baseEvents: { initialized: IEvent<boolean> } = {
     initialized: new SuccessFullyInitializedEvent(),
   };
-  abstract events: Record<string, IEvent<unknown>>;
-  abstract features: Record<string, IFeature>;
-  abstract slices: Record<string, Slice>;
-  abstract translations: TranslationType;
-  abstract view: IView<unknown, unknown> | null;
 
   constructor(protected config: C) {
     this.uuid = uuid4();
@@ -30,10 +24,14 @@ export default abstract class Feature<C = Record<string, ConfigType>>
   init(this: IFeature): Promise<boolean> {
     return new Promise((resolve) => {
       const promises: unknown[] = [];
-      Object.keys(this.features).forEach((key) => {
-        const feature = this.features[key];
-        promises.push(feature.init());
-      });
+      if (this.features) {
+        Object.keys(this.features).forEach((key) => {
+          if (this.features && this.features[key]) {
+            const feature = this.features[key];
+            promises.push(feature.init());
+          }
+        });
+      }
       Promise.all(promises).then(() => {
         this.initFeature().then((result) => {
           this.setInitialized(result);
@@ -45,7 +43,6 @@ export default abstract class Feature<C = Record<string, ConfigType>>
   }
 
   abstract initFeature(): Promise<boolean>;
-  abstract getModels(): Record<string, IModel>;
 
   getConfig(): C {
     return this.config;
@@ -69,6 +66,10 @@ export default abstract class Feature<C = Record<string, ConfigType>>
   }
 
   hasSlice(this: IFeature): boolean {
-    return Object.keys(this.slices).length > 0 && this.isInitialized();
+    return (
+      typeof this.slices !== undefined &&
+      Object.keys(this.slices!).length > 0 &&
+      this.isInitialized()
+    );
   }
 }

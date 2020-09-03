@@ -1,4 +1,4 @@
-import SuccessFullyInitializedEvent from '../../Events/SuccessfullyInitializedEvent';
+import SuccessFullyInitializedEvent from '../../Events/Features/SuccessfullyInitializedEvent';
 
 describe('Events test', () => {
   it('Should work correctly', (done) => {
@@ -21,6 +21,11 @@ describe('Events test', () => {
     event.unsubscribe(callbackTwo);
 
     event.fire(true);
+
+    expect(callbackOne).toHaveBeenCalledTimes(2);
+    expect(callbackTwo).toHaveBeenCalledTimes(1);
+
+    event.clear();
 
     expect(callbackOne).toHaveBeenCalledTimes(2);
     expect(callbackTwo).toHaveBeenCalledTimes(1);

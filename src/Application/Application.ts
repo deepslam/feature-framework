@@ -1,21 +1,26 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import { pick } from 'dot-object';
 import { Store, configureStore, Reducer, Slice } from '@reduxjs/toolkit';
 
-import { AppFeatures, AppReducers, AppConfig, AppInitParams } from '../Types';
+import {
+  AppFeatures,
+  AppReducers,
+  AppConfig,
+  AppInitParams,
+  CountryCodeType,
+} from '../Types';
 
-import IApp from '../Interfaces/IApp';
+import { IApp } from '../Interfaces/IApp';
 
-class Application<F = AppFeatures, R = AppReducers, C = AppConfig>
-  implements IApp {
-  private initialized: boolean = false;
-
-  private languages: string[] = [];
+export default abstract class Application<C = AppConfig> implements IApp {
+  private baseEvents = {};
+  private initialized = false;
+  private languages: CountryCodeType[] = [];
   private currentLanguage = 'en';
-  private translations: Record<string, object> = {};
+  public abstract readonly translations: TranslationType;
+  public abstract readonly features: Record<string>;
 
-  constructor(readonly features: F, readonly reducers: R, readonly config: C) {}
+  constructor(readonly config: C) {}
 
   public init(): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
