@@ -12,7 +12,7 @@ import {
 
 import { IApp } from '../Interfaces/IApp';
 
-export default abstract class Application<C = AppConfig> implements IApp {
+export default class Application<C = AppConfig> implements IApp {
   private baseEvents = {};
   private initialized = false;
   private languages: CountryCodeType[] = [];

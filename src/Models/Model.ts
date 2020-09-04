@@ -21,4 +21,10 @@ export default abstract class Model<T = Record<string, unknown>>
     };
     this.baseEvents.updated.fire(this);
   }
+
+  toJSON() {
+    return {
+      ...this.fields,
+    };
+  }
 }

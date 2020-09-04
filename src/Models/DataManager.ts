@@ -7,7 +7,6 @@ import { IDataManager } from './../Interfaces/IDataManager';
 import { IEvent } from './../Interfaces/IEvent';
 
 export default abstract class DataManager<T> implements IDataManager<T> {
-  public abstract readonly key: string;
   public readonly events: {
     DataLoaded: IEvent<T>;
     DataLoadingError: IEvent<null>;
@@ -20,18 +19,18 @@ export default abstract class DataManager<T> implements IDataManager<T> {
     DataSavingError: new DataSavingErrorEvent(),
   };
 
-  load(dataProvider: IDataProvider): Promise<T | null> {
+  protected abstract restore(data: unknown): T;
+  protected abstract pack(data: T): unknown;
+
+  constructor(public readonly provider: IDataProvider) {}
+
+  load(key: string): Promise<T | null> {
     return new Promise((resolve, reject) => {
-      dataProvider
-        .load(this.key)
+      this.provider
+        .load(key)
         .then((data: unknown) => {
-          let result = null;
-          if (typeof data === 'string') {
-            result = JSON.parse(data) as T;
-          } else {
-            result = data;
-          }
-          this.events.DataLoaded.fire(result as T);
+          const result = this.restore(data) as T;
+          this.events.DataLoaded.fire(result);
           resolve(result as T);
         })
         .catch(() => {
@@ -41,10 +40,11 @@ export default abstract class DataManager<T> implements IDataManager<T> {
     });
   }
 
-  save(dataProvider: IDataProvider, data: T): Promise<boolean> {
+  save(key: string, data: T): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      dataProvider
-        .save(this.key, data)
+      const dataToSave = this.pack(data);
+      this.provider
+        .save(key, dataToSave)
         .then(() => {
           this.events.DataSaved.fire(true);
           resolve(true);

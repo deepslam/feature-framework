@@ -3,6 +3,7 @@ import { Slice } from '@reduxjs/toolkit';
 import { IEvent } from './IEvent';
 import { IView } from './IView';
 import { IModel } from './IModel';
+import { IDataManager } from './IDataManager';
 import { ConfigType, TranslationType } from '../Types';
 
 export interface IFeature<C = Record<string, ConfigType>> {
@@ -14,6 +15,7 @@ export interface IFeature<C = Record<string, ConfigType>> {
   view?: IView<unknown, unknown> | null;
   models?: Record<string, IModel<unknown>>;
   collections?: Record<string, IDataCollection<unknown, unknown>>;
+  dataManagers?: Record<string, IDataManager<unknown>>;
 
   init(): Promise<boolean>;
   initFeature(): Promise<boolean>;

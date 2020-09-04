@@ -6,6 +6,7 @@ import {
   IDataCollection,
   IModel,
   IDataManager,
+  IDataProvider,
 } from '../Interfaces';
 import { ConfigType, TranslationType } from '../Types';
 

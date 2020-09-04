@@ -6,6 +6,7 @@ import CollectionClearedEvent from '../Events/DataCollections/CollectionClearedE
 export default class DataCollection<T, P = Record<string, string>>
   implements IDataCollection<T, P> {
   public readonly items = new Map();
+  public readonly __classname__: string = '';
   events: {
     onItemAdded: ItemAddedEvent<T>;
     onItemRemoved: ItemRemovedEvent<T>;
