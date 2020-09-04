@@ -1,9 +1,10 @@
 import { IEvent } from './IEvent';
+import { IDataProvider } from './IDataProvider';
 
 export interface IDataManager<T = unknown> {
   key: string;
   events: Record<string, IEvent<unknown>>;
 
-  load(): Promise<T | false>;
-  save(data: T): Promise<boolean>;
+  load(provider: IDataProvider): Promise<T | null>;
+  save(provider: IDataProvider, data: T): Promise<boolean>;
 }
