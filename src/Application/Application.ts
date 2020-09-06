@@ -1,26 +1,31 @@
-import i18n from 'i18next';
+import i18n, { TOptions } from 'i18next';
 import { pick } from 'dot-object';
-import { Store, configureStore, Reducer, Slice } from '@reduxjs/toolkit';
-
 import {
-  AppFeatures,
-  AppReducers,
-  AppConfig,
-  AppInitParams,
-  CountryCodeType,
-} from '../Types';
+  Store,
+  configureStore,
+  Reducer,
+  combineReducers,
+} from '@reduxjs/toolkit';
 
-import { IApp } from '../Interfaces/IApp';
+import { CountryCodeType, TranslationType } from '../Types';
 
-export default class Application<C = AppConfig> implements IApp {
-  private baseEvents = {};
+import { IApp, IFeature } from '../Interfaces';
+
+export default abstract class Application<C> implements IApp<C> {
   private initialized = false;
   private languages: CountryCodeType[] = [];
   private currentLanguage = 'en';
+  public store?: Store;
+  public readonly baseEvents = {};
   public abstract readonly translations: TranslationType;
-  public abstract readonly features: Record<string>;
+  public abstract readonly features: Record<string, IFeature>;
+  public abstract readonly reducers: Record<string, Reducer>;
 
   constructor(readonly config: C) {}
+
+  getConfig(): C {
+    return this.config;
+  }
 
   public init(): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
@@ -51,10 +56,10 @@ export default class Application<C = AppConfig> implements IApp {
     return this.initialized;
   }
 
-  public setAvailableLanguages(languages: string[]) {
+  public setAvailableLanguages(languages: CountryCodeType[]) {
     languages.forEach((lang) => {
-      if (!this.languages.includes(lang.toLowerCase())) {
-        this.languages.push(lang.toLowerCase());
+      if (!this.languages.includes(lang.toLowerCase() as CountryCodeType)) {
+        this.languages.push(lang.toLowerCase() as CountryCodeType);
       }
     });
   }
@@ -63,15 +68,15 @@ export default class Application<C = AppConfig> implements IApp {
     return this.languages;
   }
 
-  public isLanguageAvailable(language: string): boolean {
+  public isLanguageAvailable(language: CountryCodeType): boolean {
     return (
-      this.languages.includes(language.toLowerCase()) ||
+      this.languages.includes(language.toLowerCase() as CountryCodeType) ||
       this.currentLanguage.toLowerCase() === language.toLowerCase()
     );
   }
 
-  public setCurrentLanguage(language: string): boolean {
-    if (this.isLanguageAvailable(language)) {
+  public setCurrentLanguage(language: CountryCodeType): boolean {
+    if (this.isLanguageAvailable(language as CountryCodeType)) {
       this.currentLanguage = language;
       return true;
     }
@@ -83,11 +88,11 @@ export default class Application<C = AppConfig> implements IApp {
     return this.currentLanguage;
   }
 
-  public t(key: string, data: object = {}): string {
+  public t(key: string, data: TOptions): string {
     return i18n.t(key, data);
   }
 
-  public cfg(path: string): object | number | string {
+  public cfg(path: string): unknown {
     return pick(path, this.config);
   }
 
@@ -95,31 +100,14 @@ export default class Application<C = AppConfig> implements IApp {
     throw new Error(err);
   }
 
-  private initStore() {
-    let reducers: Record<string, Reducer> = {};
-    Object.keys(this.features).forEach((featureKey) => {
-      if (this.features[featureKey] && this.features[featureKey].hasSlice()) {
-        Object.keys(this.features[featureKey].getSlice()).forEach(
-          (sliceKey) => {
-            const key = `${featureKey}/${sliceKey}`;
-            reducers = {
-              ...reducers,
-              [key]: this.features[featureKey].getSlice()[sliceKey]!.reducer,
-            };
-          },
-        );
-      }
-    });
-    this.store = configureStore({ reducer: reducers });
-  }
-
-  public getStore() {
-    return this.store;
+  protected initStore() {
+    this.store = configureStore({ reducer: combineReducers(this.reducers) });
   }
 
   private initI18n(): Promise<boolean> {
     return new Promise((resolve) => {
-      i18n.use(initReactI18next).init(
+      // i18n.use(initReactI18next).init(
+      i18n.init(
         {
           fallbackLng: this.currentLanguage,
           debug: false,
@@ -131,16 +119,6 @@ export default class Application<C = AppConfig> implements IApp {
       );
     });
   }
-}
-
-export function createApp<F = AppFeatures, R = AppReducers, C = Config>(
-  options: AppInitParams<F, R, C>,
-): Application<F, R, C> {
-  return new Application<F, R, C>(
-    options.features,
-    options.reducers,
-    options.config,
-  );
 }
 
 export type ApplicationInitSuccessfulType = boolean;

@@ -1,4 +1,4 @@
-import { Slice } from '@reduxjs/toolkit';
+import { Reducer } from '@reduxjs/toolkit';
 import {
   IEvent,
   IFeature,
@@ -14,7 +14,7 @@ export interface IApp<C = Record<string, ConfigType>> {
   baseEvents: Record<string, IEvent<unknown>>;
   events?: Record<string, IEvent<unknown>>;
   features?: Record<string, IFeature>;
-  slices?: Record<string, Slice>;
+  reducers: Record<string, Reducer>;
   translations?: TranslationType;
   view?: IView<unknown, unknown> | null;
   models?: Record<string, IModel<unknown>>;
