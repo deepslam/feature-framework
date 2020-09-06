@@ -7,7 +7,7 @@ describe('Features test', () => {
       name: 'test',
     });
 
-    expect(feature.getConfig()).toStrictEqual({
+    expect(feature.cfg()).toStrictEqual({
       id: 222,
       name: 'test',
     });
@@ -16,7 +16,7 @@ describe('Features test', () => {
       name: 'edited',
     });
 
-    expect(feature.getConfig()).toStrictEqual({
+    expect(feature.cfg()).toStrictEqual({
       id: 222,
       name: 'edited',
     });

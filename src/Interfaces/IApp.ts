@@ -22,6 +22,7 @@ export interface IApp<C = Record<string, ConfigType>> {
   dataManagers?: Record<string, IDataManager<unknown>>;
   dataProviders?: Record<string, IDataProvider>;
 
-  getConfig(): C;
+  cfg(): C;
+  extendConfig(config: Partial<C>): void;
   init(): Promise<boolean>;
 }

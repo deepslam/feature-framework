@@ -1,5 +1,4 @@
 import i18n, { TOptions } from 'i18next';
-import { pick } from 'dot-object';
 import {
   Store,
   configureStore,
@@ -10,26 +9,55 @@ import {
 import { CountryCodeType, TranslationType } from '../Types';
 
 import { IApp, IFeature } from '../Interfaces';
+import {
+  AppLoadedEvent,
+  ItemAddedToCollectionEvent,
+  ItemRemovedFromCollectionEvent,
+  ModelCreatedEvent,
+  ModelUpdatedEvent,
+} from '../Events/App';
+import DataCollection from '../Models/DataCollection';
+import Model from '../Models/Model';
 
 export default abstract class Application<C> implements IApp<C> {
   private initialized = false;
   private languages: CountryCodeType[] = [];
   private currentLanguage = 'en';
   public store?: Store;
-  public readonly baseEvents = {};
+  public readonly baseEvents: {
+    onAppLoaded: AppLoadedEvent;
+    onItemAddedToCollection: ItemAddedToCollectionEvent<
+      DataCollection<unknown, unknown>
+    >;
+    onItemRemovedFromCollection: ItemRemovedFromCollectionEvent<
+      DataCollection<unknown, unknown>
+    >;
+    onModelCreated: ModelCreatedEvent<Model>;
+    onModelUpdated: ModelUpdatedEvent<Model>;
+  } = {
+    onAppLoaded: new AppLoadedEvent(),
+    onItemAddedToCollection: new ItemAddedToCollectionEvent(),
+    onItemRemovedFromCollection: new ItemRemovedFromCollectionEvent(),
+    onModelCreated: new ModelCreatedEvent(),
+    onModelUpdated: new ModelUpdatedEvent(),
+  };
   public abstract readonly translations: TranslationType;
   public abstract readonly features: Record<string, IFeature>;
   public abstract readonly reducers: Record<string, Reducer>;
 
-  constructor(readonly config: C) {}
+  constructor(protected config: C) {}
 
-  getConfig(): C {
+  public cfg(): C {
     return this.config;
+  }
+
+  public extendConfig(config: Partial<C>): void {
+    this.config = { ...this.config, ...config };
   }
 
   public init(): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
-      if (this.isInitialized) {
+      if (this.isInitialized()) {
         reject();
       }
       const promises: Promise<boolean>[] = [];
@@ -43,8 +71,10 @@ export default abstract class Application<C> implements IApp<C> {
           const falseArgs = args.filter((arg) => !arg);
           if (falseArgs.length === 0) {
             this.initialized = true;
+            this.baseEvents.onAppLoaded.fire(true);
             resolve(true);
           } else {
+            this.baseEvents.onAppLoaded.fire(false);
             resolve(false);
           }
         })
@@ -52,7 +82,7 @@ export default abstract class Application<C> implements IApp<C> {
     });
   }
 
-  get isInitialized() {
+  isInitialized() {
     return this.initialized;
   }
 
@@ -90,10 +120,6 @@ export default abstract class Application<C> implements IApp<C> {
 
   public t(key: string, data: TOptions): string {
     return i18n.t(key, data);
-  }
-
-  public cfg(path: string): unknown {
-    return pick(path, this.config);
   }
 
   error(err: string): never {

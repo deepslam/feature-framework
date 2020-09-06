@@ -44,7 +44,7 @@ export default abstract class Feature<C = Record<string, ConfigType>>
 
   abstract initFeature(): Promise<boolean>;
 
-  getConfig(): C {
+  cfg(): C {
     return this.config;
   }
 

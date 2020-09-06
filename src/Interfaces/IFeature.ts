@@ -23,7 +23,7 @@ export interface IFeature<C = Record<string, ConfigType>> {
   isInitialized(): boolean;
   setInitialized(val: boolean): void;
 
-  getConfig(): C;
+  cfg(): C;
   extendConfig(config: Partial<C>): void;
 
   hasSlice(): boolean;
