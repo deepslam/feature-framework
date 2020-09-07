@@ -9,13 +9,7 @@ import {
 import { CountryCodeType, TranslationType } from '../Types';
 
 import { IApp, IFeature } from '../Interfaces';
-import {
-  AppLoadedEvent,
-  ItemAddedToCollectionEvent,
-  ItemRemovedFromCollectionEvent,
-  ModelCreatedEvent,
-  ModelUpdatedEvent,
-} from '../Events/App';
+import { AppLoadedEvent } from '../Events/App';
 import DataCollection from '../Models/DataCollection';
 import Model from '../Models/Model';
 
@@ -26,20 +20,8 @@ export default abstract class Application<C> implements IApp<C> {
   public store?: Store;
   public readonly baseEvents: {
     onAppLoaded: AppLoadedEvent;
-    onItemAddedToCollection: ItemAddedToCollectionEvent<
-      DataCollection<unknown, unknown>
-    >;
-    onItemRemovedFromCollection: ItemRemovedFromCollectionEvent<
-      DataCollection<unknown, unknown>
-    >;
-    onModelCreated: ModelCreatedEvent<Model>;
-    onModelUpdated: ModelUpdatedEvent<Model>;
   } = {
     onAppLoaded: new AppLoadedEvent(),
-    onItemAddedToCollection: new ItemAddedToCollectionEvent(),
-    onItemRemovedFromCollection: new ItemRemovedFromCollectionEvent(),
-    onModelCreated: new ModelCreatedEvent(),
-    onModelUpdated: new ModelUpdatedEvent(),
   };
   public abstract readonly translations: TranslationType;
   public abstract readonly features: Record<string, IFeature>;

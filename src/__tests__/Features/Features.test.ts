@@ -1,8 +1,11 @@
+import TestApplication from '../TestData/Application/TestApplication';
 import TestFeature from '../TestData/SampleFeature/TestFeature';
+
+const app = new TestApplication({ version: '1.0' });
 
 describe('Features test', () => {
   test('Features config test', () => {
-    const feature = new TestFeature({
+    const feature = new TestFeature(app, {
       id: 222,
       name: 'test',
     });
@@ -23,7 +26,7 @@ describe('Features test', () => {
   });
 
   test('Init test', async (done) => {
-    const feature = new TestFeature({
+    const feature = new TestFeature(app, {
       id: 222,
       name: 'test',
     });

@@ -3,6 +3,7 @@ import { v4 as uuid4 } from 'uuid';
 import SuccessFullyInitializedEvent from '../Events/Features/SuccessfullyInitializedEvent';
 import { IFeature, IEvent } from '../Interfaces';
 import { ConfigType } from '../Types';
+import Application from '../Application/Application';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
@@ -10,14 +11,16 @@ type AbstractFeaturePrivateDataType = {
 
 const privateData = new Map<string, Partial<AbstractFeaturePrivateDataType>>();
 
-export default abstract class Feature<C = Record<string, ConfigType>>
-  implements IFeature<C> {
+export default abstract class Feature<
+  C = Record<string, ConfigType>,
+  A = Application<unknown>
+> implements IFeature<C> {
   public readonly uuid: string;
   public readonly baseEvents: { initialized: IEvent<boolean> } = {
     initialized: new SuccessFullyInitializedEvent(),
   };
 
-  constructor(protected config: C) {
+  constructor(public readonly app: A, protected config: C) {
     this.uuid = uuid4();
   }
 

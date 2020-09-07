@@ -39,4 +39,16 @@ describe('Application init test', () => {
         done(e);
       });
   });
+
+  it('Application config test', () => {
+    const app = new TestApp({ version: '1.2.2' });
+
+    expect(app.cfg()).toStrictEqual({ version: '1.2.2' });
+
+    app.extendConfig({
+      version: '1.0',
+    });
+
+    expect(app.cfg()).toStrictEqual({ version: '1.0' });
+  });
 });
