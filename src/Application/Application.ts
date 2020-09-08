@@ -10,8 +10,6 @@ import { CountryCodeType, TranslationType } from '../Types';
 
 import { IApp, IFeature } from '../Interfaces';
 import { AppLoadedEvent } from '../Events/App';
-import DataCollection from '../Models/DataCollection';
-import Model from '../Models/Model';
 
 export default abstract class Application<C> implements IApp<C> {
   private initialized = false;
@@ -42,6 +40,7 @@ export default abstract class Application<C> implements IApp<C> {
       if (this.isInitialized()) {
         reject();
       }
+      this.setAppToFeatures(this.features);
       const promises: Promise<boolean>[] = [];
       Object.keys(this.features).forEach((key) => {
         promises.push(this.features[key].init());
@@ -125,6 +124,17 @@ export default abstract class Application<C> implements IApp<C> {
           resolve(true);
         },
       );
+    });
+  }
+
+  private setAppToFeatures(features: Record<string, IFeature>) {
+    Object.keys(features).forEach((key) => {
+      if (!features[key].hasApp()) {
+        features[key].setApp(this);
+        if (features[key].features) {
+          this.setAppToFeatures(features[key].features!);
+        }
+      }
     });
   }
 }

@@ -1,7 +1,7 @@
 import { CountryCodeType } from './CountryCodeType';
 
-export type Constructor<T = { new (...args: unknown[]): unknown }> = new (
-  ...args: unknown[]
+export type Constructor<T = { new (...args: any[]): unknown }> = new (
+  ...args: any[]
 ) => T;
 
 export type TranslationItemType =

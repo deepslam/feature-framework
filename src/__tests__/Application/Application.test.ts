@@ -32,6 +32,14 @@ describe('Application init test', () => {
         expect(
           app.features.TestFeature.features.SubFeature.isInitialized(),
         ).toBeTruthy();
+        expect(app.features.TestFeature.hasApp()).toBeTruthy();
+        expect(
+          app.features.TestFeature.features.SubFeature.hasApp(),
+        ).toBeTruthy();
+        expect(app.features.TestFeature.getApp()).toStrictEqual(app);
+        expect(
+          app.features.TestFeature.features.SubFeature.getApp(),
+        ).toStrictEqual(app);
 
         done();
       })

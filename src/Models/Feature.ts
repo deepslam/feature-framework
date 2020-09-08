@@ -14,14 +14,32 @@ const privateData = new Map<string, Partial<AbstractFeaturePrivateDataType>>();
 export default abstract class Feature<
   C = Record<string, ConfigType>,
   A = Application<unknown>
-> implements IFeature<C> {
+> implements IFeature<C, A> {
   public readonly uuid: string;
   public readonly baseEvents: { initialized: IEvent<boolean> } = {
     initialized: new SuccessFullyInitializedEvent(),
   };
+  protected app: A | null = null;
 
-  constructor(public readonly app: A, protected config: C) {
+  constructor(protected config: C) {
     this.uuid = uuid4();
+  }
+
+  public setApp(app: A): boolean {
+    if (this.app === null) {
+      this.app = app;
+      return true;
+    }
+
+    return false;
+  }
+
+  public getApp(): A | null {
+    return this.app;
+  }
+
+  public hasApp(): boolean {
+    return this.app !== null;
   }
 
   init(this: IFeature): Promise<boolean> {

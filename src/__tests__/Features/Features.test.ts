@@ -1,11 +1,9 @@
-import TestApplication from '../TestData/Application/TestApplication';
 import TestFeature from '../TestData/SampleFeature/TestFeature';
-
-const app = new TestApplication({ version: '1.0' });
+import TestApplication from '../TestData/Application/TestApplication';
 
 describe('Features test', () => {
   test('Features config test', () => {
-    const feature = new TestFeature(app, {
+    const feature = new TestFeature({
       id: 222,
       name: 'test',
     });
@@ -26,7 +24,7 @@ describe('Features test', () => {
   });
 
   test('Init test', async (done) => {
-    const feature = new TestFeature(app, {
+    const feature = new TestFeature({
       id: 222,
       name: 'test',
     });
@@ -56,5 +54,19 @@ describe('Features test', () => {
       .catch((e) => {
         done(e);
       });
+  });
+
+  test('Set app test', () => {
+    const feature = new TestFeature({
+      id: 222,
+      name: 'test',
+    });
+    const app = new TestApplication({ version: '1.0' });
+
+    expect(feature.hasApp()).toBeFalsy();
+    expect(feature.setApp(app)).toBeTruthy();
+    expect(feature.hasApp()).toBeTruthy();
+    expect(feature.getApp()).toStrictEqual(app);
+    expect(feature.setApp(app)).toBeFalsy();
   });
 });
