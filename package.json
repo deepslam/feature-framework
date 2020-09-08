@@ -1,7 +1,7 @@
 {
   "name": "@feature-framework/core",
   "version": "0.2.4",
-  "description": "Feature driven React/React-Native framework",
+  "description": "Feature driven frontend framework",
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest",
@@ -12,7 +12,6 @@
     "url": "git+ssh://git@github.com/deepslam/feature-framework.git"
   },
   "keywords": [
-    "react",
     "react",
     "native",
     "vue",
@@ -41,7 +40,6 @@
     "eslint": "^7.5.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-config-react-native": "^4.1.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^23.20.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
