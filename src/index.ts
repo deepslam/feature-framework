@@ -1,4 +1,8 @@
-export * as Models from './Models';
-export * as Events from './Events';
-export * as Interfaces from './Interfaces';
-export * as Types from './Types';
+import Application from './Application/Application';
+
+export { Application };
+
+export * from './Models';
+export * from './Events';
+export * from './Interfaces';
+export * from './Types';
