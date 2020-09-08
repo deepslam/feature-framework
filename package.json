@@ -1,6 +1,6 @@
 {
   "name": "@feature-framework/core",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Feature driven React/React-Native framework",
   "main": "index.ts",
   "scripts": {
