@@ -2,7 +2,7 @@
   "name": "@feature-framework/core",
   "version": "0.2.3",
   "description": "Feature driven React/React-Native framework",
-  "main": "index.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "test": "jest",
     "jest-watch": "jest --watch"
