@@ -2,9 +2,11 @@
 	"name": "@feature-framework/core",
 	"version": "0.2.5",
 	"description": "Feature driven frontend framework",
-	"main": "./src/index.ts",
+	"main": "./dist/index.js",
 	"type": "module",
 	"scripts": {
+		"check": "tsc",
+		"build": "tsc --noEmit false",
 		"test": "jest",
 		"jest-watch": "jest --watch"
 	},
@@ -12,7 +14,14 @@
 		"type": "git",
 		"url": "git+ssh://git@github.com/deepslam/feature-framework.git"
 	},
-	"keywords": [ "react", "native", "vue", "node", "typescript", "framework" ],
+	"keywords": [
+		"react",
+		"native",
+		"vue",
+		"node",
+		"typescript",
+		"framework"
+	],
 	"author": "Dmitry Ivanov <deepslam@gmail.com>",
 	"license": "ISC",
 	"bugs": {
