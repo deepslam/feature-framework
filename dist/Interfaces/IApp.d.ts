@@ -9,7 +9,7 @@ export interface IApp<C = Record<string, ConfigType>> {
     features?: Record<string, IFeature>;
     reducers: Record<string, Reducer>;
     translations?: TranslationType;
-    view?: IView<unknown, unknown> | null;
+    view?: IView<unknown> | null;
     models?: Record<string, IModel<unknown>>;
     collections?: Record<string, IDataCollection<unknown, unknown>>;
     dataManagers?: Record<string, IDataManager<unknown>>;

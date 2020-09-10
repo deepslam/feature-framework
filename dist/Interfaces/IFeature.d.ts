@@ -12,7 +12,7 @@ export interface IFeature<C = Record<string, ConfigType>, A = Application<unknow
     features?: Record<string, IFeature>;
     slices?: Record<string, Slice>;
     translations?: TranslationType;
-    view?: IView<unknown, unknown> | null;
+    view?: IView<unknown> | null;
     models?: Record<string, IModel<unknown>>;
     collections?: Record<string, IDataCollection<unknown, unknown>>;
     dataManagers?: Record<string, IDataManager<unknown>>;

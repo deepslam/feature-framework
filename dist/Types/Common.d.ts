@@ -11,7 +11,3 @@ export declare type TranslationType = {
 export declare type ConfigType = boolean | string | number | ConfigType[] | {
     [name: string]: ConfigType;
 };
-export declare type ComponentType<T, P> = {
-    component: T;
-    params: P;
-};

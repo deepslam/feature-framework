@@ -18,8 +18,3 @@ export type ConfigType =
   | number
   | ConfigType[]
   | { [name: string]: ConfigType };
-
-export type ComponentType<T, P> = {
-  component: T;
-  params: P;
-};
