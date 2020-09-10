@@ -1,6 +1,7 @@
 # Feature framework
 
-Fully typescript typed feature driven framework was developed to fits daily needs any frontend parts and mobile apps written with JS.
+Fully typed feature driven framework written completely with TypeScript. 
+It was developed to fits daily needs any frontend parts and mobile apps written with JS.
 
 The main idea lies that eveyrthing is a feature. You define your app, define features which your application will you and craft your app.
 
