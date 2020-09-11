@@ -1,0 +1,11 @@
+src/
+node_modules/
+npm-debug.log
+yarn-error.log
+.DS_Store
+.eslintrc.js
+.prerrierrc.js
+jest.config.js
+jestSetup.js
+README.md
+tsconfig.json
