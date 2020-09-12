@@ -1,6 +1,6 @@
 # Feature framework
 
-** Documentation** is still in progress
+** Documentation is still in progress **
 
 Project is opened for pull requests.
 Any help would be appreciated.

@@ -7,11 +7,15 @@ import {
   IModel,
   IDataManager,
   IDataProvider,
+  ILogger,
 } from '../Interfaces';
 import { ConfigType, TranslationType } from '../Types';
 import Factory from '../Models/Factory';
+import { IErrorHandler } from './IErrorHandler';
+import { ErrorTypeEnum } from 'Types/ErrorTypes';
 
 export interface IApp<C = Record<string, ConfigType>> {
+  debug: boolean;
   baseEvents: Record<string, IEvent<unknown>>;
   events?: Record<string, IEvent<unknown>>;
   factories?: Record<string, Factory<any>>;
@@ -23,8 +27,19 @@ export interface IApp<C = Record<string, ConfigType>> {
   collections?: Record<string, IDataCollection<unknown, unknown>>;
   dataManagers?: Record<string, IDataManager<unknown>>;
   dataProviders?: Record<string, IDataProvider>;
+  logger: ILogger;
+  errorHandler: IErrorHandler;
+
+  additionalLoggers?: Record<string, ILogger>;
+  additionalErrorHandlers?: Record<string, IErrorHandler>;
 
   cfg(): C;
   extendConfig(config: Partial<C>): void;
   init(): Promise<boolean>;
+
+  err(error: string): void;
+  throwErr(error: string): void;
+  warning(error: string): void;
+
+  log(message: string, type: ErrorTypeEnum): void;
 }

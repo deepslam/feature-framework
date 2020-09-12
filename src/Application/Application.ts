@@ -6,24 +6,30 @@ import {
   combineReducers,
 } from '@reduxjs/toolkit';
 
-import { CountryCodeType, TranslationType } from '../Types';
+import { CountryCodeType, TranslationType, ErrorTypeEnum } from '../Types';
 
-import { IApp, IFeature } from '../Interfaces';
-import { AppLoadedEvent } from '../Events/App';
+import { IApp, IFeature, ILogger } from '../Interfaces';
+import { ConsoleLogger, ErrorHandler } from '../Models';
+import { AppLoadedEvent, AppErrorEvent } from '../Events/App';
 
 export default abstract class Application<C> implements IApp<C> {
   private initialized = false;
   private languages: CountryCodeType[] = [];
   private currentLanguage = 'en';
+  public debug = false;
   public store?: Store;
   public readonly baseEvents: {
     onAppLoaded: AppLoadedEvent;
+    onAppError: AppErrorEvent;
   } = {
     onAppLoaded: new AppLoadedEvent(),
+    onAppError: new AppErrorEvent(),
   };
   public abstract readonly translations: TranslationType;
   public abstract readonly features: Record<string, IFeature>;
   public abstract readonly reducers: Record<string, Reducer>;
+  public readonly logger: ILogger = new ConsoleLogger(this);
+  public readonly errorHandler = new ErrorHandler();
 
   constructor(protected config: C) {}
 
@@ -65,6 +71,32 @@ export default abstract class Application<C> implements IApp<C> {
 
   isInitialized() {
     return this.initialized;
+  }
+
+  err(error: string): void {
+    this.baseEvents.onAppError.fire({
+      message: error,
+      type: ErrorTypeEnum.error,
+    });
+  }
+
+  throwErr(error: string): void {
+    this.baseEvents.onAppError.fire({
+      message: error,
+      type: ErrorTypeEnum.error,
+    });
+  }
+
+  warning(error: string): void {
+    this.baseEvents.onAppError.fire({
+      message: error,
+      type: ErrorTypeEnum.warning,
+    });
+    this;
+  }
+
+  log(message: string, type: ErrorTypeEnum): void {
+    this.logger.log(message, type);
   }
 
   public setAvailableLanguages(languages: CountryCodeType[]) {
