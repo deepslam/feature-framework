@@ -13,6 +13,7 @@ type TestFeatureConfig = {
 export default class TestFeature
   extends Feature<TestFeatureConfig>
   implements IFeature<TestFeatureConfig> {
+  name = 'TestFeature';
   public readonly features = {
     SubFeature: new TestSubFeature({ enabled: false }),
   };

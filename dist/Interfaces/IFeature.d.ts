@@ -7,6 +7,7 @@ import { IDataManager } from './IDataManager';
 import { ConfigType, TranslationType } from '../Types';
 import Application from '../Application/Application';
 export interface IFeature<C = Record<string, ConfigType>, A = Application<unknown>> {
+    name: string;
     baseEvents: Record<string, IEvent<unknown>>;
     events?: Record<string, IEvent<unknown>>;
     features?: Record<string, IFeature>;

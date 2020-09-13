@@ -2,7 +2,7 @@
 import { v4 as uuid4 } from 'uuid';
 import SuccessFullyInitializedEvent from '../Events/Features/SuccessfullyInitializedEvent';
 import { IFeature, IEvent } from '../Interfaces';
-import { ConfigType } from '../Types';
+import { ConfigType, Constructor } from '../Types';
 import Application from '../Application/Application';
 
 type AbstractFeaturePrivateDataType = {
@@ -15,6 +15,7 @@ export default abstract class Feature<
   C = Record<string, ConfigType>,
   A = Application<unknown>
 > implements IFeature<C, A> {
+  public abstract name: string;
   public readonly uuid: string;
   public readonly baseEvents: { initialized: IEvent<boolean> } = {
     initialized: new SuccessFullyInitializedEvent(),
@@ -42,8 +43,8 @@ export default abstract class Feature<
     return this.app !== null;
   }
 
-  init(this: IFeature): Promise<boolean> {
-    return new Promise((resolve) => {
+  public init(this: IFeature): Promise<boolean> {
+    return new Promise((resolve, reject) => {
       const promises: unknown[] = [];
       if (this.features) {
         Object.keys(this.features).forEach((key) => {
@@ -54,11 +55,21 @@ export default abstract class Feature<
         });
       }
       Promise.all(promises).then(() => {
-        this.initFeature().then((result) => {
-          this.setInitialized(result);
-          this.baseEvents.initialized.fire(result);
-          resolve(result);
-        });
+        this.initFeature()
+          .then((result) => {
+            this.setInitialized(result);
+            this.baseEvents.initialized.fire(result);
+            this.getApp()?.info(
+              `Feature '${this.name}' successfully intialized`,
+            );
+            resolve(result);
+          })
+          .catch((e) => {
+            this.getApp()?.error(
+              `Failed to initialize the feature '${this.name}' (${e})`,
+            );
+            reject(e);
+          });
       });
     });
   }

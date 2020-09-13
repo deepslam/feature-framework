@@ -13,6 +13,7 @@ import { ConfigType, TranslationType } from '../Types';
 import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';
 import { ErrorTypeEnum } from 'Types/ErrorTypes';
+import { ErrorHandler } from 'Models';
 
 export interface IApp<C = Record<string, ConfigType>> {
   debug: boolean;
@@ -30,8 +31,8 @@ export interface IApp<C = Record<string, ConfigType>> {
   logger: ILogger;
   errorHandler: IErrorHandler;
 
-  additionalLoggers?: Record<string, ILogger>;
-  additionalErrorHandlers?: Record<string, IErrorHandler>;
+  additionalLoggers: ILogger[];
+  additionalErrorHandlers: ErrorHandler[];
 
   cfg(): C;
   extendConfig(config: Partial<C>): void;
@@ -42,4 +43,5 @@ export interface IApp<C = Record<string, ConfigType>> {
   warning(error: string): void;
 
   log(message: string, type: ErrorTypeEnum): void;
+  info(message: string): void;
 }

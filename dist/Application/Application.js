@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const i18next_1 = __importDefault(require("i18next"));
 const toolkit_1 = require("@reduxjs/toolkit");
+const Types_1 = require("../Types");
+const Models_1 = require("../Models");
 const App_1 = require("../Events/App");
 class Application {
     constructor(config) {
@@ -12,9 +14,15 @@ class Application {
         this.initialized = false;
         this.languages = [];
         this.currentLanguage = 'en';
+        this.debug = false;
         this.baseEvents = {
             onAppLoaded: new App_1.AppLoadedEvent(),
+            onAppError: new App_1.AppErrorEvent(),
         };
+        this.logger = new Models_1.ConsoleLogger(this);
+        this.errorHandler = new Models_1.ErrorHandler();
+        this.additionalLoggers = [];
+        this.additionalErrorHandlers = [];
     }
     cfg() {
         return this.config;
@@ -43,15 +51,53 @@ class Application {
                     resolve(true);
                 }
                 else {
+                    this.throwErr('App initialization failed');
                     this.baseEvents.onAppLoaded.fire(false);
                     resolve(false);
                 }
             })
-                .catch(() => reject());
+                .catch((e) => {
+                this.throwErr(`Unexpected error happened during app initialization (${e})`);
+                reject();
+            });
         });
     }
     isInitialized() {
         return this.initialized;
+    }
+    err(error) {
+        this.baseEvents.onAppError.fire({
+            message: error,
+            type: Types_1.ErrorTypeEnum.error,
+        });
+        this.log(error, Types_1.ErrorTypeEnum.error);
+        this.errorHandler.handleError(error, Types_1.ErrorTypeEnum.error);
+        this.additionalErrorHandlers.forEach((handler) => handler.handleError(error, Types_1.ErrorTypeEnum.error));
+    }
+    throwErr(error) {
+        this.baseEvents.onAppError.fire({
+            message: error,
+            type: Types_1.ErrorTypeEnum.critical,
+        });
+        this.log(error, Types_1.ErrorTypeEnum.critical);
+        this.errorHandler.handleError(error, Types_1.ErrorTypeEnum.critical);
+        this.additionalErrorHandlers.forEach((handler) => handler.handleError(error, Types_1.ErrorTypeEnum.critical));
+    }
+    warning(error) {
+        this.baseEvents.onAppError.fire({
+            message: error,
+            type: Types_1.ErrorTypeEnum.warning,
+        });
+        this.log(error, Types_1.ErrorTypeEnum.warning);
+        this.errorHandler.handleError(error, Types_1.ErrorTypeEnum.warning);
+        this.additionalErrorHandlers.forEach((handler) => handler.handleError(error, Types_1.ErrorTypeEnum.warning));
+    }
+    log(message, type = Types_1.ErrorTypeEnum.warning) {
+        this.logger.log(message, type);
+        this.additionalLoggers.forEach((logger) => logger.log(message, type));
+    }
+    info(message) {
+        this.log(message, Types_1.ErrorTypeEnum.info);
     }
     setAvailableLanguages(languages) {
         languages.forEach((lang) => {

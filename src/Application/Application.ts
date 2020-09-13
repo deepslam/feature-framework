@@ -8,7 +8,7 @@ import {
 
 import { CountryCodeType, TranslationType, ErrorTypeEnum } from '../Types';
 
-import { IApp, IFeature, ILogger } from '../Interfaces';
+import { IApp, IFeature, ILogger, IErrorHandler } from '../Interfaces';
 import { ConsoleLogger, ErrorHandler } from '../Models';
 import { AppLoadedEvent, AppErrorEvent } from '../Events/App';
 
@@ -30,6 +30,8 @@ export default abstract class Application<C> implements IApp<C> {
   public abstract readonly reducers: Record<string, Reducer>;
   public readonly logger: ILogger = new ConsoleLogger(this);
   public readonly errorHandler = new ErrorHandler();
+  public readonly additionalLoggers: ILogger[] = [];
+  public readonly additionalErrorHandlers: IErrorHandler[] = [];
 
   constructor(protected config: C) {}
 
@@ -61,11 +63,17 @@ export default abstract class Application<C> implements IApp<C> {
             this.baseEvents.onAppLoaded.fire(true);
             resolve(true);
           } else {
+            this.throwErr('App initialization failed');
             this.baseEvents.onAppLoaded.fire(false);
             resolve(false);
           }
         })
-        .catch(() => reject());
+        .catch((e) => {
+          this.throwErr(
+            `Unexpected error happened during app initialization (${e})`,
+          );
+          reject();
+        });
     });
   }
 
@@ -78,13 +86,23 @@ export default abstract class Application<C> implements IApp<C> {
       message: error,
       type: ErrorTypeEnum.error,
     });
+    this.log(error, ErrorTypeEnum.error);
+    this.errorHandler.handleError(error, ErrorTypeEnum.error);
+    this.additionalErrorHandlers.forEach((handler) =>
+      handler.handleError(error, ErrorTypeEnum.error),
+    );
   }
 
   throwErr(error: string): void {
     this.baseEvents.onAppError.fire({
       message: error,
-      type: ErrorTypeEnum.error,
+      type: ErrorTypeEnum.critical,
     });
+    this.log(error, ErrorTypeEnum.critical);
+    this.errorHandler.handleError(error, ErrorTypeEnum.critical);
+    this.additionalErrorHandlers.forEach((handler) =>
+      handler.handleError(error, ErrorTypeEnum.critical),
+    );
   }
 
   warning(error: string): void {
@@ -92,11 +110,20 @@ export default abstract class Application<C> implements IApp<C> {
       message: error,
       type: ErrorTypeEnum.warning,
     });
-    this;
+    this.log(error, ErrorTypeEnum.warning);
+    this.errorHandler.handleError(error, ErrorTypeEnum.warning);
+    this.additionalErrorHandlers.forEach((handler) =>
+      handler.handleError(error, ErrorTypeEnum.warning),
+    );
   }
 
-  log(message: string, type: ErrorTypeEnum): void {
+  log(message: string, type: ErrorTypeEnum = ErrorTypeEnum.warning): void {
     this.logger.log(message, type);
+    this.additionalLoggers.forEach((logger) => logger.log(message, type));
+  }
+
+  info(message: string): void {
+    this.log(message, ErrorTypeEnum.info);
   }
 
   public setAvailableLanguages(languages: CountryCodeType[]) {

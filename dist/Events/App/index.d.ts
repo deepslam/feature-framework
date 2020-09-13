@@ -1,2 +1,3 @@
 import AppLoadedEvent from './AppLoadedEvent';
-export { AppLoadedEvent };
+import AppErrorEvent from './AppErrorEvent';
+export { AppLoadedEvent, AppErrorEvent };

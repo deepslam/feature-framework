@@ -5,6 +5,8 @@ type TestSubFeatureConfig = {
 };
 
 export default class TestSubFeature extends Feature<TestSubFeatureConfig> {
+  name = 'TestSubFeature';
+
   getConfig(): TestSubFeatureConfig {
     return {
       enabled: false,

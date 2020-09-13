@@ -30,7 +30,7 @@ class Feature {
         return this.app !== null;
     }
     init() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const promises = [];
             if (this.features) {
                 Object.keys(this.features).forEach((key) => {
@@ -41,10 +41,18 @@ class Feature {
                 });
             }
             Promise.all(promises).then(() => {
-                this.initFeature().then((result) => {
+                this.initFeature()
+                    .then((result) => {
+                    var _a;
                     this.setInitialized(result);
                     this.baseEvents.initialized.fire(result);
+                    (_a = this.getApp()) === null || _a === void 0 ? void 0 : _a.info(`Feature '${this.name}' successfully intialized`);
                     resolve(result);
+                })
+                    .catch((e) => {
+                    var _a;
+                    (_a = this.getApp()) === null || _a === void 0 ? void 0 : _a.error(`Failed to initialize the feature '${this.name}' (${e})`);
+                    reject(e);
                 });
             });
         });

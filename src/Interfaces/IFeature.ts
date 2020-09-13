@@ -11,6 +11,8 @@ export interface IFeature<
   C = Record<string, ConfigType>,
   A = Application<unknown>
 > {
+  name: string;
+
   baseEvents: Record<string, IEvent<unknown>>;
   events?: Record<string, IEvent<unknown>>;
   features?: Record<string, IFeature>;

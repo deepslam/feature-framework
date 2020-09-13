@@ -3,6 +3,7 @@ import { ConfigType } from '../Types';
 import Application from '../Application/Application';
 export default abstract class Feature<C = Record<string, ConfigType>, A = Application<unknown>> implements IFeature<C, A> {
     protected config: C;
+    abstract name: string;
     readonly uuid: string;
     readonly baseEvents: {
         initialized: IEvent<boolean>;

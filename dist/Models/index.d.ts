@@ -5,4 +5,6 @@ import Factory from './Factory';
 import DataCollection from './DataCollection';
 import DataManager from './DataManager';
 import View from './View';
-export { Feature, Event, Model, Factory, DataCollection, DataManager, View };
+import ConsoleLogger from './ConsoleLogger';
+import ErrorHandler from './ErrorHandler';
+export { Feature, Event, Model, Factory, DataCollection, DataManager, View, ConsoleLogger, ErrorHandler, };

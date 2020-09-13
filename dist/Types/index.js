@@ -14,5 +14,6 @@ __exportStar(require("./AppTypes"), exports);
 __exportStar(require("./CountryCodeType"), exports);
 __exportStar(require("./ModelTypes"), exports);
 __exportStar(require("./EventTypes"), exports);
+__exportStar(require("./ErrorTypes"), exports);
 __exportStar(require("./Common"), exports);
 //# sourceMappingURL=index.js.map

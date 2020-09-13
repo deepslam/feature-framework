@@ -5,14 +5,14 @@ import { ErrorTypeEnum } from '../Types/ErrorTypes';
 export default class ConsoleLogger implements ILogger {
   constructor(private readonly app: Application<unknown>) {}
 
-  log(message: string, type: ErrorTypeEnum | null = null): void {
+  public log(message: string, type: ErrorTypeEnum | null = null): void {
     if (this.app.debug) {
       switch (type) {
         case ErrorTypeEnum.critical:
         case ErrorTypeEnum.error:
           console.error(message);
           break;
-        case 'warning':
+        case ErrorTypeEnum.warning:
         default:
           console.warn(message);
       }
