@@ -47,8 +47,7 @@ describe('Collections test', () => {
 
     expect(collection.contain(modelOne)).toBeFalsy();
     expect(collection.length()).toBe(1);
-
-    expect(itemAddedCallback).toHaveBeenCalled();
+    expect(itemRemovedCallback).toHaveBeenCalled();
 
     collection.clear();
 

@@ -1,7 +1,9 @@
 import DataLoadedEvent from '../Events/DataManager/DataLoadedEvent';
 import DataSavedEvent from '../Events/DataManager/DataSavedEvent';
+import DataRemovedEvent from '../Events/DataManager/DataRemovedEvent';
 import DataLoadingErrorEvent from '../Events/DataManager/DataLoadingErrorEvent';
 import DataSavingErrorEvent from '../Events/DataManager/DataSavingErrorEvent';
+import DataRemovingErrorEvent from '../Events/DataManager/DataRemovingErrorEvent';
 import { IDataProvider } from './../Interfaces/IDataProvider';
 import { IDataManager } from './../Interfaces/IDataManager';
 import { IEvent } from './../Interfaces/IEvent';
@@ -10,13 +12,21 @@ export default abstract class DataManager<T> implements IDataManager<T> {
   public readonly events: {
     DataLoaded: IEvent<T>;
     DataLoadingError: IEvent<null>;
-    DataSaved: IEvent<boolean>;
-    DataSavingError: IEvent<boolean>;
+
+    DataSaved: IEvent<string>;
+    DataSavingError: IEvent<string>;
+
+    DataRemoved: IEvent<string>;
+    DataRemovingError: IEvent<string>;
   } = {
     DataLoaded: new DataLoadedEvent(),
     DataLoadingError: new DataLoadingErrorEvent(),
+
     DataSaved: new DataSavedEvent(),
     DataSavingError: new DataSavingErrorEvent(),
+
+    DataRemoved: new DataRemovedEvent(),
+    DataRemovingError: new DataRemovingErrorEvent(),
   };
 
   protected abstract restore(data: unknown): T;
@@ -46,12 +56,31 @@ export default abstract class DataManager<T> implements IDataManager<T> {
       this.provider
         .save(key, dataToSave)
         .then(() => {
-          this.events.DataSaved.fire(true);
+          this.events.DataSaved.fire(key);
           resolve(true);
         })
         .catch(() => {
-          this.events.DataSavingError.fire(false);
+          this.events.DataSavingError.fire(key);
           reject(false);
+        });
+    });
+  }
+
+  remove(key: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.provider
+        .remove(key)
+        .then((result) => {
+          if (result) {
+            this.events.DataRemoved.fire(key);
+          } else {
+            this.events.DataRemovingError.fire(key);
+          }
+          resolve(result);
+        })
+        .catch(() => {
+          this.events.DataRemovingError.fire(key);
+          resolve(false);
         });
     });
   }
