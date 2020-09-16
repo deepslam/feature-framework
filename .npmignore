@@ -7,4 +7,3 @@ yarn-error.log
 .github
 jest.config.js
 jestSetup.js
-tsconfig.json
