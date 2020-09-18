@@ -12,8 +12,8 @@ import {
 import { ConfigType, TranslationType } from '../Types';
 import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';
-import { ErrorTypeEnum } from 'Types/ErrorTypes';
-import { ErrorHandler } from 'Models';
+import { ErrorTypeEnum } from '../Types/ErrorTypes';
+import ErrorHandler from '../Models/ErrorHandler';
 
 export interface IApp<C = Record<string, ConfigType>> {
   debug: boolean;

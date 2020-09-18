@@ -77,6 +77,26 @@ export default abstract class Application<C> implements IApp<C> {
     });
   }
 
+  protected initStore() {
+    this.store = configureStore({ reducer: combineReducers(this.reducers) });
+  }
+
+  private initI18n(): Promise<boolean> {
+    return new Promise((resolve) => {
+      // i18n.use(initReactI18next).init(
+      i18n.init(
+        {
+          fallbackLng: this.currentLanguage,
+          debug: false,
+        },
+        (err) => {
+          if (err) throw new Error(`Error with i18n initialization: ${err}`);
+          resolve(true);
+        },
+      );
+    });
+  }
+
   isInitialized() {
     return this.initialized;
   }
@@ -164,26 +184,6 @@ export default abstract class Application<C> implements IApp<C> {
 
   error(err: string): never {
     throw new Error(err);
-  }
-
-  protected initStore() {
-    this.store = configureStore({ reducer: combineReducers(this.reducers) });
-  }
-
-  private initI18n(): Promise<boolean> {
-    return new Promise((resolve) => {
-      // i18n.use(initReactI18next).init(
-      i18n.init(
-        {
-          fallbackLng: this.currentLanguage,
-          debug: false,
-        },
-        (err) => {
-          if (err) throw new Error(`Error with i18n initialization: ${err}`);
-          resolve(true);
-        },
-      );
-    });
   }
 
   private setAppToFeatures(features: Record<string, IFeature>) {

@@ -62,6 +62,22 @@ class Application {
             });
         });
     }
+    initStore() {
+        this.store = toolkit_1.configureStore({ reducer: toolkit_1.combineReducers(this.reducers) });
+    }
+    initI18n() {
+        return new Promise((resolve) => {
+            // i18n.use(initReactI18next).init(
+            i18next_1.default.init({
+                fallbackLng: this.currentLanguage,
+                debug: false,
+            }, (err) => {
+                if (err)
+                    throw new Error(`Error with i18n initialization: ${err}`);
+                resolve(true);
+            });
+        });
+    }
     isInitialized() {
         return this.initialized;
     }
@@ -128,22 +144,6 @@ class Application {
     }
     error(err) {
         throw new Error(err);
-    }
-    initStore() {
-        this.store = toolkit_1.configureStore({ reducer: toolkit_1.combineReducers(this.reducers) });
-    }
-    initI18n() {
-        return new Promise((resolve) => {
-            // i18n.use(initReactI18next).init(
-            i18next_1.default.init({
-                fallbackLng: this.currentLanguage,
-                debug: false,
-            }, (err) => {
-                if (err)
-                    throw new Error(`Error with i18n initialization: ${err}`);
-                resolve(true);
-            });
-        });
     }
     setAppToFeatures(features) {
         Object.keys(features).forEach((key) => {

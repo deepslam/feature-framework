@@ -26,6 +26,8 @@ export default abstract class Application<C> implements IApp<C> {
     cfg(): C;
     extendConfig(config: Partial<C>): void;
     init(): Promise<ApplicationInitSuccessfulType>;
+    protected initStore(): void;
+    private initI18n;
     isInitialized(): boolean;
     err(error: string): void;
     throwErr(error: string): void;
@@ -39,8 +41,6 @@ export default abstract class Application<C> implements IApp<C> {
     getCurrentLanguage(): string;
     t(key: string, data: TOptions): string;
     error(err: string): never;
-    protected initStore(): void;
-    private initI18n;
     private setAppToFeatures;
 }
 export declare type ApplicationInitSuccessfulType = boolean;
