@@ -1,3 +1,4 @@
+import { Locale } from 'locale-enum';
 import Application from '../../../Application/Application';
 import TestFeature from '../SampleFeature/TestFeature';
 import TestFactory from '../TestFactories/TestFactory';
@@ -20,7 +21,6 @@ export default class TestApplication
   factories = {
     TestFactory: new TestFactory(TestModel),
   };
-  translations = {};
   additionalErrorHandlers: IErrorHandler[] = [new TestErrorHandler()];
   additionalLoggers: ILogger[] = [new TestLogger(this)];
 }

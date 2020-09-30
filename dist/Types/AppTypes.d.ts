@@ -1,5 +1,11 @@
+import { Locale } from 'locale-enum';
 import { Reducer } from '@reduxjs/toolkit';
 import { IFeature } from '../Interfaces';
+export declare type DefaultAppConfigType = {
+    fallbackLocale: Locale;
+    locales: Locale[];
+    defaultLocale: Locale;
+};
 export declare type AppConfig = number | string | boolean | unknown[] | {
     [key: string]: AppConfig;
 };

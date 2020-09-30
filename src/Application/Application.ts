@@ -1,31 +1,42 @@
-import i18n, { TOptions } from 'i18next';
 import {
   Store,
   configureStore,
   Reducer,
   combineReducers,
 } from '@reduxjs/toolkit';
+import { Locale } from 'locale-enum';
 
-import { CountryCodeType, TranslationType, ErrorTypeEnum } from '../Types';
+import {
+  ErrorTypeEnum,
+  DefaultAppConfigType,
+  TranslationPluralItemType,
+} from '../Types';
 
 import { IApp, IFeature, ILogger, IErrorHandler } from '../Interfaces';
-import { ConsoleLogger, ErrorHandler } from '../Models';
-import { AppLoadedEvent, AppErrorEvent } from '../Events/App';
+import { ConsoleLogger, ErrorHandler, Translations } from '../Models';
+import {
+  AppLoadedEvent,
+  AppErrorEvent,
+  AppLocaleChangedEvent,
+} from '../Events/App';
 
 export default abstract class Application<C> implements IApp<C> {
   private initialized = false;
-  private languages: CountryCodeType[] = [];
-  private currentLanguage = 'en';
+  private locales: Locale[] = [Locale.en];
+  public locale: Locale = Locale.en;
+  public readonly fallbackLocale: Locale = Locale.en;
   public debug = false;
   public store?: Store;
   public readonly baseEvents: {
     onAppLoaded: AppLoadedEvent;
     onAppError: AppErrorEvent;
+    onAppLocaleChanged: AppLocaleChangedEvent;
   } = {
     onAppLoaded: new AppLoadedEvent(),
     onAppError: new AppErrorEvent(),
+    onAppLocaleChanged: new AppLocaleChangedEvent(),
   };
-  public abstract readonly translations: TranslationType;
+  public readonly translations: Record<string, Translations<unknown>> = {};
   public abstract readonly features: Record<string, IFeature>;
   public abstract readonly reducers: Record<string, Reducer>;
   public readonly logger: ILogger = new ConsoleLogger(this);
@@ -33,7 +44,11 @@ export default abstract class Application<C> implements IApp<C> {
   public readonly additionalLoggers: ILogger[] = [];
   public readonly additionalErrorHandlers: IErrorHandler[] = [];
 
-  constructor(protected config: C) {}
+  constructor(protected config: C & Partial<DefaultAppConfigType>) {
+    this.locales = config.locales || [Locale.en];
+    this.fallbackLocale = config.fallbackLocale || Locale.en;
+    this.setCurrentLocale(config.defaultLocale || Locale.en);
+  }
 
   public cfg(): C {
     return this.config;
@@ -54,8 +69,8 @@ export default abstract class Application<C> implements IApp<C> {
         promises.push(this.features[key].init());
       });
       this.initStore();
-      this.initI18n()
-        .then(() => Promise.all(promises))
+      this.initTranslations();
+      Promise.all(promises)
         .then((args: boolean[]) => {
           const falseArgs = args.filter((arg) => !arg);
           if (falseArgs.length === 0) {
@@ -81,20 +96,24 @@ export default abstract class Application<C> implements IApp<C> {
     this.store = configureStore({ reducer: combineReducers(this.reducers) });
   }
 
-  private initI18n(): Promise<boolean> {
-    return new Promise((resolve) => {
-      // i18n.use(initReactI18next).init(
-      i18n.init(
-        {
-          fallbackLng: this.currentLanguage,
-          debug: false,
-        },
-        (err) => {
-          if (err) throw new Error(`Error with i18n initialization: ${err}`);
-          resolve(true);
-        },
-      );
-    });
+  private initTranslations(): void {
+    const setAppToTranslations = (
+      translations: Record<string, Translations<unknown>>,
+    ) => {
+      Object.keys(translations).forEach((translationKey) => {
+        const translation = translations[translationKey];
+        if (translation instanceof Translations) {
+          translation.setApp(this);
+        } else if (
+          typeof translation === 'object' &&
+          Object.keys(translation).length > 0
+        ) {
+          setAppToTranslations(translation);
+        }
+      });
+    };
+
+    setAppToTranslations(this.translations);
   }
 
   isInitialized() {
@@ -146,40 +165,70 @@ export default abstract class Application<C> implements IApp<C> {
     this.log(message, ErrorTypeEnum.info);
   }
 
-  public setAvailableLanguages(languages: CountryCodeType[]) {
-    languages.forEach((lang) => {
-      if (!this.languages.includes(lang.toLowerCase() as CountryCodeType)) {
-        this.languages.push(lang.toLowerCase() as CountryCodeType);
+  public setLocales(locales: Locale[]) {
+    locales.forEach((locale) => {
+      if (!this.locales.includes(locale)) {
+        this.locales.push(locale);
       }
     });
   }
 
-  public getAvailableLanguages() {
-    return this.languages;
+  public getAvailableLocales() {
+    return this.locales;
   }
 
-  public isLanguageAvailable(language: CountryCodeType): boolean {
+  public isLocaleAvailable(locale: Locale): boolean {
     return (
-      this.languages.includes(language.toLowerCase() as CountryCodeType) ||
-      this.currentLanguage.toLowerCase() === language.toLowerCase()
+      this.locales.includes(locale) || this.locale.toLowerCase() === locale
     );
   }
 
-  public setCurrentLanguage(language: CountryCodeType): boolean {
-    if (this.isLanguageAvailable(language as CountryCodeType)) {
-      this.currentLanguage = language;
+  public setCurrentLocale(locale: Locale): boolean {
+    if (this.isLocaleAvailable(locale)) {
+      this.locale = locale;
+      this.baseEvents.onAppLocaleChanged.fire(locale);
       return true;
     }
 
     return false;
   }
 
-  public getCurrentLanguage() {
-    return this.currentLanguage;
+  public getCurrentLocale() {
+    return this.locale;
   }
 
-  public t(key: string, data: TOptions): string {
-    return i18n.t(key, data);
+  public t(
+    value: string | TranslationPluralItemType,
+    data: Record<string, string> = {},
+    number?: number,
+  ): string {
+    if (typeof value === 'string') {
+      return Translations.template(
+        value,
+        (data as Record<string, string>) || {},
+      );
+    } else if (
+      typeof value === 'object' &&
+      value.plural &&
+      value.one &&
+      value.zero
+    ) {
+      const params: Record<string, string> = data || {};
+      if (number === 0) {
+        return Translations.template(value.zero, params);
+      } else if (number === 1) {
+        return Translations.template(value.one, params);
+      } else if (number && number > 1) {
+        if (typeof value.plural === 'string') {
+          return Translations.template(value.plural, params);
+        } else {
+          return Translations.template(value.plural(number), params);
+        }
+      } else {
+        return '';
+      }
+    }
+    return '';
   }
 
   error(err: string): never {

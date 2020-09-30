@@ -7,6 +7,7 @@ import DataManager from './DataManager';
 import View from './View';
 import ConsoleLogger from './ConsoleLogger';
 import ErrorHandler from './ErrorHandler';
+import Translations from './Translations';
 
 export {
   Feature,
@@ -18,4 +19,5 @@ export {
   View,
   ConsoleLogger,
   ErrorHandler,
+  Translations,
 };

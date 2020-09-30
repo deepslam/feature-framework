@@ -4,8 +4,9 @@ import { IEvent } from './IEvent';
 import { IView } from './IView';
 import { IModel } from './IModel';
 import { IDataManager } from './IDataManager';
-import { ConfigType, TranslationType } from '../Types';
+import { ConfigType } from '../Types';
 import Application from '../Application/Application';
+import { Translations } from 'Models';
 
 export interface IFeature<
   C = Record<string, ConfigType>,
@@ -17,7 +18,7 @@ export interface IFeature<
   events?: Record<string, IEvent<unknown>>;
   features?: Record<string, IFeature>;
   slices?: Record<string, Slice>;
-  translations?: TranslationType;
+  translations?: Translations<unknown>;
   view?: IView<unknown> | null;
   models?: Record<string, IModel<unknown>>;
   collections?: Record<string, IDataCollection<unknown, unknown>>;

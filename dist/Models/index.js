@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorHandler = exports.ConsoleLogger = exports.View = exports.DataManager = exports.DataCollection = exports.Factory = exports.Model = exports.Event = exports.Feature = void 0;
+exports.Translations = exports.ErrorHandler = exports.ConsoleLogger = exports.View = exports.DataManager = exports.DataCollection = exports.Factory = exports.Model = exports.Event = exports.Feature = void 0;
 const Feature_1 = __importDefault(require("./Feature"));
 exports.Feature = Feature_1.default;
 const Event_1 = __importDefault(require("./Event"));
@@ -22,4 +22,6 @@ const ConsoleLogger_1 = __importDefault(require("./ConsoleLogger"));
 exports.ConsoleLogger = ConsoleLogger_1.default;
 const ErrorHandler_1 = __importDefault(require("./ErrorHandler"));
 exports.ErrorHandler = ErrorHandler_1.default;
+const Translations_1 = __importDefault(require("./Translations"));
+exports.Translations = Translations_1.default;
 //# sourceMappingURL=index.js.map

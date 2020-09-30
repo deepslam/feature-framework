@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const i18next_1 = __importDefault(require("i18next"));
 const toolkit_1 = require("@reduxjs/toolkit");
+const locale_enum_1 = require("locale-enum");
 const Types_1 = require("../Types");
 const Models_1 = require("../Models");
 const App_1 = require("../Events/App");
@@ -12,17 +9,23 @@ class Application {
     constructor(config) {
         this.config = config;
         this.initialized = false;
-        this.languages = [];
-        this.currentLanguage = 'en';
+        this.locales = [locale_enum_1.Locale.en];
+        this.locale = locale_enum_1.Locale.en;
+        this.fallbackLocale = locale_enum_1.Locale.en;
         this.debug = false;
         this.baseEvents = {
             onAppLoaded: new App_1.AppLoadedEvent(),
             onAppError: new App_1.AppErrorEvent(),
+            onAppLocaleChanged: new App_1.AppLocaleChangedEvent(),
         };
+        this.translations = {};
         this.logger = new Models_1.ConsoleLogger(this);
         this.errorHandler = new Models_1.ErrorHandler();
         this.additionalLoggers = [];
         this.additionalErrorHandlers = [];
+        this.locales = config.locales || [locale_enum_1.Locale.en];
+        this.fallbackLocale = config.fallbackLocale || locale_enum_1.Locale.en;
+        this.setCurrentLocale(config.defaultLocale || locale_enum_1.Locale.en);
     }
     cfg() {
         return this.config;
@@ -41,8 +44,8 @@ class Application {
                 promises.push(this.features[key].init());
             });
             this.initStore();
-            this.initI18n()
-                .then(() => Promise.all(promises))
+            this.initTranslations();
+            Promise.all(promises)
                 .then((args) => {
                 const falseArgs = args.filter((arg) => !arg);
                 if (falseArgs.length === 0) {
@@ -65,18 +68,20 @@ class Application {
     initStore() {
         this.store = toolkit_1.configureStore({ reducer: toolkit_1.combineReducers(this.reducers) });
     }
-    initI18n() {
-        return new Promise((resolve) => {
-            // i18n.use(initReactI18next).init(
-            i18next_1.default.init({
-                fallbackLng: this.currentLanguage,
-                debug: false,
-            }, (err) => {
-                if (err)
-                    throw new Error(`Error with i18n initialization: ${err}`);
-                resolve(true);
+    initTranslations() {
+        const setAppToTranslations = (translations) => {
+            Object.keys(translations).forEach((translationKey) => {
+                const translation = translations[translationKey];
+                if (translation instanceof Models_1.Translations) {
+                    translation.setApp(this);
+                }
+                else if (typeof translation === 'object' &&
+                    Object.keys(translation).length > 0) {
+                    setAppToTranslations(translation);
+                }
             });
-        });
+        };
+        setAppToTranslations(this.translations);
     }
     isInitialized() {
         return this.initialized;
@@ -115,32 +120,58 @@ class Application {
     info(message) {
         this.log(message, Types_1.ErrorTypeEnum.info);
     }
-    setAvailableLanguages(languages) {
-        languages.forEach((lang) => {
-            if (!this.languages.includes(lang.toLowerCase())) {
-                this.languages.push(lang.toLowerCase());
+    setLocales(locales) {
+        locales.forEach((locale) => {
+            if (!this.locales.includes(locale)) {
+                this.locales.push(locale);
             }
         });
     }
-    getAvailableLanguages() {
-        return this.languages;
+    getAvailableLocales() {
+        return this.locales;
     }
-    isLanguageAvailable(language) {
-        return (this.languages.includes(language.toLowerCase()) ||
-            this.currentLanguage.toLowerCase() === language.toLowerCase());
+    isLocaleAvailable(locale) {
+        return (this.locales.includes(locale) || this.locale.toLowerCase() === locale);
     }
-    setCurrentLanguage(language) {
-        if (this.isLanguageAvailable(language)) {
-            this.currentLanguage = language;
+    setCurrentLocale(locale) {
+        if (this.isLocaleAvailable(locale)) {
+            this.locale = locale;
+            this.baseEvents.onAppLocaleChanged.fire(locale);
             return true;
         }
         return false;
     }
-    getCurrentLanguage() {
-        return this.currentLanguage;
+    getCurrentLocale() {
+        return this.locale;
     }
-    t(key, data) {
-        return i18next_1.default.t(key, data);
+    t(value, data = {}, number) {
+        if (typeof value === 'string') {
+            return Models_1.Translations.template(value, data || {});
+        }
+        else if (typeof value === 'object' &&
+            value.plural &&
+            value.one &&
+            value.zero) {
+            const params = data || {};
+            if (number === 0) {
+                return Models_1.Translations.template(value.zero, params);
+            }
+            else if (number === 1) {
+                return Models_1.Translations.template(value.one, params);
+            }
+            else if (number && number > 1) {
+                if (typeof value.plural === 'string') {
+                    return Models_1.Translations.template(value.plural, params);
+                }
+                else {
+                    return Models_1.Translations.template(value.plural(number), params);
+                }
+            }
+            else {
+                return '';
+            }
+        }
+        return '';
     }
     error(err) {
         throw new Error(err);
