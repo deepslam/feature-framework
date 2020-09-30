@@ -15,7 +15,7 @@ import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';
 import { ErrorTypeEnum } from '../Types/ErrorTypes';
 import ErrorHandler from '../Models/ErrorHandler';
-import { Translations } from 'Models';
+import Translations from '../Models/Translations';
 
 export interface IApp<C = Record<string, ConfigType>> {
   locale: Locale;

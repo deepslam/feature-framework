@@ -1,5 +1,5 @@
-import TestApp from '../TestData/Application/TestApplication';
 import { Locale } from 'locale-enum';
+import TestApp from '../TestData/Application/TestApplication';
 
 describe('Application should be able to manage locales', () => {
   it('Expect that default locale is en', () => {

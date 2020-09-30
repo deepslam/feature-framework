@@ -2,7 +2,7 @@
 import { v4 as uuid4 } from 'uuid';
 import SuccessFullyInitializedEvent from '../Events/Features/SuccessfullyInitializedEvent';
 import { IFeature, IEvent } from '../Interfaces';
-import { ConfigType, Constructor } from '../Types';
+import { ConfigType } from '../Types';
 import Application from '../Application/Application';
 
 type AbstractFeaturePrivateDataType = {
