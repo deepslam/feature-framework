@@ -13,7 +13,7 @@ export interface IFeature<C = Record<string, ConfigType>, A = Application<unknow
     events?: Record<string, IEvent<unknown>>;
     features?: Record<string, IFeature>;
     slices?: Record<string, Slice>;
-    translations?: Translations<unknown>;
+    translations?: Record<string, Translations<unknown>>;
     view?: IView<unknown> | null;
     models?: Record<string, IModel<unknown>>;
     collections?: Record<string, IDataCollection<unknown, unknown>>;

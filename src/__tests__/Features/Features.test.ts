@@ -29,10 +29,21 @@ describe('Features test', () => {
       name: 'test',
     });
 
+    const secondFeature = new TestFeature({
+      id: 223,
+      name: 'Never initialized feature',
+    });
+
     const eventFeatureInitializedFunction = jest.fn();
     const eventSubFeatureInitializedFunction = jest.fn();
-    feature.baseEvents.initialized.fire = eventFeatureInitializedFunction;
-    feature.features.SubFeature.baseEvents.initialized.fire = eventSubFeatureInitializedFunction;
+    const secondEventFeatureInitializedFunction = jest.fn();
+    secondFeature.baseEvents.initialized.subscribe(
+      secondEventFeatureInitializedFunction,
+    );
+    feature.baseEvents.initialized.subscribe(eventFeatureInitializedFunction);
+    feature.features.SubFeature.baseEvents.initialized.subscribe(
+      eventSubFeatureInitializedFunction,
+    );
 
     expect(feature.isInitialized()).toBeFalsy();
 
@@ -40,6 +51,7 @@ describe('Features test', () => {
 
     expect(eventFeatureInitializedFunction).not.toHaveBeenCalled();
     expect(eventSubFeatureInitializedFunction).not.toHaveBeenCalled();
+    expect(secondEventFeatureInitializedFunction).not.toHaveBeenCalled();
 
     feature
       .init()
@@ -49,6 +61,7 @@ describe('Features test', () => {
         expect(feature.features.SubFeature.isInitialized()).toBeTruthy();
         expect(eventFeatureInitializedFunction).toHaveBeenCalledTimes(1);
         expect(eventSubFeatureInitializedFunction).toHaveBeenCalledTimes(1);
+        expect(secondEventFeatureInitializedFunction).toHaveBeenCalledTimes(0);
         done();
       })
       .catch((e) => {
