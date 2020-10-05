@@ -20,4 +20,5 @@ __exportStar(require("./Models"), exports);
 __exportStar(require("./Events"), exports);
 __exportStar(require("./Interfaces"), exports);
 __exportStar(require("./Types"), exports);
+__exportStar(require("./DataProviders"), exports);
 //# sourceMappingURL=index.js.map
