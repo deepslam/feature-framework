@@ -5,6 +5,7 @@ import TestSubFeature from './TestSubFeature';
 import TestModel from '../TestModels/TestModel';
 import TestCollection from '../DataCollection/TestDataCollection';
 import { IFeature } from '../../../Interfaces/IFeature';
+import TestFactory from '../TestFactories/TestFactory';
 
 type TestFeatureConfig = {
   name: string;
@@ -24,6 +25,10 @@ export default class TestFeature
   };
   public readonly collections = {
     test: new TestCollection(),
+  };
+
+  public readonly factories = {
+    TestModelFactory: new TestFactory(),
   };
 
   public readonly models = {

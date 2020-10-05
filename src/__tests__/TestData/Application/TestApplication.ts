@@ -19,7 +19,7 @@ export default class TestApplication
     TestFeature: new TestFeature({ id: 2, name: 'test' }),
   };
   factories = {
-    TestFactory: new TestFactory(TestModel),
+    TestFactory: new TestFactory(),
   };
   additionalErrorHandlers: IErrorHandler[] = [new TestErrorHandler()];
   additionalLoggers: ILogger[] = [new TestLogger(this)];

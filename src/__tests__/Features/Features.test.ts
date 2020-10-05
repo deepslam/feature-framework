@@ -1,5 +1,6 @@
 import TestFeature from '../TestData/SampleFeature/TestFeature';
 import TestApplication from '../TestData/Application/TestApplication';
+import TestModel from '../TestData/TestModels/TestModel';
 
 describe('Features test', () => {
   test('Features config test', () => {
@@ -81,5 +82,18 @@ describe('Features test', () => {
     expect(feature.hasApp()).toBeTruthy();
     expect(feature.getApp()).toStrictEqual(app);
     expect(feature.setApp(app)).toBeFalsy();
+  });
+
+  test('Features factories test', () => {
+    const feature = new TestFeature({
+      id: 222,
+      name: 'test',
+    });
+    const model = feature.factories.TestModelFactory.new({
+      id: 225,
+      name: 'Dmitry',
+      surname: 'Ivanov',
+    });
+    expect(model).toBeInstanceOf(TestModel);
   });
 });

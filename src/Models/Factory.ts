@@ -1,5 +1,5 @@
 export default abstract class Factory<M extends { new (...args: any[]): any }> {
-  constructor(public readonly model: M) {}
+  public abstract readonly model: M;
 
   public static create<T extends { new (...args: any[]): any }>(
     ClassToCreate: T,

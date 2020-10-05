@@ -6,11 +6,12 @@ import { IModel } from './IModel';
 import { IDataManager } from './IDataManager';
 import { ConfigType } from '../Types';
 import Application from '../Application/Application';
-import { Translations } from '../Models';
+import { Translations, Factory } from '../Models';
 export interface IFeature<C = Record<string, ConfigType>, A = Application<unknown>> {
     name: string;
     baseEvents: Record<string, IEvent<unknown>>;
     events?: Record<string, IEvent<unknown>>;
+    factories?: Record<string, Factory<any>>;
     features?: Record<string, IFeature>;
     slices?: Record<string, Slice>;
     translations?: Record<string, Translations<unknown>>;
