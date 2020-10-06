@@ -31,8 +31,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
 
   protected abstract restore(data: unknown): T;
   protected abstract pack(data: T): unknown;
-
-  constructor(public readonly provider: IDataProvider) {}
+  public abstract provider: IDataProvider;
 
   load(key: string): Promise<T | null> {
     return new Promise((resolve, reject) => {

@@ -10,8 +10,7 @@ const DataLoadingErrorEvent_1 = __importDefault(require("../Events/DataManager/D
 const DataSavingErrorEvent_1 = __importDefault(require("../Events/DataManager/DataSavingErrorEvent"));
 const DataRemovingErrorEvent_1 = __importDefault(require("../Events/DataManager/DataRemovingErrorEvent"));
 class DataManager {
-    constructor(provider) {
-        this.provider = provider;
+    constructor() {
         this.events = {
             DataLoaded: new DataLoadedEvent_1.default(),
             DataLoadingError: new DataLoadingErrorEvent_1.default(),

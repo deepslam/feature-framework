@@ -1,12 +1,10 @@
-import TestDataProvider from '../TestData/TestDataProviders/TestDataProvider';
 import FailedDataProvider from '../TestData/TestDataProviders/FailedDataProvider';
 import TestModel from '../TestData/TestModels/TestModel';
 import TestDataManager from '../TestData/TestDataManager/TestDataManager';
 
 describe('Data manager tests', () => {
   it('Should save and load data correctly', async () => {
-    const provider = new TestDataProvider();
-    const manager = new TestDataManager(provider);
+    const manager = new TestDataManager();
     const newModel = new TestModel({
       id: 2,
       name: 'newModel',
@@ -56,8 +54,8 @@ describe('Data manager tests', () => {
   });
 
   it('Should call error events', async () => {
-    const provider = new FailedDataProvider();
-    const manager = new TestDataManager(provider);
+    const manager = new TestDataManager();
+    manager.provider = new FailedDataProvider();
     const model = new TestModel({
       id: 2,
       name: 'model',
