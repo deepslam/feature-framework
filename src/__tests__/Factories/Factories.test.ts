@@ -24,7 +24,7 @@ describe('A model factory test', () => {
       name: 'test',
     });
 
-    const factory = new TestFactory(TestModel);
+    const factory = new TestFactory();
     const factoryModel = factory.new({
       id: 332,
       name: 'test',
