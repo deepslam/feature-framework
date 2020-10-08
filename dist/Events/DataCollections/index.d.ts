@@ -1,4 +1,5 @@
 import CollectionClearedEvent from './CollectionClearedEvent';
 import ItemAddedEvent from './ItemAddedEvent';
 import ItemRemovedEvent from './ItemRemovedEvent';
-export { CollectionClearedEvent, ItemAddedEvent, ItemRemovedEvent };
+import ItemsFoundEvent from './ItemsFoundEvent';
+export { CollectionClearedEvent, ItemAddedEvent, ItemRemovedEvent, ItemsFoundEvent, };

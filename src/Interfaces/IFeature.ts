@@ -22,7 +22,7 @@ export interface IFeature<
   translations?: Record<string, Translations<unknown>>;
   view?: IView<unknown> | null;
   models?: Record<string, IModel<unknown>>;
-  collections?: Record<string, IDataCollection<unknown, unknown>>;
+  collections?: Record<string, IDataCollection<unknown>>;
   dataManagers?: Record<string, IDataManager<unknown>>;
 
   init(): Promise<boolean>;
