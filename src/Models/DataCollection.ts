@@ -1,8 +1,5 @@
 import { IDataCollection } from '../Interfaces';
-import ItemAddedEvent from '../Events/DataCollections/ItemAddedEvent';
-import ItemRemovedEvent from '../Events/DataCollections/ItemRemovedEvent';
-import CollectionClearedEvent from '../Events/DataCollections/CollectionClearedEvent';
-import ItemsFoundEvent from '../Events/DataCollections/ItemsFoundEvent';
+import { ItemAddedEvent, ItemRemovedEvent, ItemsFoundEvent, ItemsSortedEvent, CollectionClearedEvent } from '../Events/DataCollections';
 import { Constructor } from '../Types';
 
 export default class DataCollection<T> implements IDataCollection<T> {
@@ -14,11 +11,13 @@ export default class DataCollection<T> implements IDataCollection<T> {
     onItemRemoved: ItemRemovedEvent<T>;
     onCollectionCleared: CollectionClearedEvent<IDataCollection<T>>;
     onItemsFound: ItemsFoundEvent<IDataCollection<T>>;
+    onItemsSorted: ItemsSortedEvent<IDataCollection<T>>;
   } = {
     onItemAdded: new ItemAddedEvent(),
     onItemRemoved: new ItemRemovedEvent(),
     onCollectionCleared: new CollectionClearedEvent(),
     onItemsFound: new ItemsFoundEvent(),
+    onItemsSorted: new ItemsSortedEvent(),
   };
 
   public constructor(items?: T[]) {
@@ -68,6 +67,12 @@ export default class DataCollection<T> implements IDataCollection<T> {
     });
     const newCollection = new this.__class__(result);
     this.events.onItemsFound.fire(newCollection);
+    return newCollection;
+  }
+
+  sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T> {
+    const newCollection = new this.__class__(this.getAll().sort(callback));
+    this.events.onItemsSorted.fire(newCollection);
     return newCollection;
   }
 

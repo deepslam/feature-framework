@@ -146,4 +146,44 @@ describe('Collections test', () => {
       collection.paginate(1, 0);
     }).toThrowError();
   });
+
+  it('Should be able to sort results', () => {
+    const modelOne = new TestModel({
+      id: 1,
+      name: 'Test model 1',
+    });
+    const modelTwo = new TestModel({
+      id: 2,
+      name: 'Test model 2',
+    });
+    const modelThree = new TestModel({
+      id: 3,
+      name: 'Test model 3',
+    });
+    const collection = new TestDataCollection([modelTwo, modelOne, modelThree]);
+    const collectionSortedCallback = jest.fn();
+    collection.events.onItemsSorted.subscribe(collectionSortedCallback);
+
+    expect(collection.getAll()).toStrictEqual([modelTwo, modelOne, modelThree]);
+
+    const sortedByIdAscCollection = collection.sort((a, b) => {
+      if (a.fields.id < b.fields.id) return -1;
+      if (a.fields.id > b.fields.id) return 1;
+      return 0;
+    });
+
+    expect(collectionSortedCallback).toBeCalled();
+    expect(collectionSortedCallback).toBeCalledWith(sortedByIdAscCollection);
+    expect(sortedByIdAscCollection.getAll()).toStrictEqual([modelOne, modelTwo, modelThree]);
+
+    const sortedByIdDescCollection = collection.sort((a, b) => {
+      if (a.fields.id > b.fields.id) return -1;
+      if (a.fields.id < b.fields.id) return 1;
+      return 0;
+    });
+
+    expect(collectionSortedCallback).toBeCalled();
+    expect(collectionSortedCallback).toBeCalledWith(sortedByIdDescCollection);
+    expect(sortedByIdDescCollection.getAll()).toStrictEqual([modelThree, modelTwo, modelOne]);    
+  });
 });

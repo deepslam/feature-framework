@@ -10,6 +10,7 @@ export interface IDataCollection<T> {
   clear(): void;
   length(): number;
   find(callback: (item: T) => boolean): IDataCollection<T>;
+  sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T>;
   getAll(): T[];
   paginate(
     page: number,

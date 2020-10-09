@@ -1,20 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ItemAddedEvent_1 = __importDefault(require("../Events/DataCollections/ItemAddedEvent"));
-const ItemRemovedEvent_1 = __importDefault(require("../Events/DataCollections/ItemRemovedEvent"));
-const CollectionClearedEvent_1 = __importDefault(require("../Events/DataCollections/CollectionClearedEvent"));
-const ItemsFoundEvent_1 = __importDefault(require("../Events/DataCollections/ItemsFoundEvent"));
+const DataCollections_1 = require("../Events/DataCollections");
 class DataCollection {
     constructor(items) {
         this.items = new Map();
         this.events = {
-            onItemAdded: new ItemAddedEvent_1.default(),
-            onItemRemoved: new ItemRemovedEvent_1.default(),
-            onCollectionCleared: new CollectionClearedEvent_1.default(),
-            onItemsFound: new ItemsFoundEvent_1.default(),
+            onItemAdded: new DataCollections_1.ItemAddedEvent(),
+            onItemRemoved: new DataCollections_1.ItemRemovedEvent(),
+            onCollectionCleared: new DataCollections_1.CollectionClearedEvent(),
+            onItemsFound: new DataCollections_1.ItemsFoundEvent(),
+            onItemsSorted: new DataCollections_1.ItemsSortedEvent(),
         };
         this.__class__ = new.target;
         if (items) {
@@ -55,6 +50,11 @@ class DataCollection {
         });
         const newCollection = new this.__class__(result);
         this.events.onItemsFound.fire(newCollection);
+        return newCollection;
+    }
+    sort(callback) {
+        const newCollection = new this.__class__(this.getAll().sort(callback));
+        this.events.onItemsSorted.fire(newCollection);
         return newCollection;
     }
     paginate(page = 1, onPage = 20) {
