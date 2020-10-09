@@ -3,7 +3,7 @@ import ItemAddedEvent from '../Events/DataCollections/ItemAddedEvent';
 import ItemRemovedEvent from '../Events/DataCollections/ItemRemovedEvent';
 import CollectionClearedEvent from '../Events/DataCollections/CollectionClearedEvent';
 import ItemsFoundEvent from '../Events/DataCollections/ItemsFoundEvent';
-import { Constructor } from 'Types';
+import { Constructor } from '../Types';
 
 export default class DataCollection<T> implements IDataCollection<T> {
   public readonly items = new Map();
