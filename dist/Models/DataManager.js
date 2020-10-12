@@ -24,18 +24,18 @@ class DataManager {
         return new Promise((resolve, reject) => {
             if (!this.provider) {
                 this.events.DataLoadingError.fire(null);
-                reject(null);
+                resolve(null);
             }
             if (!this.provider.load) {
                 this.events.DataLoadingError.fire(null);
-                reject(null);
+                resolve(null);
             }
             this.provider
                 .load(key)
                 .then((data) => {
                 if (data === null) {
                     this.events.DataLoadingError.fire(null);
-                    reject(null);
+                    resolve(null);
                 }
                 const result = this.restore(data);
                 this.events.DataLoaded.fire(result);
@@ -51,11 +51,11 @@ class DataManager {
         return new Promise((resolve, reject) => {
             if (!this.provider) {
                 this.events.DataSavingError.fire(key);
-                reject(null);
+                resolve(false);
             }
             if (!this.provider.save) {
                 this.events.DataSavingError.fire(key);
-                reject(null);
+                resolve(false);
             }
             const dataToSave = this.pack(data);
             this.provider
@@ -72,6 +72,14 @@ class DataManager {
     }
     remove(key) {
         return new Promise((resolve) => {
+            if (!this.provider) {
+                this.events.DataRemovingError.fire(key);
+                resolve(false);
+            }
+            if (!this.provider.remove) {
+                this.events.DataRemovingError.fire(key);
+                resolve(false);
+            }
             this.provider
                 .remove(key)
                 .then((result) => {

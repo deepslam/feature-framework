@@ -37,11 +37,11 @@ export default abstract class DataManager<T> implements IDataManager<T> {
     return new Promise((resolve, reject) => {
       if (!this.provider) {
         this.events.DataLoadingError.fire(null);
-        reject(null);
+        resolve(null);
       }
       if (!this.provider.load) {
         this.events.DataLoadingError.fire(null);
-        reject(null);
+        resolve(null);
       }
 
       this.provider
@@ -49,7 +49,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
         .then((data: unknown) => {
           if (data === null) {
             this.events.DataLoadingError.fire(null);
-            reject(null);
+            resolve(null);
           }
 
           const result = this.restore(data) as T;
@@ -67,11 +67,11 @@ export default abstract class DataManager<T> implements IDataManager<T> {
     return new Promise((resolve, reject) => {
       if (!this.provider) {
         this.events.DataSavingError.fire(key);
-        reject(null);
+        resolve(false);
       }
       if (!this.provider.save) {
         this.events.DataSavingError.fire(key);
-        reject(null);
+        resolve(false);
       }
 
       const dataToSave = this.pack(data);
@@ -90,6 +90,15 @@ export default abstract class DataManager<T> implements IDataManager<T> {
 
   remove(key: string): Promise<boolean> {
     return new Promise((resolve) => {
+      if (!this.provider) {
+        this.events.DataRemovingError.fire(key);
+        resolve(false);
+      }
+      if (!this.provider.remove) {
+        this.events.DataRemovingError.fire(key);
+        resolve(false);
+      }
+
       this.provider
         .remove(key)
         .then((result) => {
