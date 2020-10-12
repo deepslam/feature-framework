@@ -1,4 +1,5 @@
 import FailedDataProvider from '../TestData/TestDataProviders/FailedDataProvider';
+import BrokenDataProvider from '../TestData/TestDataProviders/BrokenDataProvider';
 import TestModel from '../TestData/TestModels/TestModel';
 import TestDataManager from '../TestData/TestDataManager/TestDataManager';
 
@@ -86,5 +87,26 @@ describe('Data manager tests', () => {
     } catch (e) {
       expect(dataRemovingErrorListener).toBeCalled();
     }
+  });
+
+  it('Should work with the broken provider', async () => {
+    const manager = new TestDataManager();
+    const model = new TestModel({
+      id: 2,
+      name: 'model',
+    });
+    manager.provider = new BrokenDataProvider();
+
+    expect(async () => {
+      await manager.load('newModel');
+    }).rejects.toEqual(null);
+
+    expect(async () => {
+      await manager.save('newModel', model);
+    }).rejects.toEqual(null);
+
+    expect(async () => {
+      await manager.remove('newModel');
+    }).rejects.toEqual(null);
   });
 });
