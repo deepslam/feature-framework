@@ -35,9 +35,23 @@ export default abstract class DataManager<T> implements IDataManager<T> {
 
   load(key: string): Promise<T | null> {
     return new Promise((resolve, reject) => {
+      if (!this.provider) {
+        this.events.DataLoadingError.fire(null);
+        reject(null);
+      }
+      if (!this.provider.load) {
+        this.events.DataLoadingError.fire(null);
+        reject(null);
+      }
+
       this.provider
         .load(key)
         .then((data: unknown) => {
+          if (data === null) {
+            this.events.DataLoadingError.fire(null);
+            reject(null);
+          }
+
           const result = this.restore(data) as T;
           this.events.DataLoaded.fire(result);
           resolve(result as T);
@@ -51,6 +65,15 @@ export default abstract class DataManager<T> implements IDataManager<T> {
 
   save(key: string, data: T): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      if (!this.provider) {
+        this.events.DataSavingError.fire(key);
+        reject(null);
+      }
+      if (!this.provider.save) {
+        this.events.DataSavingError.fire(key);
+        reject(null);
+      }
+
       const dataToSave = this.pack(data);
       this.provider
         .save(key, dataToSave)
