@@ -1,5 +1,11 @@
 import { IDataCollection } from '../Interfaces';
-import { ItemAddedEvent, ItemRemovedEvent, ItemsFoundEvent, ItemsSortedEvent, CollectionClearedEvent } from '../Events/DataCollections';
+import {
+  ItemAddedEvent,
+  ItemRemovedEvent,
+  ItemsFoundEvent,
+  ItemsSortedEvent,
+  CollectionClearedEvent,
+} from '../Events/DataCollections';
 import { Constructor } from '../Types';
 
 export default class DataCollection<T> implements IDataCollection<T> {
@@ -51,7 +57,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
   }
 
   getAll() {
-    return [...this.items].map(([_, value]) => value);
+    return [...this.items].map(([, value]) => value);
   }
 
   length() {
@@ -77,8 +83,8 @@ export default class DataCollection<T> implements IDataCollection<T> {
   }
 
   paginate(
-    page: number = 1,
-    onPage: number = 20,
+    page = 1,
+    onPage = 20,
   ): { allPages: number; currentPage: number; items: T[] } {
     if (onPage <= 0) {
       throw Error('OnPage value should not be zero');

@@ -4,7 +4,7 @@ import TestModel from '../TestData/TestModels/TestModel';
 import TestDataManager from '../TestData/TestDataManager/TestDataManager';
 
 describe('Data manager tests', () => {
-  it('Should save and load data correctly', async () => {
+  it('Should work properly with DefaultDataProvider', async () => {
     const manager = new TestDataManager();
     const newModel = new TestModel({
       id: 2,
@@ -25,12 +25,11 @@ describe('Data manager tests', () => {
     manager.events.DataRemoved.subscribe(dataRemovedListener);
     manager.events.DataRemovingError.subscribe(dataRemovingErrorListener);
 
-    try {
-      await manager.load('newModel');
-    } catch (e) {
-      expect(e).toBeNull();
-    }
-    expect(dataLoadingErrorListener).toBeCalled();
+    const loadingResult = await manager.load('newModel');
+
+    expect(loadingResult).toBe(null);
+    expect(dataLoadingErrorListener).not.toBeCalled();
+    expect(dataLoadedListener).not.toBeCalled();
 
     let removeResult = await manager.remove('newModel');
     expect(removeResult).toBeFalsy();
@@ -53,7 +52,9 @@ describe('Data manager tests', () => {
     expect(removeResult).toBeTruthy();
     expect(dataRemovedListener).toBeCalled();
   });
+});
 
+describe('Tests with FailedDataProvider', () => {
   it('Should call error events', async () => {
     const manager = new TestDataManager();
     manager.provider = new FailedDataProvider();
@@ -88,7 +89,9 @@ describe('Data manager tests', () => {
       expect(dataRemovingErrorListener).toBeCalled();
     }
   });
+});
 
+describe('Tests with BrokenDataProvider', () => {
   it('Should work with the broken provider', async () => {
     const manager = new TestDataManager();
     const model = new TestModel({
@@ -96,17 +99,29 @@ describe('Data manager tests', () => {
       name: 'model',
     });
     manager.provider = new BrokenDataProvider();
+    const dataSavingErrorListener = jest.fn();
+    const dataLoadingErrorListener = jest.fn();
+    const dataRemovingErrorListener = jest.fn();
 
-    expect(async () => {
+    manager.events.DataSavingError.subscribe(dataSavingErrorListener);
+    manager.events.DataLoadingError.subscribe(dataLoadingErrorListener);
+    manager.events.DataRemovingError.subscribe(dataRemovingErrorListener);
+
+    try {
       await manager.load('newModel');
-    }).rejects.toEqual(null);
+    } catch (e) {
+      expect(dataLoadingErrorListener).toBeCalled();
+    }
 
-    expect(async () => {
+    try {
       await manager.save('newModel', model);
-    }).rejects.toEqual(null);
+    } catch (e) {
+      expect(dataSavingErrorListener).toBeCalled();
+    }
 
     expect(async () => {
       await manager.remove('newModel');
     }).rejects.toEqual(null);
+    expect(dataRemovingErrorListener).toBeCalled();
   });
 });

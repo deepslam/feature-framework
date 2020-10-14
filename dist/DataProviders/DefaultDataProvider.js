@@ -9,12 +9,12 @@ class DefaultDataProvider {
         });
     }
     load(key) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (data.has(key)) {
                 resolve(data.get(key));
             }
             else {
-                reject();
+                resolve(null);
             }
         });
     }

@@ -5,8 +5,8 @@ class Translations {
         this.translations = translations;
     }
     static template(str, data) {
-        var s = str;
-        for (var prop in data) {
+        let s = str;
+        for (const prop in data) {
             s = s.replace(new RegExp('{' + prop + '}', 'g'), data[prop]);
         }
         return s;

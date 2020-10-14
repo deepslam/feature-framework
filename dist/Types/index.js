@@ -16,4 +16,5 @@ __exportStar(require("./EventTypes"), exports);
 __exportStar(require("./ErrorTypes"), exports);
 __exportStar(require("./Common"), exports);
 __exportStar(require("./TranslationTypes"), exports);
+__exportStar(require("./DataManagerTypes"), exports);
 //# sourceMappingURL=index.js.map

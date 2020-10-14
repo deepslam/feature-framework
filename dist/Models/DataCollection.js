@@ -36,7 +36,7 @@ class DataCollection {
         this.events.onCollectionCleared.fire(this);
     }
     getAll() {
-        return [...this.items].map(([_, value]) => value);
+        return [...this.items].map(([, value]) => value);
     }
     length() {
         return this.items.size;

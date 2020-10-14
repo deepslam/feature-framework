@@ -1,4 +1,3 @@
-import { Locale } from 'locale-enum';
 import Feature from '../../../Models/Feature';
 import TestFeatureLoadedEvent from '../Events/TestFeatureLoadedEvent';
 import TestSubFeature from './TestSubFeature';

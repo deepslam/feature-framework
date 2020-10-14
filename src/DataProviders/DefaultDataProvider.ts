@@ -10,12 +10,12 @@ export default class DefaultDataProvider implements IDataProvider {
     });
   }
 
-  load(key: string): Promise<unknown> {
-    return new Promise((resolve, reject) => {
+  load(key: string): Promise<unknown | null> {
+    return new Promise((resolve) => {
       if (data.has(key)) {
         resolve(data.get(key));
       } else {
-        reject();
+        resolve(null);
       }
     });
   }

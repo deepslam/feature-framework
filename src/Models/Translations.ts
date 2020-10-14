@@ -12,8 +12,8 @@ export default class Translations<T = TranslationItemType> {
   ) {}
 
   static template(str: string, data: Record<string, string>): string {
-    var s = str;
-    for (var prop in data) {
+    let s = str;
+    for (const prop in data) {
       s = s.replace(new RegExp('{' + prop + '}', 'g'), data[prop]);
     }
     return s;

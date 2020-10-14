@@ -1,17 +1,15 @@
 import { IDataProvider } from '../../../Interfaces/IDataProvider';
 
-const data = new Map<string, unknown>();
-
 export default class BrokenDataProvider implements IDataProvider {
-  save(key: string, saveData: unknown): Promise<boolean> {
+  save(): Promise<boolean> {
     throw Error('Error');
   }
 
-  load(key: string): Promise<unknown> {
+  load(): Promise<unknown> {
     throw Error('Error');
   }
 
-  remove(key: string): Promise<boolean> {
+  remove(): Promise<boolean> {
     throw Error('Error');
   }
 }

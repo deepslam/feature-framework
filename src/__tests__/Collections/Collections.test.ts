@@ -174,7 +174,11 @@ describe('Collections test', () => {
 
     expect(collectionSortedCallback).toBeCalled();
     expect(collectionSortedCallback).toBeCalledWith(sortedByIdAscCollection);
-    expect(sortedByIdAscCollection.getAll()).toStrictEqual([modelOne, modelTwo, modelThree]);
+    expect(sortedByIdAscCollection.getAll()).toStrictEqual([
+      modelOne,
+      modelTwo,
+      modelThree,
+    ]);
 
     const sortedByIdDescCollection = collection.sort((a, b) => {
       if (a.fields.id > b.fields.id) return -1;
@@ -184,6 +188,10 @@ describe('Collections test', () => {
 
     expect(collectionSortedCallback).toBeCalled();
     expect(collectionSortedCallback).toBeCalledWith(sortedByIdDescCollection);
-    expect(sortedByIdDescCollection.getAll()).toStrictEqual([modelThree, modelTwo, modelOne]);    
+    expect(sortedByIdDescCollection.getAll()).toStrictEqual([
+      modelThree,
+      modelTwo,
+      modelOne,
+    ]);
   });
 });

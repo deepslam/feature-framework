@@ -1,5 +1,3 @@
-import { Locale } from 'locale-enum';
-
 export type TranslationReplaceVariablesType = {
   replaceVariables(data: unknown): string;
 };

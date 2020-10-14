@@ -1,4 +1,3 @@
-import ConsoleLogger from '../../Models/ConsoleLogger';
 import { ErrorTypeEnum } from '../../Types';
 
 describe('ConsoleLogger test', () => {

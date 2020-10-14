@@ -1,8 +1,6 @@
-import { Locale } from 'locale-enum';
 import Application from '../../../Application/Application';
 import TestFeature from '../SampleFeature/TestFeature';
 import TestFactory from '../TestFactories/TestFactory';
-import TestModel from '../TestModels/TestModel';
 import TestErrorHandler from '../TestErrorHandler/TestErrorHandler';
 import TestLogger from '../TestLogger/TestLogger';
 import { IErrorHandler, IApp, ILogger } from '../../../Interfaces';
