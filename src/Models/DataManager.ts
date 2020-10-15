@@ -4,10 +4,10 @@ import DataRemovedEvent from '../Events/DataManager/DataRemovedEvent';
 import DataLoadingErrorEvent from '../Events/DataManager/DataLoadingErrorEvent';
 import DataSavingErrorEvent from '../Events/DataManager/DataSavingErrorEvent';
 import DataRemovingErrorEvent from '../Events/DataManager/DataRemovingErrorEvent';
-import { IDataProvider } from './../Interfaces/IDataProvider';
-import { IDataManager } from './../Interfaces/IDataManager';
-import { IEvent } from './../Interfaces/IEvent';
-import { DataManagerErrorsType } from 'Types';
+import { IDataProvider } from '../Interfaces/IDataProvider';
+import { IDataManager } from '../Interfaces/IDataManager';
+import { IEvent } from '../Interfaces/IEvent';
+import { DataManagerErrorsType } from '../Types';
 
 const ERR_PROVIDER_NOT_SET = 'Provider is not set';
 const ERR_NO_LOAD_FUNC = 'Load function is not set';

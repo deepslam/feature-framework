@@ -1,7 +1,7 @@
-import { IDataProvider } from './../Interfaces/IDataProvider';
-import { IDataManager } from './../Interfaces/IDataManager';
-import { IEvent } from './../Interfaces/IEvent';
-import { DataManagerErrorsType } from 'Types';
+import { IDataProvider } from '../Interfaces/IDataProvider';
+import { IDataManager } from '../Interfaces/IDataManager';
+import { IEvent } from '../Interfaces/IEvent';
+import { DataManagerErrorsType } from '../Types';
 export default abstract class DataManager<T> implements IDataManager<T> {
     readonly events: {
         DataLoaded: IEvent<T>;
