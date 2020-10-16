@@ -62,7 +62,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
         this.provider
           .load(key)
           .then((data: unknown) => {
-            if (data === null) {
+            if (!data) {
               return resolve(null);
             }
 

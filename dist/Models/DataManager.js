@@ -46,7 +46,7 @@ class DataManager {
                 this.provider
                     .load(key)
                     .then((data) => {
-                    if (data === null) {
+                    if (!data) {
                         return resolve(null);
                     }
                     const result = this.restore(data);
