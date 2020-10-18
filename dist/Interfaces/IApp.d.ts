@@ -17,7 +17,7 @@ export interface IApp<C = Record<string, ConfigType>> {
     features?: Record<string, IFeature>;
     reducers: Record<string, Reducer>;
     translations?: Record<string, Translations<unknown>>;
-    view?: IView<unknown> | null;
+    views?: Record<string, IView<unknown>>;
     models?: Record<string, IModel<unknown>>;
     collections?: Record<string, IDataCollection<unknown>>;
     dataManagers?: Record<string, IDataManager<unknown>>;

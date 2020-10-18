@@ -20,7 +20,7 @@ export interface IFeature<
   features?: Record<string, IFeature>;
   slices?: Record<string, Slice>;
   translations?: Record<string, Translations<unknown>>;
-  view?: Record<string, IView<unknown>>;
+  views?: Record<string, IView<unknown>>;
   models?: Record<string, IModel<unknown>>;
   collections?: Record<string, IDataCollection<unknown>>;
   dataManagers?: Record<string, IDataManager<unknown>>;
