@@ -60,35 +60,41 @@ export default abstract class Application<C> implements IApp<C> {
 
   public init(): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
-      if (this.isInitialized()) {
-        reject();
-      }
-      this.setAppToFeatures(this.features);
-      const promises: Promise<boolean>[] = [];
-      Object.keys(this.features).forEach((key) => {
-        promises.push(this.features[key].init());
-      });
-      this.initStore();
-      this.initTranslations();
-      Promise.all(promises)
-        .then((args: boolean[]) => {
-          const falseArgs = args.filter((arg) => !arg);
-          if (falseArgs.length === 0) {
-            this.initialized = true;
-            this.baseEvents.onAppLoaded.fire(true);
-            resolve(true);
-          } else {
-            this.throwErr('App initialization failed');
-            this.baseEvents.onAppLoaded.fire(false);
-            resolve(false);
-          }
-        })
-        .catch((e) => {
-          this.throwErr(
-            `Unexpected error happened during app initialization (${e})`,
-          );
-          reject();
+      try {
+        if (this.isInitialized()) {
+          reject('App is already initialized!');
+        }
+        this.setAppToFeatures(this.features);
+        const promises: Promise<boolean>[] = [];
+        Object.keys(this.features).forEach((key) => {
+          promises.push(this.features[key].init());
         });
+        this.initStore();
+        this.initTranslations();
+        Promise.all(promises)
+          .then((args: boolean[]) => {
+            const falseArgs = args.filter((arg) => !arg);
+            if (falseArgs.length === 0) {
+              this.initialized = true;
+              this.baseEvents.onAppLoaded.fire(true);
+              resolve(true);
+            } else {
+              this.throwErr('App initialization failed');
+              this.baseEvents.onAppLoaded.fire(false);
+              resolve(false);
+            }
+          })
+          .catch((e) => {
+            this.throwErr(
+              `Unexpected error happened during app initialization (${e})`,
+            );
+            reject(
+              `Unexpected error happened during app initialization (${e})`,
+            );
+          });
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 

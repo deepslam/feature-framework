@@ -35,34 +35,39 @@ class Application {
     }
     init() {
         return new Promise((resolve, reject) => {
-            if (this.isInitialized()) {
-                reject();
+            try {
+                if (this.isInitialized()) {
+                    reject('App is already initialized!');
+                }
+                this.setAppToFeatures(this.features);
+                const promises = [];
+                Object.keys(this.features).forEach((key) => {
+                    promises.push(this.features[key].init());
+                });
+                this.initStore();
+                this.initTranslations();
+                Promise.all(promises)
+                    .then((args) => {
+                    const falseArgs = args.filter((arg) => !arg);
+                    if (falseArgs.length === 0) {
+                        this.initialized = true;
+                        this.baseEvents.onAppLoaded.fire(true);
+                        resolve(true);
+                    }
+                    else {
+                        this.throwErr('App initialization failed');
+                        this.baseEvents.onAppLoaded.fire(false);
+                        resolve(false);
+                    }
+                })
+                    .catch((e) => {
+                    this.throwErr(`Unexpected error happened during app initialization (${e})`);
+                    reject(`Unexpected error happened during app initialization (${e})`);
+                });
             }
-            this.setAppToFeatures(this.features);
-            const promises = [];
-            Object.keys(this.features).forEach((key) => {
-                promises.push(this.features[key].init());
-            });
-            this.initStore();
-            this.initTranslations();
-            Promise.all(promises)
-                .then((args) => {
-                const falseArgs = args.filter((arg) => !arg);
-                if (falseArgs.length === 0) {
-                    this.initialized = true;
-                    this.baseEvents.onAppLoaded.fire(true);
-                    resolve(true);
-                }
-                else {
-                    this.throwErr('App initialization failed');
-                    this.baseEvents.onAppLoaded.fire(false);
-                    resolve(false);
-                }
-            })
-                .catch((e) => {
-                this.throwErr(`Unexpected error happened during app initialization (${e})`);
-                reject();
-            });
+            catch (e) {
+                reject(e);
+            }
         });
     }
     initStore() {
