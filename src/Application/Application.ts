@@ -18,6 +18,7 @@ import {
   AppLoadedEvent,
   AppErrorEvent,
   AppLocaleChangedEvent,
+  AppUpdatedEvent,
 } from '../Events/App';
 
 export default abstract class Application<C> implements IApp<C> {
@@ -29,12 +30,14 @@ export default abstract class Application<C> implements IApp<C> {
   public store?: Store;
   public readonly baseEvents: {
     onAppLoaded: AppLoadedEvent;
+    onUpdate: AppUpdatedEvent<C>;
     onAppError: AppErrorEvent;
     onAppLocaleChanged: AppLocaleChangedEvent;
   } = {
     onAppLoaded: new AppLoadedEvent(),
     onAppError: new AppErrorEvent(),
     onAppLocaleChanged: new AppLocaleChangedEvent(),
+    onUpdate: new AppUpdatedEvent(),
   };
   public readonly translations: Record<string, Translations<unknown>> = {};
   public abstract readonly features: Record<string, IFeature>;
@@ -44,18 +47,23 @@ export default abstract class Application<C> implements IApp<C> {
   public readonly additionalLoggers: ILogger[] = [];
   public readonly additionalErrorHandlers: IErrorHandler[] = [];
 
-  constructor(protected config: C & Partial<DefaultAppConfigType>) {
+  constructor(public config: C & Partial<DefaultAppConfigType>) {
     this.locales = config.locales || [Locale.en];
     this.fallbackLocale = config.fallbackLocale || Locale.en;
     this.setCurrentLocale(config.defaultLocale || Locale.en);
   }
 
-  public cfg(): C {
-    return this.config;
-  }
-
   public extendConfig(config: Partial<C>): void {
     this.config = { ...this.config, ...config };
+    this.baseEvents.onUpdate.fire(this.config);
+  }
+
+  public setConfig<K extends keyof C>(key: K, value: C[K]): void {
+    this.config = {
+      ...this.config,
+      [key]: value,
+    };
+    this.baseEvents.onUpdate.fire(this.config);
   }
 
   public init(): Promise<ApplicationInitSuccessfulType> {

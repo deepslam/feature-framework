@@ -17,6 +17,7 @@ class Application {
             onAppLoaded: new App_1.AppLoadedEvent(),
             onAppError: new App_1.AppErrorEvent(),
             onAppLocaleChanged: new App_1.AppLocaleChangedEvent(),
+            onUpdate: new App_1.AppUpdatedEvent(),
         };
         this.translations = {};
         this.logger = new Models_1.ConsoleLogger(this);
@@ -27,11 +28,13 @@ class Application {
         this.fallbackLocale = config.fallbackLocale || locale_enum_1.Locale.en;
         this.setCurrentLocale(config.defaultLocale || locale_enum_1.Locale.en);
     }
-    cfg() {
-        return this.config;
-    }
     extendConfig(config) {
         this.config = Object.assign(Object.assign({}, this.config), config);
+        this.baseEvents.onUpdate.fire(this.config);
+    }
+    setConfig(key, value) {
+        this.config = Object.assign(Object.assign({}, this.config), { [key]: value });
+        this.baseEvents.onUpdate.fire(this.config);
     }
     init() {
         return new Promise((resolve, reject) => {
@@ -40,11 +43,11 @@ class Application {
                     reject('App is already initialized!');
                 }
                 this.setAppToFeatures(this.features);
+                this.initStore();
                 const promises = [];
                 Object.keys(this.features).forEach((key) => {
                     promises.push(this.features[key].init());
                 });
-                this.initStore();
                 this.initTranslations();
                 Promise.all(promises)
                     .then((args) => {

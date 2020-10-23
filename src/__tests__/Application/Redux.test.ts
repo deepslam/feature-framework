@@ -1,4 +1,4 @@
-import { Store } from '@reduxjs/toolkit';
+// import { Store } from '@reduxjs/toolkit';
 import TestApp from '../TestData/Application/TestApplication';
 
 describe('Redux test', () => {

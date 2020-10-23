@@ -15,6 +15,12 @@ class Model {
         this.fields = Object.assign(Object.assign({}, this.fields), fields);
         this.baseEvents.updated.fire(this);
     }
+    setField(key, value) {
+        const updatedValues = {
+            [key]: value,
+        };
+        this.update(updatedValues);
+    }
     toJSON() {
         return Object.assign({}, this.fields);
     }

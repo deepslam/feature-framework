@@ -30,7 +30,6 @@ export interface IApp<C = Record<string, ConfigType>> {
     getCurrentLocale: () => Locale;
     setCurrentLocale(locale: Locale): boolean;
     isLocaleAvailable(locale: Locale): boolean;
-    cfg(): C;
     extendConfig(config: Partial<C>): void;
     init(): Promise<boolean>;
     err(error: string): void;

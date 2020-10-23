@@ -3,9 +3,9 @@ import { Locale } from 'locale-enum';
 import { ErrorTypeEnum, DefaultAppConfigType, TranslationPluralItemType } from '../Types';
 import { IApp, IFeature, ILogger, IErrorHandler } from '../Interfaces';
 import { ErrorHandler, Translations } from '../Models';
-import { AppLoadedEvent, AppErrorEvent, AppLocaleChangedEvent } from '../Events/App';
+import { AppLoadedEvent, AppErrorEvent, AppLocaleChangedEvent, AppUpdatedEvent } from '../Events/App';
 export default abstract class Application<C> implements IApp<C> {
-    protected config: C & Partial<DefaultAppConfigType>;
+    config: C & Partial<DefaultAppConfigType>;
     private initialized;
     private locales;
     locale: Locale;
@@ -14,6 +14,7 @@ export default abstract class Application<C> implements IApp<C> {
     store?: Store;
     readonly baseEvents: {
         onAppLoaded: AppLoadedEvent;
+        onUpdate: AppUpdatedEvent<C>;
         onAppError: AppErrorEvent;
         onAppLocaleChanged: AppLocaleChangedEvent;
     };
@@ -25,8 +26,8 @@ export default abstract class Application<C> implements IApp<C> {
     readonly additionalLoggers: ILogger[];
     readonly additionalErrorHandlers: IErrorHandler[];
     constructor(config: C & Partial<DefaultAppConfigType>);
-    cfg(): C;
     extendConfig(config: Partial<C>): void;
+    setConfig<K extends keyof C>(key: K, value: C[K]): void;
     init(): Promise<ApplicationInitSuccessfulType>;
     protected initStore(): void;
     private initTranslations;

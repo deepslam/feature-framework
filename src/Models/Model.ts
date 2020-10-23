@@ -23,9 +23,10 @@ export default abstract class Model<T = Record<string, unknown>>
   }
 
   setField<K extends keyof T>(key: K, value: T[K]): void {
-    this.update({
+    const updatedValues = ({
       [key]: value,
-    });
+    } as unknown) as Partial<T>;
+    this.update(updatedValues);
   }
 
   toJSON() {

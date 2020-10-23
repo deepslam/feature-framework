@@ -51,13 +51,25 @@ describe('Application init test', () => {
 
   it('Application config test', () => {
     const app = new TestApp({ version: '1.2.2' });
+    const appUpdatedListener = jest.fn();
 
-    expect(app.cfg()).toStrictEqual({ version: '1.2.2' });
+    app.baseEvents.onUpdate.subscribe(appUpdatedListener);
+
+    expect(app.config).toStrictEqual({ version: '1.2.2' });
 
     app.extendConfig({
       version: '1.0',
     });
 
-    expect(app.cfg()).toStrictEqual({ version: '1.0' });
+    expect(appUpdatedListener).toBeCalled();
+
+    expect(app.config).toStrictEqual({ version: '1.0' });
+    expect(appUpdatedListener).toBeCalledWith({ version: '1.0' });
+
+    app.setConfig('version', '1.1');
+
+    expect(app.config).toStrictEqual({ version: '1.1' });
+    expect(appUpdatedListener).toBeCalledTimes(2);
+    expect(appUpdatedListener).toBeCalledWith({ version: '1.1' });
   });
 });
