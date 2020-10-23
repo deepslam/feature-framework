@@ -20,5 +20,9 @@ describe('Application models test', () => {
     expect(eventUpdatedFunc).toHaveBeenCalledWith(instance);
     expect(instance.fields.name).toBe('John');
     expect(instance.fields.id).toBe(2);
+
+    instance.setField('name', 'eff');
+    expect(eventUpdatedFunc).toBeCalledTimes(2);
+    expect(eventUpdatedFunc).toHaveBeenCalledWith(instance);
   });
 });

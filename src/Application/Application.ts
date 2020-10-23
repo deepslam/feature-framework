@@ -65,11 +65,11 @@ export default abstract class Application<C> implements IApp<C> {
           reject('App is already initialized!');
         }
         this.setAppToFeatures(this.features);
+        this.initStore();
         const promises: Promise<boolean>[] = [];
         Object.keys(this.features).forEach((key) => {
           promises.push(this.features[key].init());
         });
-        this.initStore();
         this.initTranslations();
         Promise.all(promises)
           .then((args: boolean[]) => {

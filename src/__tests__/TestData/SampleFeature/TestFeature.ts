@@ -5,6 +5,7 @@ import TestModel from '../TestModels/TestModel';
 import TestCollection from '../DataCollection/TestDataCollection';
 import { IFeature } from '../../../Interfaces/IFeature';
 import TestFactory from '../TestFactories/TestFactory';
+import TestSlice from '../TestSlices/TestSlice';
 
 type TestFeatureConfig = {
   name: string;
@@ -40,5 +41,11 @@ export default class TestFeature
 
   initFeature() {
     return new Promise((resolve) => resolve(true)) as Promise<boolean>;
+  }
+
+  getSlice() {
+    return {
+      messages: TestSlice,
+    };
   }
 }

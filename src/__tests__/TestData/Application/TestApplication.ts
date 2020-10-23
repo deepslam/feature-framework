@@ -9,12 +9,16 @@ export type TestApplicationConfigType = {
   version: string;
 };
 
+const TestFeatureInstance = new TestFeature({ id: 2, name: 'test' });
+
 export default class TestApplication
   extends Application<TestApplicationConfigType>
   implements IApp {
-  reducers = {};
+  reducers = {
+    messages: TestFeatureInstance.getSlice().messages.reducer,
+  };
   features = {
-    TestFeature: new TestFeature({ id: 2, name: 'test' }),
+    TestFeature: TestFeatureInstance,
   };
   factories = {
     TestFactory: new TestFactory(),

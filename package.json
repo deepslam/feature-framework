@@ -32,12 +32,12 @@
   },
   "homepage": "https://github.com/deepslam/feature-framework#readme",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.4.0",
     "locale-enum": "^1.1.1",
     "tslib": "^2.0.1",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@reduxjs/toolkit": "^1.4.0",
     "@types/jest": "^25.2.3",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^3.7.1",

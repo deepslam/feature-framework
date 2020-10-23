@@ -22,6 +22,12 @@ export default abstract class Model<T = Record<string, unknown>>
     this.baseEvents.updated.fire(this);
   }
 
+  setField<K extends keyof T>(key: K, value: T[K]): void {
+    this.update({
+      [key]: value,
+    });
+  }
+
   toJSON() {
     return {
       ...this.fields,
