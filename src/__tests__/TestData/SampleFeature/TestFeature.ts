@@ -6,20 +6,22 @@ import TestCollection from '../DataCollection/TestDataCollection';
 import { IFeature } from '../../../Interfaces/IFeature';
 import TestFactory from '../TestFactories/TestFactory';
 import TestSlice from '../TestSlices/TestSlice';
+import TestApplication from '../Application/TestApplication';
 
 type TestFeatureConfig = {
   name: string;
   id: number;
 };
 
+type TestFeatureSubFeatures = {
+  SubFeature: TestSubFeature;
+};
+
 export default class TestFeature
-  extends Feature<TestFeatureConfig>
-  implements IFeature<TestFeatureConfig> {
+  extends Feature<TestFeatureConfig, TestApplication, TestFeatureSubFeatures>
+  implements IFeature<TestFeatureConfig, TestApplication> {
   name = 'TestFeature';
 
-  public readonly features = {
-    SubFeature: new TestSubFeature({ enabled: false }),
-  };
   public readonly events = {
     loaded: new TestFeatureLoadedEvent(),
   };

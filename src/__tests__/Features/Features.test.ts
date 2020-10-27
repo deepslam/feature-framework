@@ -1,13 +1,19 @@
 import TestFeature from '../TestData/SampleFeature/TestFeature';
 import TestApplication from '../TestData/Application/TestApplication';
 import TestModel from '../TestData/TestModels/TestModel';
+import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
 
 describe('Features test', () => {
   test('Features config test', () => {
-    const feature = new TestFeature({
-      id: 222,
-      name: 'test',
-    });
+    const feature = new TestFeature(
+      {
+        id: 222,
+        name: 'test',
+      },
+      {
+        SubFeature: new TestSubFeature({ enabled: false }, {}),
+      },
+    );
 
     expect(feature.cfg()).toStrictEqual({
       id: 222,
@@ -25,15 +31,25 @@ describe('Features test', () => {
   });
 
   test('Init test', async (done) => {
-    const feature = new TestFeature({
-      id: 222,
-      name: 'test',
-    });
+    const feature = new TestFeature(
+      {
+        id: 222,
+        name: 'test',
+      },
+      {
+        SubFeature: new TestSubFeature({ enabled: false }, {}),
+      },
+    );
 
-    const secondFeature = new TestFeature({
-      id: 223,
-      name: 'Never initialized feature',
-    });
+    const secondFeature = new TestFeature(
+      {
+        id: 223,
+        name: 'Never initialized feature',
+      },
+      {
+        SubFeature: new TestSubFeature({ enabled: false }, {}),
+      },
+    );
 
     const eventFeatureInitializedFunction = jest.fn();
     const eventSubFeatureInitializedFunction = jest.fn();
@@ -71,10 +87,13 @@ describe('Features test', () => {
   });
 
   test('Set app test', () => {
-    const feature = new TestFeature({
-      id: 222,
-      name: 'test',
-    });
+    const feature = new TestFeature(
+      {
+        id: 222,
+        name: 'test',
+      },
+      { SubFeature: new TestSubFeature({ enabled: true }, {}) },
+    );
     const app = new TestApplication({ version: '1.0' });
 
     expect(feature.hasApp()).toBeFalsy();
@@ -85,10 +104,15 @@ describe('Features test', () => {
   });
 
   test('Features factories test', () => {
-    const feature = new TestFeature({
-      id: 222,
-      name: 'test',
-    });
+    const feature = new TestFeature(
+      {
+        id: 222,
+        name: 'test',
+      },
+      {
+        SubFeature: new TestSubFeature({ enabled: true }, {}),
+      },
+    );
     const model = feature.factories.TestModelFactory.new({
       id: 225,
       name: 'Dmitry',

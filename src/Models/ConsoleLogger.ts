@@ -1,9 +1,9 @@
-import { ILogger } from '../Interfaces/ILogger';
-import Application from '../Application/Application';
+import { ConfigType } from 'Types';
+import { ILogger, IApp } from '../Interfaces';
 import { ErrorTypeEnum } from '../Types/ErrorTypes';
 
 export default class ConsoleLogger implements ILogger {
-  constructor(private readonly app: Application<unknown>) {}
+  constructor(private readonly app: IApp<Record<string, ConfigType>>) {}
 
   public log(message: string, type: ErrorTypeEnum | null = null): void {
     if (this.app.debug) {

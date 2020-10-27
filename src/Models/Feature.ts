@@ -1,49 +1,62 @@
 /* eslint-disable indent */
 import { v4 as uuid4 } from 'uuid';
-import SuccessFullyInitializedEvent from '../Events/Features/SuccessfullyInitializedEvent';
-import { IFeature, IEvent } from '../Interfaces';
-import { ConfigType } from '../Types';
-import Application from '../Application/Application';
+import {
+  FeatureInitializedEvent,
+  FeatureErrorEvent,
+  FeatureUpdatedEvent,
+} from '../Events/Features';
+import { IFeature, IEvent, IApp } from '../Interfaces';
+import { AppFeaturesType, ConfigType } from '../Types';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
 };
 
 const privateData = new Map<string, Partial<AbstractFeaturePrivateDataType>>();
+const appData = new Map<string, IApp>();
 
 export default abstract class Feature<
-  C = Record<string, ConfigType>,
-  A = Application<unknown>
+  C extends Record<string, ConfigType>,
+  A extends IApp,
+  F extends AppFeaturesType
 > implements IFeature<C, A> {
   public abstract name: string;
   public readonly uuid: string;
-  public readonly baseEvents: { initialized: IEvent<boolean> } = {
-    initialized: new SuccessFullyInitializedEvent(),
+  public readonly baseEvents: {
+    initialized: IEvent<boolean>;
+    onError: IEvent<boolean>;
+    onUpdate: IEvent<C>;
+  } = {
+    initialized: new FeatureInitializedEvent(),
+    onError: new FeatureErrorEvent(),
+    onUpdate: new FeatureUpdatedEvent(),
   };
-  protected app: A | null = null;
 
-  constructor(protected config: C) {
+  constructor(public config: C, public readonly features: F) {
     this.uuid = uuid4();
   }
 
   public setApp(app: A): boolean {
-    if (this.app === null) {
-      this.app = app;
-      return true;
+    if (appData.has(this.uuid)) {
+      appData.set(this.uuid, app);
     }
 
-    return false;
+    return appData.has(this.uuid);
   }
 
-  public getApp(): A | null {
-    return this.app;
+  public getApp(): A {
+    if (appData.has(this.uuid)) {
+      return appData.get(this.uuid) as A;
+    }
+
+    throw Error('App is not defined');
   }
 
   public hasApp(): boolean {
-    return this.app !== null;
+    return appData.has(this.uuid);
   }
 
-  public init(this: IFeature): Promise<boolean> {
+  public init(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const promises: unknown[] = [];
       if (this.features) {
@@ -65,7 +78,8 @@ export default abstract class Feature<
             resolve(result);
           })
           .catch((e) => {
-            this.getApp()?.error(
+            this.baseEvents.onError.fire(false);
+            this.getApp().err(
               `Failed to initialize the feature '${this.name}' (${e})`,
             );
             reject(e);
@@ -85,6 +99,7 @@ export default abstract class Feature<
       ...this.config,
       ...newConfig,
     };
+    this.baseEvents.onUpdate.fire(this.config);
   }
 
   isInitialized(): boolean {
@@ -97,7 +112,7 @@ export default abstract class Feature<
     });
   }
 
-  hasSlice(this: IFeature): boolean {
+  hasSlice(): boolean {
     return (
       typeof this.slices !== undefined &&
       Object.keys(this.slices!).length > 0 &&

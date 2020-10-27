@@ -1,4 +1,8 @@
-import TestApp from '../TestData/Application/TestApplication';
+import TestApp, {
+  TestApplicationFeaturesType,
+} from '../TestData/Application/TestApplication';
+import TestFeature from '../TestData/SampleFeature/TestFeature';
+import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
 
 describe('Application init test', () => {
   it('Should be initialized correctly', async (done) => {
@@ -8,38 +12,58 @@ describe('Application init test', () => {
     const featureLoadedListener = jest.fn();
     const subfeatureLoadedListener = jest.fn();
 
-    app.features.TestFeature.baseEvents.initialized.subscribe(
+    const features: TestApplicationFeaturesType = {
+      TestFeature: new TestFeature(
+        {
+          name: 'test',
+          id: 3434,
+        },
+        {
+          SubFeature: new TestSubFeature(
+            {
+              enabled: true,
+            },
+            {},
+          ),
+        },
+      ),
+    };
+
+    features.TestFeature.baseEvents.initialized.subscribe(
       featureLoadedListener,
     );
-    app.features.TestFeature.features.SubFeature.baseEvents.initialized.subscribe(
+
+    features.TestFeature.features.SubFeature.baseEvents.initialized.subscribe(
       subfeatureLoadedListener,
     );
     app.baseEvents.onAppLoaded.subscribe(appLoadedListener);
     expect(app.isInitialized()).toBeFalsy();
-    expect(app.features.TestFeature.isInitialized()).toBeFalsy();
+    expect(() => {
+      app.features();
+    }).toThrowError();
     expect(
-      app.features.TestFeature.features.SubFeature.isInitialized(),
+      app.features().TestFeature.features.SubFeature.isInitialized(),
     ).toBeFalsy();
 
     app
-      .init()
+      .init(features)
       .then((result) => {
         expect(result).toBeTruthy();
         expect(appLoadedListener).toBeCalled();
         expect(featureLoadedListener).toBeCalled();
         expect(subfeatureLoadedListener).toBeCalled();
         expect(app.isInitialized()).toBeTruthy();
-        expect(app.features.TestFeature.isInitialized()).toBeTruthy();
+        expect(app.features().TestFeature.isInitialized()).toBeTruthy();
         expect(
-          app.features.TestFeature.features.SubFeature.isInitialized(),
+          app.features().TestFeature.features.SubFeature.isInitialized(),
         ).toBeTruthy();
-        expect(app.features.TestFeature.hasApp()).toBeTruthy();
+        expect(app.features().TestFeature.hasApp()).toBeTruthy();
         expect(
-          app.features.TestFeature.features.SubFeature.hasApp(),
+          app.features().TestFeature.features.SubFeature.hasApp(),
         ).toBeTruthy();
-        expect(app.features.TestFeature.getApp()).toStrictEqual(app);
+        expect(app.features().TestFeature.getApp()).toStrictEqual(app);
         expect(
-          app.features.TestFeature.features.SubFeature.getApp(),
+          app.features().TestFeature.features.SubFeature.getApp(),
         ).toStrictEqual(app);
 
         done();

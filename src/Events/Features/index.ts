@@ -1,3 +1,5 @@
-import SuccessfullyInitializedEvent from './SuccessfullyInitializedEvent';
+import FeatureInitializedEvent from './FeatureInitializedEvent';
+import FeatureUpdatedEvent from './FeatureUpdatedEvent';
+import FeatureErrorEvent from './FeatureErrorEvent';
 
-export { SuccessfullyInitializedEvent };
+export { FeatureInitializedEvent, FeatureUpdatedEvent, FeatureErrorEvent };

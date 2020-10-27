@@ -1,12 +1,23 @@
 import Factory from '../../Models/Factory';
-import { TestFeature, TestModel, TestFactory } from '../TestData';
+import {
+  TestFeature,
+  TestModel,
+  TestFactory,
+  TestSubFeature,
+} from '../TestData';
 
 describe('A common factory test', () => {
   it('Create an instance', () => {
-    const createdClass = Factory.create(TestFeature, {
-      id: 1,
-      name: 'test',
-    });
+    const createdClass = Factory.create(
+      TestFeature,
+      {
+        id: 1,
+        name: 'test',
+      },
+      {
+        SubFeature: new TestSubFeature({ enabled: true }, {}),
+      },
+    );
     expect(createdClass).toBeInstanceOf(TestFeature);
 
     const createdModel = Factory.create(TestModel, {

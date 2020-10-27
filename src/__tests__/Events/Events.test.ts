@@ -1,4 +1,4 @@
-import SuccessFullyInitializedEvent from '../../Events/Features/SuccessfullyInitializedEvent';
+import SuccessFullyInitializedEvent from '../../Events/Features/FeatureInitializedEvent';
 
 describe('Events test', () => {
   it('Should work correctly', (done) => {

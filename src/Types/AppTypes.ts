@@ -1,6 +1,7 @@
 import { Locale } from 'locale-enum';
 import { Reducer } from '@reduxjs/toolkit';
-import { IFeature } from '../Interfaces';
+import { IFeature, IApp } from '../Interfaces';
+import { ConfigType } from './Common';
 
 export type DefaultAppConfigType = {
   fallbackLocale: Locale;
@@ -17,10 +18,7 @@ export type AppConfig =
 
 export type AppReducers = Record<string, Reducer>;
 
-export type AppInitParams<F = AppFeatures, R = AppReducers, C = AppConfig> = {
-  features: F;
-  config: R;
-  reducers: C;
-};
-
-export type AppFeatures = Record<string, IFeature>;
+export type AppFeaturesType = Record<
+  string,
+  IFeature<Record<string, ConfigType>, IApp>
+>;

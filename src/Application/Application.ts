@@ -10,9 +10,11 @@ import {
   ErrorTypeEnum,
   DefaultAppConfigType,
   TranslationPluralItemType,
+  ConfigType,
+  AppFeaturesType,
 } from '../Types';
 
-import { IApp, IFeature, ILogger, IErrorHandler } from '../Interfaces';
+import { IApp, ILogger, IErrorHandler } from '../Interfaces';
 import { ConsoleLogger, ErrorHandler, Translations } from '../Models';
 import {
   AppLoadedEvent,
@@ -21,7 +23,12 @@ import {
   AppUpdatedEvent,
 } from '../Events/App';
 
-export default abstract class Application<C> implements IApp<C> {
+const privateFeatures = new Map();
+
+export default abstract class Application<
+  F extends AppFeaturesType,
+  C extends Record<string, ConfigType>
+> implements IApp<C> {
   private initialized = false;
   private locales: Locale[] = [Locale.en];
   public locale: Locale = Locale.en;
@@ -40,7 +47,6 @@ export default abstract class Application<C> implements IApp<C> {
     onUpdate: new AppUpdatedEvent(),
   };
   public readonly translations: Record<string, Translations<unknown>> = {};
-  public abstract readonly features: Record<string, IFeature>;
   public abstract readonly reducers: Record<string, Reducer>;
   public readonly logger: ILogger = new ConsoleLogger(this);
   public readonly errorHandler = new ErrorHandler();
@@ -66,17 +72,26 @@ export default abstract class Application<C> implements IApp<C> {
     this.baseEvents.onUpdate.fire(this.config);
   }
 
-  public init(): Promise<ApplicationInitSuccessfulType> {
+  features(): F {
+    if (privateFeatures.has(this)) {
+      return privateFeatures.get(this);
+    }
+
+    throw Error('Features are not defined for application!');
+  }
+
+  public init(features: F): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
       try {
+        privateFeatures.set(this, features);
         if (this.isInitialized()) {
           reject('App is already initialized!');
         }
-        this.setAppToFeatures(this.features);
+        this.setAppToFeatures(features);
         this.initStore();
         const promises: Promise<boolean>[] = [];
-        Object.keys(this.features).forEach((key) => {
-          promises.push(this.features[key].init());
+        Object.keys(features).forEach((key: string) => {
+          promises.push(features[key].init());
         });
         this.initTranslations();
         Promise.all(promises)
@@ -249,12 +264,12 @@ export default abstract class Application<C> implements IApp<C> {
     throw new Error(err);
   }
 
-  private setAppToFeatures(features: Record<string, IFeature>) {
+  private setAppToFeatures(features: F) {
     Object.keys(features).forEach((key) => {
-      if (!features[key].hasApp()) {
+      if (features[key].hasApp()) {
         features[key].setApp(this);
         if (features[key].features) {
-          this.setAppToFeatures(features[key].features!);
+          this.setAppToFeatures(features[key].features);
         }
       }
     });
