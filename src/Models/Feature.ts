@@ -37,11 +37,12 @@ export default abstract class Feature<
   }
 
   public setApp(app: A): boolean {
-    if (appData.has(this.uuid)) {
+    if (!appData.has(this.uuid)) {
       appData.set(this.uuid, app);
+      return true;
     }
 
-    return appData.has(this.uuid);
+    return false;
   }
 
   public getApp(): A {
@@ -72,7 +73,7 @@ export default abstract class Feature<
           .then((result) => {
             this.setInitialized(result);
             this.baseEvents.initialized.fire(result);
-            this.getApp()?.info(
+            this.getApp().info(
               `Feature '${this.name}' successfully intialized`,
             );
             resolve(result);
@@ -110,13 +111,5 @@ export default abstract class Feature<
     privateData.set(this.uuid, {
       initialized,
     });
-  }
-
-  hasSlice(): boolean {
-    return (
-      typeof this.slices !== undefined &&
-      Object.keys(this.slices!).length > 0 &&
-      this.isInitialized()
-    );
   }
 }

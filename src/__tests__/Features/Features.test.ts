@@ -31,6 +31,8 @@ describe('Features test', () => {
   });
 
   test('Init test', async (done) => {
+    const app = new TestApplication({ version: '3.4.3' });
+
     const feature = new TestFeature(
       {
         id: 222,
@@ -61,6 +63,10 @@ describe('Features test', () => {
     feature.features.SubFeature.baseEvents.initialized.subscribe(
       eventSubFeatureInitializedFunction,
     );
+
+    app.setAppToFeatures({
+      TestFeature: feature,
+    });
 
     expect(feature.isInitialized()).toBeFalsy();
 

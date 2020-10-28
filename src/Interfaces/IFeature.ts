@@ -38,6 +38,4 @@ export interface IFeature<
 
   cfg(): C;
   extendConfig(config: Partial<C>): void;
-
-  hasSlice(): boolean;
 }

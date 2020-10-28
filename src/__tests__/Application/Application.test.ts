@@ -5,7 +5,7 @@ import TestFeature from '../TestData/SampleFeature/TestFeature';
 import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
 
 describe('Application init test', () => {
-  it('Should be initialized correctly', async (done) => {
+  it('Should initialize correctly', async (done) => {
     const app = new TestApp({ version: '3.4.3' });
 
     const appLoadedListener = jest.fn();
@@ -41,8 +41,9 @@ describe('Application init test', () => {
     expect(() => {
       app.features();
     }).toThrowError();
+    expect(features.TestFeature.isInitialized()).toBeFalsy();
     expect(
-      app.features().TestFeature.features.SubFeature.isInitialized(),
+      features.TestFeature.features.SubFeature.isInitialized(),
     ).toBeFalsy();
 
     app

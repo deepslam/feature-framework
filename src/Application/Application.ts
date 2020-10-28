@@ -264,9 +264,9 @@ export default abstract class Application<
     throw new Error(err);
   }
 
-  private setAppToFeatures(features: F) {
+  setAppToFeatures(features: AppFeaturesType) {
     Object.keys(features).forEach((key) => {
-      if (features[key].hasApp()) {
+      if (!features[key].hasApp()) {
         features[key].setApp(this);
         if (features[key].features) {
           this.setAppToFeatures(features[key].features);
