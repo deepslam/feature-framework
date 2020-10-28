@@ -1,4 +1,3 @@
-import { Reducer } from '@reduxjs/toolkit';
 import { Locale } from 'locale-enum';
 import {
   IEvent,
@@ -24,7 +23,6 @@ export interface IApp<C = Record<string, ConfigType>> {
   baseEvents: Record<string, IEvent<unknown>>;
   events?: Record<string, IEvent<unknown>>;
   factories?: Record<string, Factory<any>>;
-  reducers: Record<string, Reducer>;
   translations?: Record<string, Translations<unknown>>;
   views?: Record<string, IView<unknown>>;
   models?: Record<string, IModel<unknown>>;
