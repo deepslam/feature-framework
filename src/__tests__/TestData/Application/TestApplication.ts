@@ -16,9 +16,6 @@ export type TestApplicationFeaturesType = {
 export default class TestApplication
   extends Application<TestApplicationFeaturesType, TestApplicationConfigType>
   implements IApp {
-  reducers = {
-    // messages: TestFeatureInstance.getSlice().messages.reducer,
-  };
   factories = {
     TestFactory: new TestFactory(),
   };

@@ -1,9 +1,4 @@
-import {
-  Store,
-  configureStore,
-  Reducer,
-  combineReducers,
-} from '@reduxjs/toolkit';
+import { Store, configureStore, combineReducers } from '@reduxjs/toolkit';
 import { Locale } from 'locale-enum';
 
 import {
@@ -47,7 +42,6 @@ export default abstract class Application<
     onUpdate: new AppUpdatedEvent(),
   };
   public readonly translations: Record<string, Translations<unknown>> = {};
-  public abstract readonly reducers: Record<string, Reducer>;
   public readonly logger: ILogger = new ConsoleLogger(this);
   public readonly errorHandler = new ErrorHandler();
   public readonly additionalLoggers: ILogger[] = [];

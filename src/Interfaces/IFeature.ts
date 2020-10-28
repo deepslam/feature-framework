@@ -1,4 +1,3 @@
-import { Slice } from '@reduxjs/toolkit';
 import { IDataCollection } from './IDataCollection';
 import { IApp } from './IApp';
 import { IEvent } from './IEvent';
@@ -17,7 +16,6 @@ export interface IFeature<
   baseEvents: Record<string, IEvent<unknown>>;
   events?: Record<string, IEvent<unknown>>;
   factories?: Record<string, Factory<any>>;
-  slices?: Record<string, Slice>;
   translations?: Record<string, Translations<unknown>>;
   views?: Record<string, IView<unknown>>;
   models?: Record<string, IModel<unknown>>;
