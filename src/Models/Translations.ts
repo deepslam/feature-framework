@@ -1,5 +1,4 @@
 import { Locale } from 'locale-enum';
-import Application from '../Application/Application';
 import { IApp } from '../Interfaces';
 import { TranslationItemType } from '../Types';
 
@@ -19,7 +18,7 @@ export default class Translations<T = TranslationItemType> {
     return s;
   }
 
-  setApp(app: Application<unknown>) {
+  setApp(app: IApp) {
     this.app = app;
   }
 

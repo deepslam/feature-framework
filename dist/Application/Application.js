@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const toolkit_1 = require("@reduxjs/toolkit");
 const locale_enum_1 = require("locale-enum");
 const Types_1 = require("../Types");
 const Models_1 = require("../Models");
 const App_1 = require("../Events/App");
+const privateFeatures = new Map();
 class Application {
     constructor(config) {
         this.config = config;
@@ -36,17 +36,23 @@ class Application {
         this.config = Object.assign(Object.assign({}, this.config), { [key]: value });
         this.baseEvents.onUpdate.fire(this.config);
     }
-    init() {
+    features() {
+        if (privateFeatures.has(this)) {
+            return privateFeatures.get(this);
+        }
+        throw Error('Features are not defined for application!');
+    }
+    init(features) {
         return new Promise((resolve, reject) => {
             try {
+                privateFeatures.set(this, features);
                 if (this.isInitialized()) {
                     reject('App is already initialized!');
                 }
-                this.setAppToFeatures(this.features);
-                this.initStore();
+                this.setAppToFeatures(features);
                 const promises = [];
-                Object.keys(this.features).forEach((key) => {
-                    promises.push(this.features[key].init());
+                Object.keys(features).forEach((key) => {
+                    promises.push(features[key].init());
                 });
                 this.initTranslations();
                 Promise.all(promises)
@@ -72,9 +78,6 @@ class Application {
                 reject(e);
             }
         });
-    }
-    initStore() {
-        this.store = toolkit_1.configureStore({ reducer: toolkit_1.combineReducers(this.reducers) });
     }
     initTranslations() {
         const setAppToTranslations = (translations) => {

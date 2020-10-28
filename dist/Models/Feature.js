@@ -1,33 +1,36 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable indent */
 const uuid_1 = require("uuid");
-const SuccessfullyInitializedEvent_1 = __importDefault(require("../Events/Features/SuccessfullyInitializedEvent"));
+const Features_1 = require("../Events/Features");
 const privateData = new Map();
+const appData = new Map();
 class Feature {
-    constructor(config) {
+    constructor(config, features) {
         this.config = config;
+        this.features = features;
         this.baseEvents = {
-            initialized: new SuccessfullyInitializedEvent_1.default(),
+            initialized: new Features_1.FeatureInitializedEvent(),
+            onError: new Features_1.FeatureErrorEvent(),
+            onUpdate: new Features_1.FeatureUpdatedEvent(),
         };
-        this.app = null;
         this.uuid = uuid_1.v4();
     }
     setApp(app) {
-        if (this.app === null) {
-            this.app = app;
+        if (!appData.has(this.uuid)) {
+            appData.set(this.uuid, app);
             return true;
         }
         return false;
     }
     getApp() {
-        return this.app;
+        if (appData.has(this.uuid)) {
+            return appData.get(this.uuid);
+        }
+        throw Error('App is not defined');
     }
     hasApp() {
-        return this.app !== null;
+        return appData.has(this.uuid);
     }
     init() {
         return new Promise((resolve, reject) => {
@@ -43,15 +46,14 @@ class Feature {
             Promise.all(promises).then(() => {
                 this.initFeature()
                     .then((result) => {
-                    var _a;
                     this.setInitialized(result);
                     this.baseEvents.initialized.fire(result);
-                    (_a = this.getApp()) === null || _a === void 0 ? void 0 : _a.info(`Feature '${this.name}' successfully intialized`);
+                    this.getApp().info(`Feature '${this.name}' successfully intialized`);
                     resolve(result);
                 })
                     .catch((e) => {
-                    var _a;
-                    (_a = this.getApp()) === null || _a === void 0 ? void 0 : _a.error(`Failed to initialize the feature '${this.name}' (${e})`);
+                    this.baseEvents.onError.fire(false);
+                    this.getApp().err(`Failed to initialize the feature '${this.name}' (${e})`);
                     reject(e);
                 });
             });
@@ -62,6 +64,7 @@ class Feature {
     }
     extendConfig(newConfig) {
         this.config = Object.assign(Object.assign({}, this.config), newConfig);
+        this.baseEvents.onUpdate.fire(this.config);
     }
     isInitialized() {
         var _a;
@@ -71,11 +74,6 @@ class Feature {
         privateData.set(this.uuid, {
             initialized,
         });
-    }
-    hasSlice() {
-        return (typeof this.slices !== undefined &&
-            Object.keys(this.slices).length > 0 &&
-            this.isInitialized());
     }
 }
 exports.default = Feature;

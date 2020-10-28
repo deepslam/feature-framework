@@ -1,23 +1,23 @@
-import { IFeature, IEvent } from '../Interfaces';
-import { ConfigType } from '../Types';
-import Application from '../Application/Application';
-export default abstract class Feature<C = Record<string, ConfigType>, A = Application<unknown>> implements IFeature<C, A> {
-    protected config: C;
+import { IFeature, IEvent, IApp } from '../Interfaces';
+import { AppFeaturesType, ConfigType } from '../Types';
+export default abstract class Feature<C extends Record<string, ConfigType>, A extends IApp, F extends AppFeaturesType> implements IFeature<C, A> {
+    config: C;
+    readonly features: F;
     abstract name: string;
     readonly uuid: string;
     readonly baseEvents: {
         initialized: IEvent<boolean>;
+        onError: IEvent<boolean>;
+        onUpdate: IEvent<C>;
     };
-    protected app: A | null;
-    constructor(config: C);
+    constructor(config: C, features: F);
     setApp(app: A): boolean;
-    getApp(): A | null;
+    getApp(): A;
     hasApp(): boolean;
-    init(this: IFeature): Promise<boolean>;
+    init(): Promise<boolean>;
     abstract initFeature(): Promise<boolean>;
     cfg(): C;
     extendConfig(newConfig: Partial<C>): void;
     isInitialized(): boolean;
     setInitialized(initialized: boolean): void;
-    hasSlice(this: IFeature): boolean;
 }
