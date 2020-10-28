@@ -1,4 +1,3 @@
-import { Store, configureStore, combineReducers } from '@reduxjs/toolkit';
 import { Locale } from 'locale-enum';
 
 import {
@@ -29,7 +28,6 @@ export default abstract class Application<
   public locale: Locale = Locale.en;
   public readonly fallbackLocale: Locale = Locale.en;
   public debug = false;
-  public store?: Store;
   public readonly baseEvents: {
     onAppLoaded: AppLoadedEvent;
     onUpdate: AppUpdatedEvent<C>;
@@ -82,7 +80,6 @@ export default abstract class Application<
           reject('App is already initialized!');
         }
         this.setAppToFeatures(features);
-        this.initStore();
         const promises: Promise<boolean>[] = [];
         Object.keys(features).forEach((key: string) => {
           promises.push(features[key].init());
@@ -113,10 +110,6 @@ export default abstract class Application<
         reject(e);
       }
     });
-  }
-
-  protected initStore() {
-    this.store = configureStore({ reducer: combineReducers(this.reducers) });
   }
 
   private initTranslations(): void {
