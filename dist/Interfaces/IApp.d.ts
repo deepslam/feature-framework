@@ -33,4 +33,5 @@ export interface IApp<C = Record<string, ConfigType>> {
     warning(error: string): void;
     log(message: string, type: ErrorTypeEnum): void;
     info(message: string): void;
+    isInitialized(): boolean;
 }

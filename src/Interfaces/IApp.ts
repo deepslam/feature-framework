@@ -52,4 +52,6 @@ export interface IApp<C = Record<string, ConfigType>> {
 
   log(message: string, type: ErrorTypeEnum): void;
   info(message: string): void;
+
+  isInitialized(): boolean;
 }
