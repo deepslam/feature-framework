@@ -2,7 +2,7 @@ import { ILogger, IApp } from '../Interfaces';
 import { ErrorTypeEnum, ConfigType } from '../Types';
 
 export default class ConsoleLogger implements ILogger {
-  constructor(private readonly app: IApp<Record<string, ConfigType>>) { }
+  constructor(private readonly app: IApp<Record<string, ConfigType>>) {}
 
   public log(message: string, type: ErrorTypeEnum | null = null): void {
     if (this.app.debug) {
