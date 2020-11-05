@@ -1,6 +1,5 @@
-import { ConfigType } from 'Types';
 import { ILogger, IApp } from '../Interfaces';
-import { ErrorTypeEnum } from '../Types/ErrorTypes';
+import { ErrorTypeEnum, ConfigType } from '../Types';
 export default class ConsoleLogger implements ILogger {
     private readonly app;
     constructor(app: IApp<Record<string, ConfigType>>);
