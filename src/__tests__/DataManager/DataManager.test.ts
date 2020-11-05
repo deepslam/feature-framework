@@ -119,9 +119,10 @@ describe('Tests with BrokenDataProvider', () => {
       expect(dataSavingErrorListener).toBeCalled();
     }
 
-    expect(async () => {
+    try {
       await manager.remove('newModel');
-    }).rejects.toEqual(null);
-    expect(dataRemovingErrorListener).toBeCalled();
+    } catch (e) {
+      expect(dataRemovingErrorListener).toBeCalled();
+    }
   });
 });
