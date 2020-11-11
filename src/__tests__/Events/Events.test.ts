@@ -1,11 +1,11 @@
-import SuccessFullyInitializedEvent from '../../Events/Features/FeatureInitializedEvent';
+import FeatureInitializedEvent from '../../Events/Features/FeatureInitializedEvent';
 
 describe('Events test', () => {
   it('Should work correctly', (done) => {
     const callbackOne = jest.fn();
     const callbackTwo = jest.fn();
 
-    const event = new SuccessFullyInitializedEvent();
+    const event = new FeatureInitializedEvent();
 
     event.subscribe(callbackOne);
     event.subscribe(callbackTwo);

@@ -1,3 +1,3 @@
 import Event from '../../Models/Event';
 
-export default class SuccessFullyInitializedEvent extends Event<boolean> {}
+export default class FeatureInitializedEvent extends Event<boolean> {}

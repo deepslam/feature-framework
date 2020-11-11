@@ -9,24 +9,27 @@ describe('Application init test', () => {
     const app = new TestApp({ version: '3.4.3' });
 
     const appLoadedListener = jest.fn();
+    const appFeatureInitializedListener = jest.fn();
     const featureLoadedListener = jest.fn();
     const subfeatureLoadedListener = jest.fn();
+    const SubFeature = new TestSubFeature(
+      {
+        enabled: true,
+      },
+      {},
+    );
+    const Feature = new TestFeature(
+      {
+        name: 'test',
+        id: 3434,
+      },
+      {
+        SubFeature,
+      },
+    );
 
     const features: TestApplicationFeaturesType = {
-      TestFeature: new TestFeature(
-        {
-          name: 'test',
-          id: 3434,
-        },
-        {
-          SubFeature: new TestSubFeature(
-            {
-              enabled: true,
-            },
-            {},
-          ),
-        },
-      ),
+      TestFeature: Feature,
     };
 
     features.TestFeature.baseEvents.initialized.subscribe(
@@ -37,6 +40,9 @@ describe('Application init test', () => {
       subfeatureLoadedListener,
     );
     app.baseEvents.onAppLoaded.subscribe(appLoadedListener);
+    app.baseEvents.onFeatureInitialized.subscribe(
+      appFeatureInitializedListener,
+    );
     expect(app.isInitialized()).toBeFalsy();
     expect(() => {
       app.features();
@@ -53,6 +59,11 @@ describe('Application init test', () => {
         expect(appLoadedListener).toBeCalled();
         expect(featureLoadedListener).toBeCalled();
         expect(subfeatureLoadedListener).toBeCalled();
+        expect(appFeatureInitializedListener).toBeCalledTimes(2);
+        expect(appFeatureInitializedListener.mock.calls).toEqual([
+          [SubFeature],
+          [Feature],
+        ]);
         expect(app.isInitialized()).toBeTruthy();
         expect(app.features().TestFeature.isInitialized()).toBeTruthy();
         expect(

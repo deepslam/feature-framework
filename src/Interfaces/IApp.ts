@@ -8,6 +8,14 @@ import {
   IDataProvider,
   ILogger,
 } from '../Interfaces';
+import {
+  AppLoadedEvent,
+  AppErrorEvent,
+  AppLocaleChangedEvent,
+  AppUpdatedEvent,
+  AppFeatureInitializedEvent,
+  AppFeatureUpdatedEvent,
+} from '../Events/App';
 import { ConfigType, TranslationPluralItemType } from '../Types';
 import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';
@@ -20,7 +28,14 @@ export interface IApp<C = Record<string, ConfigType>> {
   fallbackLocale: Locale;
 
   debug: boolean;
-  baseEvents: Record<string, IEvent<unknown>>;
+  baseEvents: {
+    onAppLoaded: AppLoadedEvent;
+    onUpdate: AppUpdatedEvent<C>;
+    onAppError: AppErrorEvent;
+    onAppLocaleChanged: AppLocaleChangedEvent;
+    onFeatureInitialized: AppFeatureInitializedEvent;
+    onFeatureUpdated: AppFeatureUpdatedEvent;
+  };
   events?: Record<string, IEvent<unknown>>;
   factories?: Record<string, Factory<any>>;
   translations?: Record<string, Translations<unknown>>;

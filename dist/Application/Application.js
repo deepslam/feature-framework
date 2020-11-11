@@ -18,6 +18,8 @@ class Application {
             onAppError: new App_1.AppErrorEvent(),
             onAppLocaleChanged: new App_1.AppLocaleChangedEvent(),
             onUpdate: new App_1.AppUpdatedEvent(),
+            onFeatureInitialized: new App_1.AppFeatureInitializedEvent(),
+            onFeatureUpdated: new App_1.AppFeatureUpdatedEvent(),
         };
         this.translations = {};
         this.logger = new Models_1.ConsoleLogger(this);

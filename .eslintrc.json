@@ -32,6 +32,7 @@
   },
   "plugins": ["@typescript-eslint", "jest"],
   "rules": {
+    "indent": "off",
     "operator-linebreak": 0,
     "consistent-return": ["error", { "treatUndefinedAsUnspecified": true }],
     "no-unused-vars": 0,

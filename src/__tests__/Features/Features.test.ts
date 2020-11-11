@@ -5,6 +5,8 @@ import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
 
 describe('Features test', () => {
   test('Features config test', () => {
+    const appFeatureUpdatedListener = jest.fn();
+    const app = new TestApplication({ version: '3.4.3' });
     const feature = new TestFeature(
       {
         id: 222,
@@ -14,6 +16,8 @@ describe('Features test', () => {
         SubFeature: new TestSubFeature({ enabled: false }, {}),
       },
     );
+    feature.setApp(app);
+    app.baseEvents.onFeatureUpdated.subscribe(appFeatureUpdatedListener);
 
     expect(feature.cfg()).toStrictEqual({
       id: 222,
@@ -23,6 +27,9 @@ describe('Features test', () => {
     feature.extendConfig({
       name: 'edited',
     });
+
+    expect(appFeatureUpdatedListener).toBeCalled();
+    expect(appFeatureUpdatedListener).toBeCalledWith(feature);
 
     expect(feature.cfg()).toStrictEqual({
       id: 222,

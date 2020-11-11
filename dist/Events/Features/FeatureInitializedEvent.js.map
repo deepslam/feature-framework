@@ -1,1 +1,1 @@
-{"version":3,"file":"FeatureInitializedEvent.js","sourceRoot":"","sources":["../../../src/Events/Features/FeatureInitializedEvent.ts"],"names":[],"mappings":";;;;;AAAA,+DAAuC;AAEvC,MAAqB,4BAA6B,SAAQ,eAAc;CAAG;AAA3E,+CAA2E"}
+{"version":3,"file":"FeatureInitializedEvent.js","sourceRoot":"","sources":["../../../src/Events/Features/FeatureInitializedEvent.ts"],"names":[],"mappings":";;;;;AAAA,+DAAuC;AAEvC,MAAqB,uBAAwB,SAAQ,eAAc;CAAG;AAAtE,0CAAsE"}

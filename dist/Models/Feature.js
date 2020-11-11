@@ -48,7 +48,8 @@ class Feature {
                     .then((result) => {
                     this.setInitialized(result);
                     this.baseEvents.initialized.fire(result);
-                    this.getApp().info(`Feature '${this.name}' successfully intialized`);
+                    this.getApp().baseEvents.onFeatureInitialized.fire(this);
+                    this.getApp().info(`Feature '${this.name}' successfully initialized`);
                     resolve(result);
                 })
                     .catch((e) => {
@@ -65,6 +66,7 @@ class Feature {
     extendConfig(newConfig) {
         this.config = Object.assign(Object.assign({}, this.config), newConfig);
         this.baseEvents.onUpdate.fire(this.config);
+        this.getApp().baseEvents.onFeatureUpdated.fire(this);
     }
     isInitialized() {
         var _a;

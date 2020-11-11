@@ -73,8 +73,9 @@ export default abstract class Feature<
           .then((result) => {
             this.setInitialized(result);
             this.baseEvents.initialized.fire(result);
+            this.getApp().baseEvents.onFeatureInitialized.fire(this);
             this.getApp().info(
-              `Feature '${this.name}' successfully intialized`,
+              `Feature '${this.name}' successfully initialized`,
             );
             resolve(result);
           })
@@ -101,6 +102,7 @@ export default abstract class Feature<
       ...newConfig,
     };
     this.baseEvents.onUpdate.fire(this.config);
+    this.getApp().baseEvents.onFeatureUpdated.fire(this);
   }
 
   isInitialized(): boolean {

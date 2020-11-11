@@ -15,6 +15,8 @@ import {
   AppErrorEvent,
   AppLocaleChangedEvent,
   AppUpdatedEvent,
+  AppFeatureInitializedEvent,
+  AppFeatureUpdatedEvent,
 } from '../Events/App';
 
 const privateFeatures = new Map();
@@ -33,11 +35,15 @@ export default abstract class Application<
     onUpdate: AppUpdatedEvent<C>;
     onAppError: AppErrorEvent;
     onAppLocaleChanged: AppLocaleChangedEvent;
+    onFeatureInitialized: AppFeatureInitializedEvent;
+    onFeatureUpdated: AppFeatureUpdatedEvent;
   } = {
     onAppLoaded: new AppLoadedEvent(),
     onAppError: new AppErrorEvent(),
     onAppLocaleChanged: new AppLocaleChangedEvent(),
     onUpdate: new AppUpdatedEvent(),
+    onFeatureInitialized: new AppFeatureInitializedEvent(),
+    onFeatureUpdated: new AppFeatureUpdatedEvent(),
   };
   public readonly translations: Record<string, Translations<unknown>> = {};
   public readonly logger: ILogger = new ConsoleLogger(this);
