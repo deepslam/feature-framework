@@ -1,8 +1,20 @@
-import { IEvent } from './IEvent';
+import {
+  ItemAddedEvent,
+  ItemRemovedEvent,
+  ItemsFoundEvent,
+  CollectionClearedEvent,
+  ItemsSortedEvent,
+} from '../Events/DataCollections';
 
 export interface IDataCollection<T> {
   items: Map<T, T>;
-  events: Record<string, IEvent<unknown>>;
+  events: {
+    onItemAdded: ItemAddedEvent<T>;
+    onItemRemoved: ItemRemovedEvent<T>;
+    onCollectionCleared: CollectionClearedEvent<IDataCollection<T>>;
+    onItemsFound: ItemsFoundEvent<IDataCollection<T>>;
+    onItemsSorted: ItemsSortedEvent<IDataCollection<T>>;
+  };
 
   add(item: T): void;
   remove(item: T): void;
