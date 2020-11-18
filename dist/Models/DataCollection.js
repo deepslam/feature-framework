@@ -35,6 +35,12 @@ class DataCollection {
         this.items.clear();
         this.events.onCollectionCleared.fire(this);
     }
+    first() {
+        return this.getAll()[0] || null;
+    }
+    last() {
+        return this.getAll()[this.length() - 1] || null;
+    }
     getAll() {
         return [...this.items].map(([, value]) => value);
     }

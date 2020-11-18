@@ -50,6 +50,14 @@ export default class DataCollection<T> implements IDataCollection<T> {
     this.events.onCollectionCleared.fire(this);
   }
 
+  first(): T | null {
+    return this.getAll()[0] || null;
+  }
+
+  last(): T | null {
+    return this.getAll()[this.length() - 1] || null;
+  }
+
   getAll() {
     return [...this.items].map(([, value]) => value);
   }

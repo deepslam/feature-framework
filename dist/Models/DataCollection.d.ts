@@ -9,6 +9,8 @@ export default class DataCollection<T> implements IDataCollection<T> {
     remove(item: T): void;
     contain(item: T): boolean;
     clear(): void;
+    first(): T | null;
+    last(): T | null;
     getAll(): any[];
     length(): number;
     find(callback: (item: T) => boolean): IDataCollection<T>;
