@@ -5,11 +5,11 @@ class DataCollection {
     constructor(items) {
         this.items = new Map();
         this.events = {
-            onItemAdded: new DataCollections_1.ItemAddedEvent(),
-            onItemRemoved: new DataCollections_1.ItemRemovedEvent(),
+            onItemAdded: new DataCollections_1.CollectionItemAddedEvent(),
+            onItemRemoved: new DataCollections_1.CollectionItemRemovedEvent(),
             onCollectionCleared: new DataCollections_1.CollectionClearedEvent(),
-            onItemsFound: new DataCollections_1.ItemsFoundEvent(),
-            onItemsSorted: new DataCollections_1.ItemsSortedEvent(),
+            onItemsFound: new DataCollections_1.CollectionItemsFoundEvent(),
+            onItemsSorted: new DataCollections_1.CollectionItemsSortedEvent(),
         };
         this.__class__ = new.target;
         if (items) {

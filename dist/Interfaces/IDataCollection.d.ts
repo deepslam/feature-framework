@@ -1,13 +1,7 @@
-import { ItemAddedEvent, ItemRemovedEvent, ItemsFoundEvent, CollectionClearedEvent, ItemsSortedEvent } from '../Events/DataCollections';
+import { DataCollectionStandardEventsType } from '../Types/EventTypes';
 export interface IDataCollection<T> {
     items: Map<T, T>;
-    events: {
-        onItemAdded: ItemAddedEvent<T>;
-        onItemRemoved: ItemRemovedEvent<T>;
-        onCollectionCleared: CollectionClearedEvent<IDataCollection<T>>;
-        onItemsFound: ItemsFoundEvent<IDataCollection<T>>;
-        onItemsSorted: ItemsSortedEvent<IDataCollection<T>>;
-    };
+    events: DataCollectionStandardEventsType<T>;
     add(item: T): void;
     remove(item: T): void;
     contain(item: T): boolean;

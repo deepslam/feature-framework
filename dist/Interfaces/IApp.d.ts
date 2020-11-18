@@ -1,24 +1,15 @@
 import { Locale } from 'locale-enum';
 import { IEvent, IView, IDataCollection, IModel, IDataManager, IDataProvider, ILogger } from '../Interfaces';
-import { AppLoadedEvent, AppErrorEvent, AppLocaleChangedEvent, AppUpdatedEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent } from '../Events/App';
-import { ConfigType, TranslationPluralItemType } from '../Types';
+import { ConfigType, TranslationPluralItemType, AppStandardEventsType, ErrorTypeEnum } from '../Types';
 import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';
-import { ErrorTypeEnum } from '../Types/ErrorTypes';
 import ErrorHandler from '../Models/ErrorHandler';
 import Translations from '../Models/Translations';
 export interface IApp<C = Record<string, ConfigType>> {
     locale: Locale;
     fallbackLocale: Locale;
     debug: boolean;
-    baseEvents: {
-        onAppLoaded: AppLoadedEvent;
-        onUpdate: AppUpdatedEvent<C>;
-        onAppError: AppErrorEvent;
-        onAppLocaleChanged: AppLocaleChangedEvent;
-        onFeatureInitialized: AppFeatureInitializedEvent;
-        onFeatureUpdated: AppFeatureUpdatedEvent;
-    };
+    baseEvents: AppStandardEventsType<C>;
     events?: Record<string, IEvent<unknown>>;
     factories?: Record<string, Factory<any>>;
     translations?: Record<string, Translations<unknown>>;

@@ -1,16 +1,7 @@
-import { IDataProvider } from '../Interfaces/IDataProvider';
-import { IDataManager } from '../Interfaces/IDataManager';
-import { IEvent } from '../Interfaces/IEvent';
-import { DataManagerErrorsType } from '../Types';
+import { IDataManager, IDataProvider } from '../Interfaces';
+import { DataManagerStandardEventsType } from '../Types';
 export default abstract class DataManager<T> implements IDataManager<T> {
-    readonly events: {
-        DataLoaded: IEvent<T>;
-        DataLoadingError: IEvent<DataManagerErrorsType>;
-        DataSaved: IEvent<string>;
-        DataSavingError: IEvent<DataManagerErrorsType>;
-        DataRemoved: IEvent<string>;
-        DataRemovingError: IEvent<DataManagerErrorsType>;
-    };
+    readonly events: DataManagerStandardEventsType<T>;
     protected abstract restore(data: unknown): T;
     protected abstract pack(data: T): unknown;
     abstract provider: IDataProvider;

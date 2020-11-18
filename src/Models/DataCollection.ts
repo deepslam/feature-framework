@@ -1,29 +1,23 @@
 import { IDataCollection } from '../Interfaces';
 import {
-  ItemAddedEvent,
-  ItemRemovedEvent,
-  ItemsFoundEvent,
-  ItemsSortedEvent,
+  CollectionItemAddedEvent,
+  CollectionItemRemovedEvent,
+  CollectionItemsFoundEvent,
+  CollectionItemsSortedEvent,
   CollectionClearedEvent,
 } from '../Events/DataCollections';
-import { Constructor } from '../Types';
+import { Constructor, DataCollectionStandardEventsType } from '../Types';
 
 export default class DataCollection<T> implements IDataCollection<T> {
   public readonly items = new Map();
   public readonly __class__: Constructor<IDataCollection<T>>;
 
-  events: {
-    onItemAdded: ItemAddedEvent<T>;
-    onItemRemoved: ItemRemovedEvent<T>;
-    onCollectionCleared: CollectionClearedEvent<IDataCollection<T>>;
-    onItemsFound: ItemsFoundEvent<IDataCollection<T>>;
-    onItemsSorted: ItemsSortedEvent<IDataCollection<T>>;
-  } = {
-    onItemAdded: new ItemAddedEvent(),
-    onItemRemoved: new ItemRemovedEvent(),
+  events: DataCollectionStandardEventsType<T> = {
+    onItemAdded: new CollectionItemAddedEvent(),
+    onItemRemoved: new CollectionItemRemovedEvent(),
     onCollectionCleared: new CollectionClearedEvent(),
-    onItemsFound: new ItemsFoundEvent(),
-    onItemsSorted: new ItemsSortedEvent(),
+    onItemsFound: new CollectionItemsFoundEvent(),
+    onItemsSorted: new CollectionItemsSortedEvent(),
   };
 
   public constructor(items?: T[]) {

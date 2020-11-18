@@ -6,6 +6,7 @@ import {
   TranslationPluralItemType,
   ConfigType,
   AppFeaturesType,
+  AppStandardEventsType,
 } from '../Types';
 
 import { IApp, ILogger, IErrorHandler } from '../Interfaces';
@@ -30,14 +31,7 @@ export default abstract class Application<
   public locale: Locale = Locale.en;
   public readonly fallbackLocale: Locale = Locale.en;
   public debug = false;
-  public readonly baseEvents: {
-    onAppLoaded: AppLoadedEvent;
-    onUpdate: AppUpdatedEvent<C>;
-    onAppError: AppErrorEvent;
-    onAppLocaleChanged: AppLocaleChangedEvent;
-    onFeatureInitialized: AppFeatureInitializedEvent;
-    onFeatureUpdated: AppFeatureUpdatedEvent;
-  } = {
+  public readonly baseEvents: AppStandardEventsType<C> = {
     onAppLoaded: new AppLoadedEvent(),
     onAppError: new AppErrorEvent(),
     onAppLocaleChanged: new AppLocaleChangedEvent(),

@@ -1,13 +1,11 @@
-import DataLoadedEvent from '../Events/DataManager/DataLoadedEvent';
-import DataSavedEvent from '../Events/DataManager/DataSavedEvent';
-import DataRemovedEvent from '../Events/DataManager/DataRemovedEvent';
-import DataLoadingErrorEvent from '../Events/DataManager/DataLoadingErrorEvent';
-import DataSavingErrorEvent from '../Events/DataManager/DataSavingErrorEvent';
-import DataRemovingErrorEvent from '../Events/DataManager/DataRemovingErrorEvent';
-import { IDataProvider } from '../Interfaces/IDataProvider';
-import { IDataManager } from '../Interfaces/IDataManager';
-import { IEvent } from '../Interfaces/IEvent';
-import { DataManagerErrorsType } from '../Types';
+import DataManagerDataLoadedEvent from '../Events/DataManager/DataManagerDataLoadedEvent';
+import DataManagerDataSavedEvent from '../Events/DataManager/DataManagerDataSavedEvent';
+import DataManagerDataRemovedEvent from '../Events/DataManager/DataManagerDataRemovedEvent';
+import DataManagerDataLoadingErrorEvent from '../Events/DataManager/DataManagerDataLoadingErrorEvent';
+import DataManagerDataSavingErrorEvent from '../Events/DataManager/DataManagerDataSavingErrorEvent';
+import DataManagerDataRemovingErrorEvent from '../Events/DataManager/DataManagerDataRemovingErrorEvent';
+import { IDataManager, IDataProvider } from '../Interfaces';
+import { DataManagerStandardEventsType } from '../Types';
 
 const ERR_PROVIDER_NOT_SET = 'Provider is not set';
 const ERR_NO_LOAD_FUNC = 'Load function is not set';
@@ -15,24 +13,15 @@ const ERR_NO_SAVE_FUNC = 'Save function is not set';
 const ERR_NO_REMOVE_FUNC = 'Remove function is not set';
 
 export default abstract class DataManager<T> implements IDataManager<T> {
-  public readonly events: {
-    DataLoaded: IEvent<T>;
-    DataLoadingError: IEvent<DataManagerErrorsType>;
+  public readonly events: DataManagerStandardEventsType<T> = {
+    DataLoaded: new DataManagerDataLoadedEvent(),
+    DataLoadingError: new DataManagerDataLoadingErrorEvent(),
 
-    DataSaved: IEvent<string>;
-    DataSavingError: IEvent<DataManagerErrorsType>;
+    DataSaved: new DataManagerDataSavedEvent(),
+    DataSavingError: new DataManagerDataSavingErrorEvent(),
 
-    DataRemoved: IEvent<string>;
-    DataRemovingError: IEvent<DataManagerErrorsType>;
-  } = {
-    DataLoaded: new DataLoadedEvent(),
-    DataLoadingError: new DataLoadingErrorEvent(),
-
-    DataSaved: new DataSavedEvent(),
-    DataSavingError: new DataSavingErrorEvent(),
-
-    DataRemoved: new DataRemovedEvent(),
-    DataRemovingError: new DataRemovingErrorEvent(),
+    DataRemoved: new DataManagerDataRemovedEvent(),
+    DataRemovingError: new DataManagerDataRemovingErrorEvent(),
   };
 
   protected abstract restore(data: unknown): T;

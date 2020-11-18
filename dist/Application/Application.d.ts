@@ -1,8 +1,7 @@
 import { Locale } from 'locale-enum';
-import { ErrorTypeEnum, DefaultAppConfigType, TranslationPluralItemType, ConfigType, AppFeaturesType } from '../Types';
+import { ErrorTypeEnum, DefaultAppConfigType, TranslationPluralItemType, ConfigType, AppFeaturesType, AppStandardEventsType } from '../Types';
 import { IApp, ILogger, IErrorHandler } from '../Interfaces';
 import { ErrorHandler, Translations } from '../Models';
-import { AppLoadedEvent, AppErrorEvent, AppLocaleChangedEvent, AppUpdatedEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent } from '../Events/App';
 export default abstract class Application<F extends AppFeaturesType, C extends Record<string, ConfigType>> implements IApp<C> {
     config: C & Partial<DefaultAppConfigType>;
     private initialized;
@@ -10,14 +9,7 @@ export default abstract class Application<F extends AppFeaturesType, C extends R
     locale: Locale;
     readonly fallbackLocale: Locale;
     debug: boolean;
-    readonly baseEvents: {
-        onAppLoaded: AppLoadedEvent;
-        onUpdate: AppUpdatedEvent<C>;
-        onAppError: AppErrorEvent;
-        onAppLocaleChanged: AppLocaleChangedEvent;
-        onFeatureInitialized: AppFeatureInitializedEvent;
-        onFeatureUpdated: AppFeatureUpdatedEvent;
-    };
+    readonly baseEvents: AppStandardEventsType<C>;
     readonly translations: Record<string, Translations<unknown>>;
     readonly logger: ILogger;
     readonly errorHandler: ErrorHandler;

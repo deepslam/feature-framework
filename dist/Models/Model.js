@@ -1,13 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ModelWasUpdatedEvent_1 = __importDefault(require("../Events/Models/ModelWasUpdatedEvent"));
+const Events_1 = require("../Events");
 class Model {
     constructor(options) {
         this.baseEvents = {
-            updated: new ModelWasUpdatedEvent_1.default(),
+            updated: new Events_1.ModelWasUpdatedEvent(),
         };
         this.fields = options;
     }

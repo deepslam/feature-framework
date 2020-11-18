@@ -1,11 +1,11 @@
-import { IModel } from '../Interfaces/IModel';
-import { IEvent } from '../Interfaces/IEvent';
-import ModelWasUpdatedEvent from '../Events/Models/ModelWasUpdatedEvent';
+import { IModel, IEvent } from '../Interfaces';
+import { ModelWasUpdatedEvent } from '../Events';
+import { ModelStandardEventsType } from '../Types';
 
 export default abstract class Model<T = Record<string, unknown>>
   implements IModel<T> {
   public fields: T;
-  public readonly baseEvents: { updated: ModelWasUpdatedEvent<T> } = {
+  public readonly baseEvents: ModelStandardEventsType<T> = {
     updated: new ModelWasUpdatedEvent(),
   };
   abstract events: Record<string, IEvent<unknown>>;
