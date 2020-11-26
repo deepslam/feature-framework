@@ -4,11 +4,11 @@ import { IEvent } from './IEvent';
 import { IView } from './IView';
 import { IModel } from './IModel';
 import { IDataManager } from './IDataManager';
-import { AppFeaturesType, ConfigType } from '../Types';
+import { AppFeaturesType, ConfigType, FeatureStandardEventsType } from '../Types';
 import { Translations, Factory } from '../Models';
 export interface IFeature<C extends Record<string, ConfigType>, A extends IApp> {
     name: string;
-    baseEvents: Record<string, IEvent<unknown>>;
+    baseEvents: FeatureStandardEventsType<C>;
     events?: Record<string, IEvent<unknown>>;
     factories?: Record<string, Factory<any>>;
     translations?: Record<string, Translations<unknown>>;

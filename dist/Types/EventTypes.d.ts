@@ -28,3 +28,8 @@ export declare type DataManagerStandardEventsType<T> = {
     DataRemoved: IEvent<string>;
     DataRemovingError: IEvent<DataManagerErrorsType>;
 };
+export declare type FeatureStandardEventsType<C> = {
+    initialized: IEvent<boolean>;
+    onError: IEvent<boolean>;
+    onUpdate: IEvent<C>;
+};

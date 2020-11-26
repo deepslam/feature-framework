@@ -5,8 +5,12 @@ import {
   FeatureErrorEvent,
   FeatureUpdatedEvent,
 } from '../Events/Features';
-import { IFeature, IEvent, IApp } from '../Interfaces';
-import { AppFeaturesType, ConfigType } from '../Types';
+import { IFeature, IApp } from '../Interfaces';
+import {
+  AppFeaturesType,
+  ConfigType,
+  FeatureStandardEventsType,
+} from '../Types';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
@@ -22,11 +26,7 @@ export default abstract class Feature<
 > implements IFeature<C, A> {
   public abstract name: string;
   public readonly uuid: string;
-  public readonly baseEvents: {
-    initialized: IEvent<boolean>;
-    onError: IEvent<boolean>;
-    onUpdate: IEvent<C>;
-  } = {
+  public readonly baseEvents: FeatureStandardEventsType<C> = {
     initialized: new FeatureInitializedEvent(),
     onError: new FeatureErrorEvent(),
     onUpdate: new FeatureUpdatedEvent(),
