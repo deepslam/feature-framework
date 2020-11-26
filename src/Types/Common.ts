@@ -7,4 +7,5 @@ export type ConfigType =
   | string
   | number
   | ConfigType[]
+  | undefined
   | { [name: string]: ConfigType };
