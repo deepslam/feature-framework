@@ -8,7 +8,7 @@ export default abstract class Model<T = Record<string, unknown>>
   public readonly baseEvents: ModelStandardEventsType<T> = {
     updated: new ModelWasUpdatedEvent(),
   };
-  abstract events: Record<string, IEvent<unknown>>;
+  events: Record<string, IEvent<unknown>> = {};
 
   constructor(options: T) {
     this.fields = options;

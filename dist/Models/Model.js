@@ -6,6 +6,7 @@ class Model {
         this.baseEvents = {
             updated: new Events_1.ModelWasUpdatedEvent(),
         };
+        this.events = {};
         this.fields = options;
     }
     update(fields) {
