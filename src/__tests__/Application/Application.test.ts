@@ -85,6 +85,45 @@ describe('Application init test', () => {
       });
   });
 
+  it('Application set features without initialization test', () => {
+    const app = new TestApp({ version: '3.4.3' });
+    const SubFeature = new TestSubFeature(
+      {
+        enabled: true,
+      },
+      {},
+    );
+    const Feature = new TestFeature(
+      {
+        name: 'test',
+        id: 3434,
+      },
+      {
+        SubFeature,
+      },
+    );
+
+    const features: TestApplicationFeaturesType = {
+      TestFeature: Feature,
+    };
+
+    expect(features.TestFeature.isInitialized()).toBeFalsy();
+
+    expect(() => {
+      app.features();
+    }).toThrowError();
+
+    app.setFeatures(features);
+
+    expect(() => {
+      app.features();
+    }).not.toThrowError();
+
+    expect(features.TestFeature.isInitialized()).toBeFalsy();
+
+    expect(app.features()).toStrictEqual(features);
+  });
+
   it('Application config test', () => {
     const app = new TestApp({ version: '1.2.2' });
     const appUpdatedListener = jest.fn();

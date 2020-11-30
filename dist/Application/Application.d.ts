@@ -19,7 +19,8 @@ export default abstract class Application<F extends AppFeaturesType, C extends R
     extendConfig(config: Partial<C>): void;
     setConfig<K extends keyof C>(key: K, value: C[K]): void;
     features(): F;
-    init(features: F): Promise<ApplicationInitSuccessfulType>;
+    setFeatures(features: F): void;
+    init(features?: F): Promise<ApplicationInitSuccessfulType>;
     private initTranslations;
     isInitialized(): boolean;
     err(error: string): void;

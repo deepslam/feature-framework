@@ -44,17 +44,22 @@ class Application {
         }
         throw Error('Features are not defined for application!');
     }
+    setFeatures(features) {
+        privateFeatures.set(this, features);
+    }
     init(features) {
         return new Promise((resolve, reject) => {
             try {
-                privateFeatures.set(this, features);
+                if (features) {
+                    privateFeatures.set(this, features);
+                }
                 if (this.isInitialized()) {
                     reject('App is already initialized!');
                 }
-                this.setAppToFeatures(features);
+                this.setAppToFeatures(this.features());
                 const promises = [];
-                Object.keys(features).forEach((key) => {
-                    promises.push(features[key].init());
+                Object.keys(this.features()).forEach((key) => {
+                    promises.push(this.features()[key].init());
                 });
                 this.initTranslations();
                 Promise.all(promises)

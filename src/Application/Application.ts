@@ -72,17 +72,23 @@ export default abstract class Application<
     throw Error('Features are not defined for application!');
   }
 
-  public init(features: F): Promise<ApplicationInitSuccessfulType> {
+  public setFeatures(features: F): void {
+    privateFeatures.set(this, features);
+  }
+
+  public init(features?: F): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
       try {
-        privateFeatures.set(this, features);
+        if (features) {
+          privateFeatures.set(this, features);
+        }
         if (this.isInitialized()) {
           reject('App is already initialized!');
         }
-        this.setAppToFeatures(features);
+        this.setAppToFeatures(this.features());
         const promises: Promise<boolean>[] = [];
-        Object.keys(features).forEach((key: string) => {
-          promises.push(features[key].init());
+        Object.keys(this.features()).forEach((key: string) => {
+          promises.push(this.features()[key].init());
         });
         this.initTranslations();
         Promise.all(promises)
