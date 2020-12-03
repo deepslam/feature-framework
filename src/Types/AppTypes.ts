@@ -1,5 +1,4 @@
-import { IApp, IFeature } from '../Interfaces';
-import { FeatureCommonType } from './FeatureTypes';
+import { IFeature } from '../Interfaces';
 import { Locale } from 'locale-enum';
 
 export type DefaultAppConfigType = {
