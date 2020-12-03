@@ -1,7 +1,11 @@
 import TestApp, {
   TestApplicationFeaturesType,
 } from '../TestData/Application/TestApplication';
+import LoadedTestFeatureEvent from '../TestData/Events/TestFeatureLoadedEvent';
+import TestCollection from '../TestData/DataCollection/TestDataCollection';
+import TestFactory from '../TestData/TestFactories/TestFactory';
 import TestFeature from '../TestData/SampleFeature/TestFeature';
+import TestModel from '../TestData/TestModels/TestModel';
 import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
 
 describe('Application init test', () => {
@@ -12,21 +16,35 @@ describe('Application init test', () => {
     const appFeatureInitializedListener = jest.fn();
     const featureLoadedListener = jest.fn();
     const subfeatureLoadedListener = jest.fn();
-    const SubFeature = new TestSubFeature(
-      {
+    const SubFeature = new TestSubFeature({
+      config: {
         enabled: true,
       },
-      {},
-    );
-    const Feature = new TestFeature(
-      {
+    });
+    const Feature = new TestFeature({
+      config: {
         name: 'test',
         id: 3434,
       },
-      {
+      collections: {
+        test: new TestCollection(),
+      },
+      models: {
+        my: new TestModel({
+          id: 2,
+          name: 'test',
+        }),
+      },
+      factories: {
+        TestModelFactory: new TestFactory(),
+      },
+      events: {
+        loaded: new LoadedTestFeatureEvent(),
+      },
+      features: {
         SubFeature,
       },
-    );
+    });
 
     const features: TestApplicationFeaturesType = {
       TestFeature: Feature,
@@ -87,21 +105,35 @@ describe('Application init test', () => {
 
   it('Application set features without initialization test', () => {
     const app = new TestApp({ version: '3.4.3' });
-    const SubFeature = new TestSubFeature(
-      {
+    const SubFeature = new TestSubFeature({
+      config: {
         enabled: true,
       },
-      {},
-    );
-    const Feature = new TestFeature(
-      {
+    });
+    const Feature = new TestFeature({
+      config: {
         name: 'test',
         id: 3434,
       },
-      {
+      collections: {
+        test: new TestCollection(),
+      },
+      models: {
+        my: new TestModel({
+          id: 2,
+          name: 'test',
+        }),
+      },
+      factories: {
+        TestModelFactory: new TestFactory(),
+      },
+      events: {
+        loaded: new LoadedTestFeatureEvent(),
+      },
+      features: {
         SubFeature,
       },
-    );
+    });
 
     const features: TestApplicationFeaturesType = {
       TestFeature: Feature,

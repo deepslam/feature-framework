@@ -1,4 +1,4 @@
-import { IModel, IEvent } from '../Interfaces';
+import { IEvent, IModel } from '../Interfaces';
 import { ModelWasUpdatedEvent } from '../Events';
 import { ModelStandardEventsType } from '../Types';
 

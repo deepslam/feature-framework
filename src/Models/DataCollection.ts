@@ -1,10 +1,10 @@
 import { IDataCollection } from '../Interfaces';
 import {
+  CollectionClearedEvent,
   CollectionItemAddedEvent,
   CollectionItemRemovedEvent,
   CollectionItemsFoundEvent,
   CollectionItemsSortedEvent,
-  CollectionClearedEvent,
 } from '../Events/DataCollections';
 import { Constructor, DataCollectionStandardEventsType } from '../Types';
 

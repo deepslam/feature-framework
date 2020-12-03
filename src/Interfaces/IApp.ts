@@ -1,18 +1,18 @@
 import { Locale } from 'locale-enum';
 import {
-  IEvent,
-  IView,
   IDataCollection,
-  IModel,
   IDataManager,
   IDataProvider,
+  IEvent,
   ILogger,
+  IModel,
+  IView,
 } from '../Interfaces';
 import {
-  ConfigType,
-  TranslationPluralItemType,
   AppStandardEventsType,
+  ConfigType,
   ErrorTypeEnum,
+  TranslationPluralItemType,
 } from '../Types';
 import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';

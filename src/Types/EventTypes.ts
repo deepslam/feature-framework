@@ -1,15 +1,15 @@
-import { IEvent, IDataCollection } from '../Interfaces';
+import { IDataCollection, IEvent } from '../Interfaces';
 import {
-  AppLoadedEvent,
-  AppUpdatedEvent,
   AppErrorEvent,
-  AppLocaleChangedEvent,
   AppFeatureInitializedEvent,
   AppFeatureUpdatedEvent,
+  AppLoadedEvent,
+  AppLocaleChangedEvent,
+  AppUpdatedEvent,
+  CollectionClearedEvent,
   CollectionItemAddedEvent,
   CollectionItemRemovedEvent,
   CollectionItemsFoundEvent,
-  CollectionClearedEvent,
   CollectionItemsSortedEvent,
   ModelWasUpdatedEvent,
 } from '../Events';

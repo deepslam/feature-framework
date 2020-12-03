@@ -1,23 +1,23 @@
 import { Locale } from 'locale-enum';
 
 import {
-  ErrorTypeEnum,
-  DefaultAppConfigType,
-  TranslationPluralItemType,
-  ConfigType,
   AppFeaturesType,
   AppStandardEventsType,
+  ConfigType,
+  DefaultAppConfigType,
+  ErrorTypeEnum,
+  TranslationPluralItemType,
 } from '../Types';
 
-import { IApp, ILogger, IErrorHandler } from '../Interfaces';
+import { IApp, IErrorHandler, ILogger } from '../Interfaces';
 import { ConsoleLogger, ErrorHandler, Translations } from '../Models';
 import {
-  AppLoadedEvent,
   AppErrorEvent,
-  AppLocaleChangedEvent,
-  AppUpdatedEvent,
   AppFeatureInitializedEvent,
   AppFeatureUpdatedEvent,
+  AppLoadedEvent,
+  AppLocaleChangedEvent,
+  AppUpdatedEvent,
 } from '../Events/App';
 
 const privateFeatures = new Map();

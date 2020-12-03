@@ -1,15 +1,17 @@
 import Feature from '../../../Models/Feature';
 import TestApplication from '../Application/TestApplication';
-import { AppFeaturesType } from '../../../Types';
 
 type TestSubFeatureConfig = {
   enabled: boolean;
 };
 
+type TestSubFeatureType = {
+  config: TestSubFeatureConfig;
+};
+
 export default class TestSubFeature extends Feature<
-  TestSubFeatureConfig,
-  TestApplication,
-  AppFeaturesType
+  TestSubFeatureType,
+  TestApplication
 > {
   name = 'TestSubFeature';
 

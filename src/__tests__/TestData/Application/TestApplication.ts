@@ -3,7 +3,7 @@ import TestFeature from '../SampleFeature/TestFeature';
 import TestFactory from '../TestFactories/TestFactory';
 import TestErrorHandler from '../TestErrorHandler/TestErrorHandler';
 import TestLogger from '../TestLogger/TestLogger';
-import { IErrorHandler, IApp, ILogger } from '../../../Interfaces';
+import { IApp, IErrorHandler, ILogger } from '../../../Interfaces';
 
 export type TestApplicationConfigType = {
   version: string;

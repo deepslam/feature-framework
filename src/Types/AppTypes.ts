@@ -1,6 +1,6 @@
+import { IApp, IFeature } from '../Interfaces';
+import { FeatureCommonType } from './FeatureTypes';
 import { Locale } from 'locale-enum';
-import { IFeature, IApp } from '../Interfaces';
-import { ConfigType } from './Common';
 
 export type DefaultAppConfigType = {
   fallbackLocale: Locale;
@@ -15,7 +15,4 @@ export type AppConfig =
   | unknown[]
   | { [key: string]: AppConfig };
 
-export type AppFeaturesType = Record<
-  string,
-  IFeature<Record<string, ConfigType>, IApp>
->;
+export type AppFeaturesType = Record<string, IFeature<any, any>>;

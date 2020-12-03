@@ -12,30 +12,27 @@ type TestFeatureConfig = {
   id: number;
 };
 
-type TestFeatureSubFeatures = {
-  SubFeature: TestSubFeature;
+type TestFeatureType = {
+  config: TestFeatureConfig;
+  features: {
+    SubFeature: TestSubFeature;
+  };
+  events: { loaded: TestFeatureLoadedEvent };
+  collections: {
+    test: TestCollection;
+  };
+  factories: {
+    TestModelFactory: TestFactory;
+  };
+  models: {
+    my: TestModel;
+  };
 };
 
 export default class TestFeature
-  extends Feature<TestFeatureConfig, TestApplication, TestFeatureSubFeatures>
-  implements IFeature<TestFeatureConfig, TestApplication> {
+  extends Feature<TestFeatureType, TestApplication>
+  implements IFeature<TestFeatureType, TestApplication> {
   name = 'TestFeature';
-
-  public readonly events = {
-    loaded: new TestFeatureLoadedEvent(),
-  };
-  public readonly collections = {
-    test: new TestCollection(),
-  };
-
-  public readonly factories = {
-    TestModelFactory: new TestFactory(),
-  };
-
-  public readonly models = {
-    my: new TestModel({ id: 2, name: 'test' }),
-  };
-
   components() {
     return {};
   }

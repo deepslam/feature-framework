@@ -1,16 +1,12 @@
 /* eslint-disable indent */
 import { v4 as uuid4 } from 'uuid';
 import {
-  FeatureInitializedEvent,
   FeatureErrorEvent,
+  FeatureInitializedEvent,
   FeatureUpdatedEvent,
 } from '../Events/Features';
-import { IFeature, IApp } from '../Interfaces';
-import {
-  AppFeaturesType,
-  ConfigType,
-  FeatureStandardEventsType,
-} from '../Types';
+import { IApp, IFeature } from '../Interfaces';
+import { FeatureCommonType, FeatureStandardEventsType } from '../Types';
 
 type AbstractFeaturePrivateDataType = {
   initialized: boolean;
@@ -20,20 +16,80 @@ const privateData = new Map<string, Partial<AbstractFeaturePrivateDataType>>();
 const appData = new Map<string, IApp>();
 
 export default abstract class Feature<
-  C extends Record<string, ConfigType>,
-  A extends IApp,
-  F extends AppFeaturesType
-> implements IFeature<C, A> {
+  F extends FeatureCommonType,
+  A extends IApp
+> implements IFeature<F, A> {
   public abstract name: string;
   public readonly uuid: string;
-  public readonly baseEvents: FeatureStandardEventsType<C> = {
+  public readonly baseEvents: FeatureStandardEventsType<F['config']> = {
     initialized: new FeatureInitializedEvent(),
     onError: new FeatureErrorEvent(),
     onUpdate: new FeatureUpdatedEvent(),
   };
 
-  constructor(public config: C, public readonly features: F) {
+  public config: F['config'];
+  public events: F['events'];
+  public factories: F['factories'];
+  public views: F['views'];
+  public models: F['models'];
+  public collections: F['collections'];
+  public dataManagers: F['dataManagers'];
+  public features: F['features'];
+  public translations: F['translations'];
+
+  constructor(settings?: F) {
     this.uuid = uuid4();
+    this.config = {};
+    this.events = {};
+    this.collections = {};
+    this.factories = {};
+    this.views = {};
+    this.models = {};
+    this.dataManagers = {};
+    this.features = {};
+    this.translations = {};
+
+    if (settings) {
+      this.setData(settings);
+    }
+  }
+
+  public setData(data: F): boolean {
+    return this.setPartialData(data);
+  }
+
+  public setPartialData(data: Partial<F>): boolean {
+    if (this.isInitialized()) return false;
+
+    if (data.config) {
+      this.config = data.config;
+    }
+    if (data.collections) {
+      this.collections = data.collections;
+    }
+    if (data.dataManagers) {
+      this.dataManagers = data.dataManagers;
+    }
+    if (data.events) {
+      this.events = data.events;
+    }
+    if (data.factories) {
+      this.factories = data.factories;
+    }
+    if (data.features) {
+      this.features = data.features;
+    }
+    if (data.models) {
+      this.models = data.models;
+    }
+    if (data.translations) {
+      this.translations = data.translations;
+    }
+    if (data.views) {
+      this.views = data.views;
+    }
+
+    return true;
   }
 
   public setApp(app: A): boolean {
@@ -61,8 +117,8 @@ export default abstract class Feature<
     return new Promise((resolve, reject) => {
       const promises: unknown[] = [];
       if (this.features) {
-        Object.keys(this.features).forEach((key) => {
-          if (this.features && this.features[key]) {
+        Object.keys(this.features!).forEach((key) => {
+          if (this.features && (this.features[key] as IFeature<any, any>)) {
             const feature = this.features[key];
             promises.push(feature.init());
           }
@@ -92,11 +148,11 @@ export default abstract class Feature<
 
   abstract initFeature(): Promise<boolean>;
 
-  cfg(): C {
+  cfg(): F['config'] {
     return this.config;
   }
 
-  extendConfig(newConfig: Partial<C>): void {
+  extendConfig(newConfig: Partial<F['config']>): void {
     this.config = {
       ...this.config,
       ...newConfig,

@@ -1,21 +1,45 @@
+import LoadedTestFeatureEvent from '../TestData/Events/TestFeatureLoadedEvent';
 import TestFeature from '../TestData/SampleFeature/TestFeature';
 import TestApplication from '../TestData/Application/TestApplication';
 import TestModel from '../TestData/TestModels/TestModel';
 import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
+import TestCollection from '../TestData/DataCollection/TestDataCollection';
+import TestFactory from '../TestData/TestFactories/TestFactory';
 
 describe('Features test', () => {
   test('Features config test', () => {
     const appFeatureUpdatedListener = jest.fn();
     const app = new TestApplication({ version: '3.4.3' });
-    const feature = new TestFeature(
-      {
-        id: 222,
+    const SubFeature = new TestSubFeature({
+      config: {
+        enabled: true,
+      },
+    });
+    const feature = new TestFeature({
+      config: {
         name: 'test',
+        id: 222,
       },
-      {
-        SubFeature: new TestSubFeature({ enabled: false }, {}),
+      collections: {
+        test: new TestCollection(),
       },
-    );
+      models: {
+        my: new TestModel({
+          id: 2,
+          name: 'test',
+        }),
+      },
+      factories: {
+        TestModelFactory: new TestFactory(),
+      },
+      events: {
+        loaded: new LoadedTestFeatureEvent(),
+      },
+      features: {
+        SubFeature,
+      },
+    });
+
     feature.setApp(app);
     app.baseEvents.onFeatureUpdated.subscribe(appFeatureUpdatedListener);
 
@@ -40,25 +64,35 @@ describe('Features test', () => {
   test('Init test', async (done) => {
     const app = new TestApplication({ version: '3.4.3' });
 
-    const feature = new TestFeature(
-      {
-        id: 222,
+    const secondFeature = new TestSubFeature({
+      config: {
+        enabled: true,
+      },
+    });
+    const feature = new TestFeature({
+      config: {
         name: 'test',
+        id: 222,
       },
-      {
-        SubFeature: new TestSubFeature({ enabled: false }, {}),
+      collections: {
+        test: new TestCollection(),
       },
-    );
-
-    const secondFeature = new TestFeature(
-      {
-        id: 223,
-        name: 'Never initialized feature',
+      models: {
+        my: new TestModel({
+          id: 2,
+          name: 'test',
+        }),
       },
-      {
-        SubFeature: new TestSubFeature({ enabled: false }, {}),
+      factories: {
+        TestModelFactory: new TestFactory(),
       },
-    );
+      events: {
+        loaded: new LoadedTestFeatureEvent(),
+      },
+      features: {
+        SubFeature: secondFeature,
+      },
+    });
 
     const eventFeatureInitializedFunction = jest.fn();
     const eventSubFeatureInitializedFunction = jest.fn();
@@ -91,7 +125,7 @@ describe('Features test', () => {
         expect(feature.features.SubFeature.isInitialized()).toBeTruthy();
         expect(eventFeatureInitializedFunction).toHaveBeenCalledTimes(1);
         expect(eventSubFeatureInitializedFunction).toHaveBeenCalledTimes(1);
-        expect(secondEventFeatureInitializedFunction).toHaveBeenCalledTimes(0);
+        expect(secondEventFeatureInitializedFunction).toHaveBeenCalledTimes(1);
         done();
       })
       .catch((e) => {
@@ -99,14 +133,156 @@ describe('Features test', () => {
       });
   });
 
-  test('Set app test', () => {
-    const feature = new TestFeature(
-      {
-        id: 222,
-        name: 'test',
+  test('Empty feature init test', async () => {
+    const app = new TestApplication({ version: '3.4.3' });
+    const feature = new TestFeature();
+    feature.setApp(app);
+
+    expect(feature.isInitialized()).toBeFalsy();
+
+    await feature.init();
+
+    expect(feature.isInitialized()).toBeTruthy();
+  });
+
+  test('Set data test', async () => {
+    const app = new TestApplication({ version: '3.4.3' });
+    const secondFeature = new TestSubFeature({
+      config: {
+        enabled: true,
       },
-      { SubFeature: new TestSubFeature({ enabled: true }, {}) },
-    );
+    });
+
+    const feature = new TestFeature();
+    secondFeature.setApp(app);
+    feature.setApp(app);
+
+    expect(feature.isInitialized()).toBeFalsy();
+    expect(
+      feature.setData({
+        config: {
+          name: 'test',
+          id: 222,
+        },
+        collections: {
+          test: new TestCollection(),
+        },
+        models: {
+          my: new TestModel({
+            id: 2,
+            name: 'test',
+          }),
+        },
+        factories: {
+          TestModelFactory: new TestFactory(),
+        },
+        events: {
+          loaded: new LoadedTestFeatureEvent(),
+        },
+        features: {
+          SubFeature: secondFeature,
+        },
+      }),
+    ).toBeTruthy();
+
+    await feature.init();
+
+    expect(feature.isInitialized()).toBeTruthy();
+    expect(
+      feature.setData({
+        config: {
+          name: 'test2',
+          id: 223,
+        },
+        collections: {
+          test: new TestCollection(),
+        },
+        models: {
+          my: new TestModel({
+            id: 2,
+            name: 'test',
+          }),
+        },
+        factories: {
+          TestModelFactory: new TestFactory(),
+        },
+        events: {
+          loaded: new LoadedTestFeatureEvent(),
+        },
+        features: {
+          SubFeature: secondFeature,
+        },
+      }),
+    ).toBeFalsy();
+    expect(feature.cfg()).toStrictEqual({
+      name: 'test',
+      id: 222,
+    });
+  });
+
+  test('Partly set data test', async () => {
+    const app = new TestApplication({ version: '3.4.3' });
+
+    const feature = new TestFeature();
+    feature.setApp(app);
+
+    expect(feature.isInitialized()).toBeFalsy();
+    expect(
+      feature.setPartialData({
+        config: {
+          name: 'test',
+          id: 222,
+        },
+      }),
+    ).toBeTruthy();
+
+    await feature.init();
+
+    expect(feature.isInitialized()).toBeTruthy();
+    expect(
+      feature.setPartialData({
+        config: {
+          name: 'test2',
+          id: 2245,
+        },
+      }),
+    ).toBeFalsy();
+    expect(feature.cfg()).toStrictEqual({
+      name: 'test',
+      id: 222,
+    });
+  });
+
+  test('Set app test', () => {
+    const secondFeature = new TestSubFeature({
+      config: {
+        enabled: true,
+      },
+    });
+    const feature = new TestFeature({
+      config: {
+        name: 'test',
+        id: 3434,
+      },
+      collections: {
+        test: new TestCollection(),
+      },
+      models: {
+        my: new TestModel({
+          id: 2,
+          name: 'test',
+        }),
+      },
+      factories: {
+        TestModelFactory: new TestFactory(),
+      },
+      events: {
+        loaded: new LoadedTestFeatureEvent(),
+      },
+      features: {
+        SubFeature: secondFeature,
+      },
+    });
     const app = new TestApplication({ version: '1.0' });
 
     expect(feature.hasApp()).toBeFalsy();
@@ -117,15 +293,36 @@ describe('Features test', () => {
   });
 
   test('Features factories test', () => {
-    const feature = new TestFeature(
-      {
-        id: 222,
+    const secondFeature = new TestSubFeature({
+      config: {
+        enabled: true,
+      },
+    });
+    const feature = new TestFeature({
+      config: {
         name: 'test',
+        id: 3434,
       },
-      {
-        SubFeature: new TestSubFeature({ enabled: true }, {}),
+      collections: {
+        test: new TestCollection(),
       },
-    );
+      models: {
+        my: new TestModel({
+          id: 2,
+          name: 'test',
+        }),
+      },
+      factories: {
+        TestModelFactory: new TestFactory(),
+      },
+      events: {
+        loaded: new LoadedTestFeatureEvent(),
+      },
+      features: {
+        SubFeature: secondFeature,
+      },
+    });
+
     const model = feature.factories.TestModelFactory.new({
       id: 225,
       name: 'Dmitry',
