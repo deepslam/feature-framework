@@ -18,9 +18,6 @@ export type FeatureCommonType = {
   models?: Record<string, IModel<unknown>>;
   collections?: Record<string, IDataCollection<unknown>>;
   dataManagers?: Record<string, IDataManager<unknown>>;
-  features?: Record<
-    string,
-    IFeature<Record<string, any>, IApp<Record<string, any>>>
-  >;
+  features?: Record<string, IFeature<Record<string, any>, IApp<any>>>;
   translations?: Record<string, Translations<unknown>>;
 };

@@ -28,11 +28,15 @@ describe('Translations test', () => {
         zero: 'Нет продуктов ({name})',
       },
     };
-    const app = new TestApp({
-      version: '3.4.3',
-      defaultLocale: Locale.en,
-      locales: [Locale.ru, Locale.en],
-    });
+    const app = new TestApp(
+      {
+        config: { version: '3.4.3' },
+      },
+      {
+        defaultLocale: Locale.en,
+        locales: [Locale.ru, Locale.en],
+      },
+    );
     const msg = new TestTranslations({
       [Locale.en]: translationsEn,
       [Locale.ru]: translationsRu,
@@ -73,12 +77,14 @@ describe('Translations test', () => {
         zero: 'No products ({name})',
       },
     };
-    const app = new TestApp({
-      version: '3.4.3',
-      defaultLocale: Locale.it,
-      fallbackLocale: Locale.en,
-      locales: [Locale.ru, Locale.en, Locale.it],
-    });
+    const app = new TestApp(
+      { config: { version: '3.4.3' } },
+      {
+        defaultLocale: Locale.it,
+        fallbackLocale: Locale.en,
+        locales: [Locale.ru, Locale.en, Locale.it],
+      },
+    );
     const msg = new TestTranslations({
       [Locale.en]: translationsEn,
     });

@@ -3,7 +3,7 @@ import { Locale } from 'locale-enum';
 import {
   AppFeaturesType,
   AppStandardEventsType,
-  ConfigType,
+  AppCommonType,
   DefaultAppConfigType,
   ErrorTypeEnum,
   TranslationPluralItemType,
@@ -22,16 +22,14 @@ import {
 
 const privateFeatures = new Map();
 
-export default abstract class Application<
-  F extends AppFeaturesType,
-  C extends Record<string, ConfigType>
-> implements IApp<C> {
+export default abstract class Application<T extends AppCommonType>
+  implements IApp<T> {
   private initialized = false;
   private locales: Locale[] = [Locale.en];
   public locale: Locale = Locale.en;
   public readonly fallbackLocale: Locale = Locale.en;
   public debug = false;
-  public readonly baseEvents: AppStandardEventsType<C> = {
+  public readonly baseEvents: AppStandardEventsType<T['config']> = {
     onAppLoaded: new AppLoadedEvent(),
     onAppError: new AppErrorEvent(),
     onAppLocaleChanged: new AppLocaleChangedEvent(),
@@ -39,24 +37,95 @@ export default abstract class Application<
     onFeatureInitialized: new AppFeatureInitializedEvent(),
     onFeatureUpdated: new AppFeatureUpdatedEvent(),
   };
-  public readonly translations: Record<string, Translations<unknown>> = {};
   public readonly logger: ILogger = new ConsoleLogger(this);
   public readonly errorHandler = new ErrorHandler();
-  public readonly additionalLoggers: ILogger[] = [];
-  public readonly additionalErrorHandlers: IErrorHandler[] = [];
+  public additionalLoggers: ILogger[] = [];
+  public additionalErrorHandlers: IErrorHandler[] = [];
+  config: T['config'];
+  events?: T['events'];
+  factories?: T['factories'];
+  translations?: T['translations'];
+  views?: T['views'];
+  models?: T['models'];
+  collections?: T['collections'];
+  dataManagers?: T['dataManagers'];
+  dataProviders?: T['dataProviders'];
 
-  constructor(public config: C & Partial<DefaultAppConfigType>) {
-    this.locales = config.locales || [Locale.en];
-    this.fallbackLocale = config.fallbackLocale || Locale.en;
-    this.setCurrentLocale(config.defaultLocale || Locale.en);
+  constructor(
+    data: T,
+    locales: Partial<DefaultAppConfigType> = {
+      locales: [Locale.en],
+      fallbackLocale: Locale.en,
+      defaultLocale: Locale.en,
+    },
+  ) {
+    this.locales = locales.locales || [Locale.en];
+    this.fallbackLocale = locales.fallbackLocale || Locale.en;
+    this.setCurrentLocale(locales.defaultLocale || Locale.en);
+
+    this.config = {};
+    this.events = {};
+    this.collections = {};
+    this.factories = {};
+    this.views = {};
+    this.models = {};
+    this.dataManagers = {};
+    this.translations = {};
+    this.additionalErrorHandlers = [];
+    this.additionalLoggers = [];
+
+    if (data) {
+      this.setData(data);
+    }
   }
 
-  public extendConfig(config: Partial<C>): void {
+  private setData(data: T): boolean {
+    if (this.isInitialized()) return false;
+    if (data.features) {
+      privateFeatures.set(this, data.features);
+    }
+    if (data.config) {
+      this.config = data.config;
+    }
+    if (data.events) {
+      this.events = data.events;
+    }
+    if (data.collections) {
+      this.collections = data.collections;
+    }
+    if (data.factories) {
+      this.factories = data.factories;
+    }
+    if (data.views) {
+      this.views = data.views;
+    }
+    if (data.models) {
+      this.models = data.models;
+    }
+    if (data.dataManagers) {
+      this.dataManagers = data.dataManagers;
+    }
+    if (data.translations) {
+      this.translations = data.translations;
+    }
+    if (data.additionalErrorHandlers) {
+      this.additionalErrorHandlers = data.additionalErrorHandlers;
+    }
+    if (data.additionalErrorHandlers) {
+      this.additionalErrorHandlers = data.additionalErrorHandlers;
+    }
+    return true;
+  }
+
+  public extendConfig(config: Partial<T['config']>): void {
     this.config = { ...this.config, ...config };
     this.baseEvents.onUpdate.fire(this.config);
   }
 
-  public setConfig<K extends keyof C>(key: K, value: C[K]): void {
+  public setConfig<K extends keyof T['config']>(
+    key: K,
+    value: T['config'][K],
+  ): void {
     this.config = {
       ...this.config,
       [key]: value,
@@ -64,7 +133,7 @@ export default abstract class Application<
     this.baseEvents.onUpdate.fire(this.config);
   }
 
-  features(): F {
+  features(): T['features'] {
     if (privateFeatures.has(this)) {
       return privateFeatures.get(this);
     }
@@ -72,24 +141,26 @@ export default abstract class Application<
     throw Error('Features are not defined for application!');
   }
 
-  public setFeatures(features: F): void {
+  public setFeatures(features: T['features']): void {
     privateFeatures.set(this, features);
   }
 
-  public init(features?: F): Promise<ApplicationInitSuccessfulType> {
+  public init(data?: T): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
       try {
-        if (features) {
-          privateFeatures.set(this, features);
-        }
         if (this.isInitialized()) {
           reject('App is already initialized!');
         }
-        this.setAppToFeatures(this.features());
+        if (data) {
+          this.setData(data);
+        }
         const promises: Promise<boolean>[] = [];
-        Object.keys(this.features()).forEach((key: string) => {
-          promises.push(this.features()[key].init());
-        });
+        if (this.features()) {
+          this.setAppToFeatures(this.features()!);
+          Object.keys(this.features()!).forEach((key: string) => {
+            promises.push(this.features()![key].init());
+          });
+        }
         this.initTranslations();
         Promise.all(promises)
           .then((args: boolean[]) => {
@@ -135,7 +206,9 @@ export default abstract class Application<
       });
     };
 
-    setAppToTranslations(this.translations);
+    if (this.translations) {
+      setAppToTranslations(this.translations!);
+    }
   }
 
   isInitialized() {

@@ -1,5 +1,5 @@
-import TestFeature from './SampleFeature/TestFeature';
-import TestSubFeature from './SampleFeature/TestSubFeature';
+import TestFeature from './TestFeatures/TestFeature';
+import TestSubFeature from './TestFeatures/TestSubFeature';
 import TestApplication from './Application/TestApplication';
 import TestModel from './TestModels/TestModel';
 import TestFactory from './TestFactories/TestFactory';

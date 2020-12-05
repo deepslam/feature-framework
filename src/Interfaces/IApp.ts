@@ -1,43 +1,33 @@
 import { Locale } from 'locale-enum';
-import {
-  IDataCollection,
-  IDataManager,
-  IDataProvider,
-  IEvent,
-  ILogger,
-  IModel,
-  IView,
-} from '../Interfaces';
+import { ILogger } from '../Interfaces';
 import {
   AppStandardEventsType,
-  ConfigType,
   ErrorTypeEnum,
   TranslationPluralItemType,
+  AppCommonType,
 } from '../Types';
-import Factory from '../Models/Factory';
 import { IErrorHandler } from './IErrorHandler';
-import ErrorHandler from '../Models/ErrorHandler';
-import Translations from '../Models/Translations';
 
-export interface IApp<C = Record<string, ConfigType>> {
+export interface IApp<T extends AppCommonType> {
   locale: Locale;
   fallbackLocale: Locale;
 
+  config: T['config'];
   debug: boolean;
-  baseEvents: AppStandardEventsType<C>;
-  events?: Record<string, IEvent<unknown>>;
-  factories?: Record<string, Factory<any>>;
-  translations?: Record<string, Translations<unknown>>;
-  views?: Record<string, IView<unknown>>;
-  models?: Record<string, IModel<unknown>>;
-  collections?: Record<string, IDataCollection<unknown>>;
-  dataManagers?: Record<string, IDataManager<unknown>>;
-  dataProviders?: Record<string, IDataProvider>;
+  baseEvents: AppStandardEventsType<T['config']>;
+  events?: T['events'];
+  factories?: T['factories'];
+  translations?: T['translations'];
+  views?: T['views'];
+  models?: T['models'];
+  collections?: T['collections'];
+  dataManagers?: T['dataManagers'];
+  dataProviders?: T['dataProviders'];
   logger: ILogger;
   errorHandler: IErrorHandler;
 
-  additionalLoggers: ILogger[];
-  additionalErrorHandlers: ErrorHandler[];
+  additionalLoggers: T['additionalLoggers'];
+  additionalErrorHandlers: T['additionalErrorHandlers'];
 
   t(
     value: string | TranslationPluralItemType,
@@ -48,7 +38,7 @@ export interface IApp<C = Record<string, ConfigType>> {
   setCurrentLocale(locale: Locale): boolean;
   isLocaleAvailable(locale: Locale): boolean;
 
-  extendConfig(config: Partial<C>): void;
+  extendConfig(config: Partial<T['config']>): void;
 
   err(error: string): void;
   throwErr(error: string): void;

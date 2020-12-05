@@ -4,14 +4,12 @@ import TestApp, {
 import LoadedTestFeatureEvent from '../TestData/Events/TestFeatureLoadedEvent';
 import TestCollection from '../TestData/DataCollection/TestDataCollection';
 import TestFactory from '../TestData/TestFactories/TestFactory';
-import TestFeature from '../TestData/SampleFeature/TestFeature';
+import TestFeature from '../TestData/TestFeatures/TestFeature';
 import TestModel from '../TestData/TestModels/TestModel';
-import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
+import TestSubFeature from '../TestData/TestFeatures/TestSubFeature';
 
 describe('Application init test', () => {
   it('Should initialize correctly', async (done) => {
-    const app = new TestApp({ version: '3.4.3' });
-
     const appLoadedListener = jest.fn();
     const appFeatureInitializedListener = jest.fn();
     const featureLoadedListener = jest.fn();
@@ -50,6 +48,8 @@ describe('Application init test', () => {
       TestFeature: Feature,
     };
 
+    const app = new TestApp({ config: { version: '3.4.3' }, features });
+
     features.TestFeature.baseEvents.initialized.subscribe(
       featureLoadedListener,
     );
@@ -71,7 +71,7 @@ describe('Application init test', () => {
     ).toBeFalsy();
 
     app
-      .init(features)
+      .init()
       .then((result) => {
         expect(result).toBeTruthy();
         expect(appLoadedListener).toBeCalled();
@@ -104,7 +104,7 @@ describe('Application init test', () => {
   });
 
   it('Application set features without initialization test', () => {
-    const app = new TestApp({ version: '3.4.3' });
+    const app = new TestApp({ config: { version: '3.4.3' } });
     const SubFeature = new TestSubFeature({
       config: {
         enabled: true,
@@ -157,7 +157,7 @@ describe('Application init test', () => {
   });
 
   it('Application config test', () => {
-    const app = new TestApp({ version: '1.2.2' });
+    const app = new TestApp({ config: { version: '1.2.2' } });
     const appUpdatedListener = jest.fn();
 
     app.baseEvents.onUpdate.subscribe(appUpdatedListener);

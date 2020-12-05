@@ -4,7 +4,7 @@ describe('ConsoleLogger test', () => {
   it('Should be called with log function', async () => {
     const TestApp = (await import('../TestData/Application/TestApplication'))
       .default;
-    const app = new TestApp({ version: '3.4.3' });
+    const app = new TestApp({ config: { version: '3.4.3' } });
     const consoleLoggerLogFunc = jest.spyOn(app.logger, 'log');
     const testLogggerLogFunc = jest.spyOn(app.additionalLoggers[0], 'log');
 
@@ -54,7 +54,7 @@ describe('ConsoleLogger test', () => {
   it('Should be called with info function', async () => {
     const TestApp = (await import('../TestData/Application/TestApplication'))
       .default;
-    const app = new TestApp({ version: '3.4.3' });
+    const app = new TestApp({ config: { version: '3.4.3' } });
     const consoleLoggerLogFunc = jest.spyOn(app.logger, 'log');
     const testLogggerLogFunc = jest.spyOn(app.additionalLoggers[0], 'log');
 

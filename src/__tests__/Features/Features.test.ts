@@ -1,15 +1,15 @@
 import LoadedTestFeatureEvent from '../TestData/Events/TestFeatureLoadedEvent';
-import TestFeature from '../TestData/SampleFeature/TestFeature';
+import TestFeature from '../TestData/TestFeatures/TestFeature';
 import TestApplication from '../TestData/Application/TestApplication';
 import TestModel from '../TestData/TestModels/TestModel';
-import TestSubFeature from '../TestData/SampleFeature/TestSubFeature';
+import TestSubFeature from '../TestData/TestFeatures/TestSubFeature';
 import TestCollection from '../TestData/DataCollection/TestDataCollection';
 import TestFactory from '../TestData/TestFactories/TestFactory';
 
 describe('Features test', () => {
   test('Features config test', () => {
     const appFeatureUpdatedListener = jest.fn();
-    const app = new TestApplication({ version: '3.4.3' });
+    const app = new TestApplication({ config: { version: '3.4.3' } });
     const SubFeature = new TestSubFeature({
       config: {
         enabled: true,
@@ -62,7 +62,7 @@ describe('Features test', () => {
   });
 
   test('Init test', async (done) => {
-    const app = new TestApplication({ version: '3.4.3' });
+    const app = new TestApplication({ config: { version: '3.4.3' } });
 
     const secondFeature = new TestSubFeature({
       config: {
@@ -134,7 +134,7 @@ describe('Features test', () => {
   });
 
   test('Empty feature init test', async () => {
-    const app = new TestApplication({ version: '3.4.3' });
+    const app = new TestApplication({ config: { version: '3.4.3' } });
     const feature = new TestFeature();
     feature.setApp(app);
 
@@ -146,7 +146,7 @@ describe('Features test', () => {
   });
 
   test('Set data test', async () => {
-    const app = new TestApplication({ version: '3.4.3' });
+    const app = new TestApplication({ config: { version: '3.4.3' } });
     const secondFeature = new TestSubFeature({
       config: {
         enabled: true,
@@ -221,7 +221,7 @@ describe('Features test', () => {
   });
 
   test('Partly set data test', async () => {
-    const app = new TestApplication({ version: '3.4.3' });
+    const app = new TestApplication({ config: { version: '3.4.3' } });
 
     const feature = new TestFeature();
     feature.setApp(app);
@@ -283,7 +283,7 @@ describe('Features test', () => {
         SubFeature: secondFeature,
       },
     });
-    const app = new TestApplication({ version: '1.0' });
+    const app = new TestApplication({ config: { version: '1.0' } });
 
     expect(feature.hasApp()).toBeFalsy();
     expect(feature.setApp(app)).toBeTruthy();
