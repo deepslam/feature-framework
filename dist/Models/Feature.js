@@ -6,15 +6,60 @@ const Features_1 = require("../Events/Features");
 const privateData = new Map();
 const appData = new Map();
 class Feature {
-    constructor(config, features) {
-        this.config = config;
-        this.features = features;
+    constructor(settings) {
         this.baseEvents = {
             initialized: new Features_1.FeatureInitializedEvent(),
             onError: new Features_1.FeatureErrorEvent(),
             onUpdate: new Features_1.FeatureUpdatedEvent(),
         };
         this.uuid = uuid_1.v4();
+        this.config = {};
+        this.events = {};
+        this.collections = {};
+        this.factories = {};
+        this.views = {};
+        this.models = {};
+        this.dataManagers = {};
+        this.features = {};
+        this.translations = {};
+        if (settings) {
+            this.setData(settings);
+        }
+    }
+    setData(data) {
+        return this.setPartialData(data);
+    }
+    setPartialData(data) {
+        if (this.isInitialized())
+            return false;
+        if (data.config) {
+            this.config = data.config;
+        }
+        if (data.collections) {
+            this.collections = data.collections;
+        }
+        if (data.dataManagers) {
+            this.dataManagers = data.dataManagers;
+        }
+        if (data.events) {
+            this.events = data.events;
+        }
+        if (data.factories) {
+            this.factories = data.factories;
+        }
+        if (data.features) {
+            this.features = data.features;
+        }
+        if (data.models) {
+            this.models = data.models;
+        }
+        if (data.translations) {
+            this.translations = data.translations;
+        }
+        if (data.views) {
+            this.views = data.views;
+        }
+        return true;
     }
     setApp(app) {
         if (!appData.has(this.uuid)) {

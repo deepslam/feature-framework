@@ -1,7 +1,7 @@
 import { IApp } from './IApp';
 import { FeatureCommonType, FeatureStandardEventsType } from '../Types';
 
-export interface IFeature<F extends FeatureCommonType, A extends IApp> {
+export interface IFeature<F extends FeatureCommonType, A extends IApp<any>> {
   name: string;
 
   config: F['config'];

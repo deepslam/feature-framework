@@ -1,29 +1,26 @@
-import { IDataCollection } from './IDataCollection';
 import { IApp } from './IApp';
-import { IEvent } from './IEvent';
-import { IView } from './IView';
-import { IModel } from './IModel';
-import { IDataManager } from './IDataManager';
-import { AppFeaturesType, ConfigType, FeatureStandardEventsType } from '../Types';
-import { Translations, Factory } from '../Models';
-export interface IFeature<C extends Record<string, ConfigType>, A extends IApp> {
+import { FeatureCommonType, FeatureStandardEventsType } from '../Types';
+export interface IFeature<F extends FeatureCommonType, A extends IApp<any>> {
     name: string;
-    baseEvents: FeatureStandardEventsType<C>;
-    events?: Record<string, IEvent<unknown>>;
-    factories?: Record<string, Factory<any>>;
-    translations?: Record<string, Translations<unknown>>;
-    views?: Record<string, IView<unknown>>;
-    models?: Record<string, IModel<unknown>>;
-    collections?: Record<string, IDataCollection<unknown>>;
-    dataManagers?: Record<string, IDataManager<unknown>>;
-    features: AppFeaturesType;
+    config: F['config'];
+    baseEvents: FeatureStandardEventsType<F['config']>;
+    events: F['events'];
+    factories: F['factories'];
+    translations: F['translations'];
+    views: F['views'];
+    models: F['models'];
+    collections: F['collections'];
+    dataManagers: F['dataManagers'];
+    features: F['features'];
     init(): Promise<boolean>;
     initFeature(): Promise<boolean>;
+    setData(data: F): boolean;
+    setPartialData(data: Partial<F>): boolean;
     setApp(app: A): boolean;
     getApp(): A;
     hasApp(): boolean;
     isInitialized(): boolean;
     setInitialized(val: boolean): void;
-    cfg(): C;
-    extendConfig(config: Partial<C>): void;
+    cfg(): F['config'];
+    extendConfig(config: Partial<F['config']>): void;
 }

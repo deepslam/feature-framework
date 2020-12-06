@@ -17,10 +17,10 @@ export type TestApplicationType = {
   config: {
     version: string;
   };
-  features?: {
+  features: {
     TestFeature: TestFeature;
   };
-  factories?: {
+  factories: {
     TestFactory: TestFactory;
   };
 };
@@ -28,6 +28,6 @@ export type TestApplicationType = {
 export default class TestApplication
   extends Application<TestApplicationType>
   implements IApp<TestApplicationType> {
-  additionalErrorHandlers = [new TestErrorHandler()];
-  additionalLoggers = [new TestLogger(this)];
+  additionalErrorHandlers: TestErrorHandler[] = [new TestErrorHandler()];
+  additionalLoggers: TestLogger[] = [new TestLogger(this)];
 }

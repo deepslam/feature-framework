@@ -1,5 +1,5 @@
-import { IEvent, IDataCollection } from '../Interfaces';
-import { AppLoadedEvent, AppUpdatedEvent, AppErrorEvent, AppLocaleChangedEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionClearedEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
+import { IDataCollection, IEvent } from '../Interfaces';
+import { AppErrorEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, AppLoadedEvent, AppLocaleChangedEvent, AppUpdatedEvent, CollectionClearedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
 import { DataManagerErrorsType } from './DataManagerTypes';
 export declare type EventPrivateType<T> = WeakMap<IEvent<unknown>, T[]>;
 export declare type AppStandardEventsType<C> = {

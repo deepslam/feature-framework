@@ -9,6 +9,6 @@ export default class Translations<T = TranslationItemType> {
         [key in keyof typeof Locale]?: T;
     });
     static template(str: string, data: Record<string, string>): string;
-    setApp(app: IApp): void;
+    setApp(app: IApp<any>): void;
     get t(): T | null;
 }

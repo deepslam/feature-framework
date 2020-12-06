@@ -48,7 +48,7 @@ describe('Application init test', () => {
       TestFeature: Feature,
     };
 
-    const app = new TestApp({ config: { version: '3.4.3' }, features });
+    const app = new TestApp({ config: { version: '3.4.3' } });
 
     features.TestFeature.baseEvents.initialized.subscribe(
       featureLoadedListener,
@@ -64,15 +64,17 @@ describe('Application init test', () => {
     expect(app.isInitialized()).toBeFalsy();
     expect(() => {
       app.features();
-    }).toThrowError();
+    }).not.toThrowError();
+    expect(app.features()).toStrictEqual({});
     expect(features.TestFeature.isInitialized()).toBeFalsy();
     expect(
       features.TestFeature.features.SubFeature.isInitialized(),
     ).toBeFalsy();
 
     app
-      .init()
+      .init({ features })
       .then((result) => {
+        expect(app.features()).toStrictEqual(features);
         expect(result).toBeTruthy();
         expect(appLoadedListener).toBeCalled();
         expect(featureLoadedListener).toBeCalled();
@@ -143,7 +145,7 @@ describe('Application init test', () => {
 
     expect(() => {
       app.features();
-    }).toThrowError();
+    }).not.toThrowError();
 
     app.setFeatures(features);
 

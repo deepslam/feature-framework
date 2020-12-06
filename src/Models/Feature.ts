@@ -13,11 +13,11 @@ type AbstractFeaturePrivateDataType = {
 };
 
 const privateData = new Map<string, Partial<AbstractFeaturePrivateDataType>>();
-const appData = new Map<string, IApp>();
+const appData = new Map<string, IApp<any>>();
 
 export default abstract class Feature<
   F extends FeatureCommonType,
-  A extends IApp
+  A extends IApp<any>
 > implements IFeature<F, A> {
   public abstract name: string;
   public readonly uuid: string;

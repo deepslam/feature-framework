@@ -9,7 +9,7 @@ beforeEach(() => {
 
 describe('Error handlers test', () => {
   it('Should throw error on critical cases only', () => {
-    const app = new TestApp({ version: '3.4.3' });
+    const app = new TestApp({ config: { version: '3.4.3' } });
 
     expect(() => {
       app.err('test');
@@ -23,7 +23,7 @@ describe('Error handlers test', () => {
   });
 
   it('Should correctly handle with events', () => {
-    const app = new TestApp({ version: '3.4.3' });
+    const app = new TestApp({ config: { version: '3.4.3' } });
     app.baseEvents.onAppError.subscribe(eventCallback);
     const consoleLoggerFunc = jest.spyOn(app.logger, 'log');
 
@@ -55,7 +55,7 @@ describe('Error handlers test', () => {
   });
 
   it('Should correctly handle with standard and additional error handlers', () => {
-    const app = new TestApp({ version: '3.4.3' });
+    const app = new TestApp({ config: { version: '3.4.3' } });
     const errorHandlerFunc = jest.spyOn(app.errorHandler, 'handleError');
     const testErrorHandlerFunc = jest.spyOn(app.errorHandler, 'handleError');
 

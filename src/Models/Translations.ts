@@ -5,7 +5,7 @@ import { TranslationItemType } from '../Types';
 export type LocaleKey = keyof typeof Locale;
 
 export default class Translations<T = TranslationItemType> {
-  private app?: IApp<unknown>;
+  private app?: IApp<any>;
   constructor(
     private readonly translations: { [key in keyof typeof Locale]?: T } = {},
   ) {}
@@ -18,7 +18,7 @@ export default class Translations<T = TranslationItemType> {
     return s;
   }
 
-  setApp(app: IApp) {
+  setApp(app: IApp<any>) {
     this.app = app;
   }
 

@@ -6,8 +6,11 @@ const Models_1 = require("../Models");
 const App_1 = require("../Events/App");
 const privateFeatures = new Map();
 class Application {
-    constructor(config) {
-        this.config = config;
+    constructor(data, locales = {
+        locales: [locale_enum_1.Locale.en],
+        fallbackLocale: locale_enum_1.Locale.en,
+        defaultLocale: locale_enum_1.Locale.en,
+    }) {
         this.initialized = false;
         this.locales = [locale_enum_1.Locale.en];
         this.locale = locale_enum_1.Locale.en;
@@ -21,14 +24,65 @@ class Application {
             onFeatureInitialized: new App_1.AppFeatureInitializedEvent(),
             onFeatureUpdated: new App_1.AppFeatureUpdatedEvent(),
         };
-        this.translations = {};
         this.logger = new Models_1.ConsoleLogger(this);
         this.errorHandler = new Models_1.ErrorHandler();
         this.additionalLoggers = [];
         this.additionalErrorHandlers = [];
-        this.locales = config.locales || [locale_enum_1.Locale.en];
-        this.fallbackLocale = config.fallbackLocale || locale_enum_1.Locale.en;
-        this.setCurrentLocale(config.defaultLocale || locale_enum_1.Locale.en);
+        this.locales = locales.locales || [locale_enum_1.Locale.en];
+        this.fallbackLocale = locales.fallbackLocale || locale_enum_1.Locale.en;
+        this.setCurrentLocale(locales.defaultLocale || locale_enum_1.Locale.en);
+        this.config = {};
+        this.events = {};
+        this.collections = {};
+        this.factories = {};
+        this.views = {};
+        this.models = {};
+        this.dataManagers = {};
+        this.translations = {};
+        this.additionalErrorHandlers = [];
+        this.additionalLoggers = [];
+        privateFeatures.set(this, {});
+        if (data) {
+            this.setData(data);
+        }
+    }
+    setData(data) {
+        if (this.isInitialized())
+            return false;
+        if (data.features) {
+            privateFeatures.set(this, data.features);
+        }
+        if (data.config) {
+            this.config = data.config;
+        }
+        if (data.events) {
+            this.events = data.events;
+        }
+        if (data.collections) {
+            this.collections = data.collections;
+        }
+        if (data.factories) {
+            this.factories = data.factories;
+        }
+        if (data.views) {
+            this.views = data.views;
+        }
+        if (data.models) {
+            this.models = data.models;
+        }
+        if (data.dataManagers) {
+            this.dataManagers = data.dataManagers;
+        }
+        if (data.translations) {
+            this.translations = data.translations;
+        }
+        if (data.additionalErrorHandlers) {
+            this.additionalErrorHandlers = data.additionalErrorHandlers;
+        }
+        if (data.additionalLoggers) {
+            this.additionalLoggers = data.additionalLoggers;
+        }
+        return true;
     }
     extendConfig(config) {
         this.config = Object.assign(Object.assign({}, this.config), config);
@@ -47,20 +101,22 @@ class Application {
     setFeatures(features) {
         privateFeatures.set(this, features);
     }
-    init(features) {
+    init(data) {
         return new Promise((resolve, reject) => {
             try {
-                if (features) {
-                    privateFeatures.set(this, features);
-                }
                 if (this.isInitialized()) {
                     reject('App is already initialized!');
                 }
-                this.setAppToFeatures(this.features());
+                if (data) {
+                    this.setData(data);
+                }
                 const promises = [];
-                Object.keys(this.features()).forEach((key) => {
-                    promises.push(this.features()[key].init());
-                });
+                if (this.features()) {
+                    this.setAppToFeatures(this.features());
+                    Object.keys(this.features()).forEach((key) => {
+                        promises.push(this.features()[key].init());
+                    });
+                }
                 this.initTranslations();
                 Promise.all(promises)
                     .then((args) => {
@@ -99,7 +155,9 @@ class Application {
                 }
             });
         };
-        setAppToTranslations(this.translations);
+        if (this.translations) {
+            setAppToTranslations(this.translations);
+        }
     }
     isInitialized() {
         return this.initialized;

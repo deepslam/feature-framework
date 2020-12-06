@@ -52,7 +52,7 @@ export default abstract class Application<T extends AppCommonType>
   dataProviders?: T['dataProviders'];
 
   constructor(
-    data: T,
+    data: Partial<T>,
     locales: Partial<DefaultAppConfigType> = {
       locales: [Locale.en],
       fallbackLocale: Locale.en,
@@ -73,13 +73,14 @@ export default abstract class Application<T extends AppCommonType>
     this.translations = {};
     this.additionalErrorHandlers = [];
     this.additionalLoggers = [];
+    privateFeatures.set(this, {});
 
     if (data) {
       this.setData(data);
     }
   }
 
-  private setData(data: T): boolean {
+  private setData(data: Partial<T>): boolean {
     if (this.isInitialized()) return false;
     if (data.features) {
       privateFeatures.set(this, data.features);
@@ -109,10 +110,10 @@ export default abstract class Application<T extends AppCommonType>
       this.translations = data.translations;
     }
     if (data.additionalErrorHandlers) {
-      this.additionalErrorHandlers = data.additionalErrorHandlers;
+      this.additionalErrorHandlers = data.additionalErrorHandlers!;
     }
-    if (data.additionalErrorHandlers) {
-      this.additionalErrorHandlers = data.additionalErrorHandlers;
+    if (data.additionalLoggers) {
+      this.additionalLoggers = data.additionalLoggers!;
     }
     return true;
   }
@@ -145,7 +146,7 @@ export default abstract class Application<T extends AppCommonType>
     privateFeatures.set(this, features);
   }
 
-  public init(data?: T): Promise<ApplicationInitSuccessfulType> {
+  public init(data?: Partial<T>): Promise<ApplicationInitSuccessfulType> {
     return new Promise((resolve, reject) => {
       try {
         if (this.isInitialized()) {
