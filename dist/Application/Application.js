@@ -38,6 +38,7 @@ class Application {
         this.views = {};
         this.models = {};
         this.dataManagers = {};
+        this.dataProviders = {};
         this.translations = {};
         this.additionalErrorHandlers = [];
         this.additionalLoggers = [];
@@ -72,6 +73,9 @@ class Application {
         }
         if (data.dataManagers) {
             this.dataManagers = data.dataManagers;
+        }
+        if (data.dataProviders) {
+            this.dataProviders = data.dataProviders;
         }
         if (data.translations) {
             this.translations = data.translations;

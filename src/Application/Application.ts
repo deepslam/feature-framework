@@ -42,14 +42,14 @@ export default abstract class Application<T extends AppCommonType>
   public additionalLoggers: ILogger[] = [];
   public additionalErrorHandlers: IErrorHandler[] = [];
   config: T['config'];
-  events?: T['events'];
-  factories?: T['factories'];
-  translations?: T['translations'];
-  views?: T['views'];
-  models?: T['models'];
-  collections?: T['collections'];
-  dataManagers?: T['dataManagers'];
-  dataProviders?: T['dataProviders'];
+  events: T['events'];
+  factories: T['factories'];
+  translations: T['translations'];
+  views: T['views'];
+  models: T['models'];
+  collections: T['collections'];
+  dataManagers: T['dataManagers'];
+  dataProviders: T['dataProviders'];
 
   constructor(
     data: Partial<T>,
@@ -70,6 +70,7 @@ export default abstract class Application<T extends AppCommonType>
     this.views = {};
     this.models = {};
     this.dataManagers = {};
+    this.dataProviders = {};
     this.translations = {};
     this.additionalErrorHandlers = [];
     this.additionalLoggers = [];
@@ -105,6 +106,9 @@ export default abstract class Application<T extends AppCommonType>
     }
     if (data.dataManagers) {
       this.dataManagers = data.dataManagers;
+    }
+    if (data.dataProviders) {
+      this.dataProviders = data.dataProviders;
     }
     if (data.translations) {
       this.translations = data.translations;
