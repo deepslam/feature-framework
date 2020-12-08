@@ -23,7 +23,7 @@ class Feature {
         this.features = {};
         this.translations = {};
         if (settings) {
-            this.setData(settings);
+            this.setPartialData(settings);
         }
     }
     setData(data) {

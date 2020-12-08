@@ -13,7 +13,7 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     dataManagers: F['dataManagers'];
     features: F['features'];
     translations: F['translations'];
-    constructor(settings?: F);
+    constructor(settings?: Partial<F>);
     setData(data: F): boolean;
     setPartialData(data: Partial<F>): boolean;
     setApp(app: A): boolean;

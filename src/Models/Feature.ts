@@ -37,7 +37,7 @@ export default abstract class Feature<
   public features: F['features'];
   public translations: F['translations'];
 
-  constructor(settings?: F) {
+  constructor(settings?: Partial<F>) {
     this.uuid = uuid4();
     this.config = {};
     this.events = {};
@@ -50,7 +50,7 @@ export default abstract class Feature<
     this.translations = {};
 
     if (settings) {
-      this.setData(settings);
+      this.setPartialData(settings);
     }
   }
 
