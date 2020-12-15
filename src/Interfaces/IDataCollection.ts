@@ -9,9 +9,10 @@ export interface IDataCollection<T> {
   contain(item: T): boolean;
   clear(): void;
   length(): number;
+  filter(callback: (item: T) => boolean): IDataCollection<T>;
   find(callback: (item: T) => boolean): IDataCollection<T>;
   sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T>;
-  getAll(): T[];
+  toArray(): T[];
   paginate(
     page: number,
     onPage: number,

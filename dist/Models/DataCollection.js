@@ -36,16 +36,19 @@ class DataCollection {
         this.events.onCollectionCleared.fire(this);
     }
     first() {
-        return this.getAll()[0] || null;
+        return this.toArray()[0] || null;
     }
     last() {
-        return this.getAll()[this.length() - 1] || null;
+        return this.toArray()[this.length() - 1] || null;
     }
-    getAll() {
+    toArray() {
         return [...this.items].map(([, value]) => value);
     }
     length() {
         return this.items.size;
+    }
+    filter(callback) {
+        return this.find(callback);
     }
     find(callback) {
         const result = [];
@@ -59,7 +62,7 @@ class DataCollection {
         return newCollection;
     }
     sort(callback) {
-        const newCollection = new this.__class__(this.getAll().sort(callback));
+        const newCollection = new this.__class__(this.toArray().sort(callback));
         this.events.onItemsSorted.fire(newCollection);
         return newCollection;
     }
@@ -73,7 +76,7 @@ class DataCollection {
         return {
             allPages: Math.ceil(this.length() / onPage),
             currentPage: page,
-            items: this.getAll().slice((page - 1) * onPage, page * onPage),
+            items: this.toArray().slice((page - 1) * onPage, page * onPage),
         };
     }
 }

@@ -51,19 +51,23 @@ export default class DataCollection<T> implements IDataCollection<T> {
   }
 
   first(): T | null {
-    return this.getAll()[0] || null;
+    return this.toArray()[0] || null;
   }
 
   last(): T | null {
-    return this.getAll()[this.length() - 1] || null;
+    return this.toArray()[this.length() - 1] || null;
   }
 
-  getAll(): T[] {
+  toArray(): T[] {
     return [...this.items].map(([, value]) => value);
   }
 
   length(): number {
     return this.items.size;
+  }
+
+  filter(callback: (item: T) => boolean): IDataCollection<T> {
+    return this.find(callback);
   }
 
   find(callback: (item: T) => boolean): IDataCollection<T> {
@@ -79,7 +83,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
   }
 
   sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T> {
-    const newCollection = new this.__class__(this.getAll().sort(callback));
+    const newCollection = new this.__class__(this.toArray().sort(callback));
     this.events.onItemsSorted.fire(newCollection);
     return newCollection;
   }
@@ -97,7 +101,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return {
       allPages: Math.ceil(this.length() / onPage),
       currentPage: page,
-      items: this.getAll().slice((page - 1) * onPage, page * onPage),
+      items: this.toArray().slice((page - 1) * onPage, page * onPage),
     };
   }
 }

@@ -45,8 +45,8 @@ describe('Collections test', () => {
 
     expect(itemAddedCallback).toHaveBeenCalledTimes(2);
     expect(collection.contain(modelTwo)).toBeTruthy();
-    expect(collection.getAll()).toBeInstanceOf(Array);
-    expect(collection.getAll()).toStrictEqual([modelOne, modelTwo]);
+    expect(collection.toArray()).toBeInstanceOf(Array);
+    expect(collection.toArray()).toStrictEqual([modelOne, modelTwo]);
     expect(collection.length()).toBe(2);
     expect(collection.first()).toStrictEqual(modelOne);
     expect(collection.last()).toStrictEqual(modelTwo);
@@ -88,7 +88,7 @@ describe('Collections test', () => {
 
     foundResult = collection.find((item) => item.fields.id === 1);
 
-    expect(foundResult.getAll()).toStrictEqual([modelOne]);
+    expect(foundResult.toArray()).toStrictEqual([modelOne]);
     expect(foundResult.length()).toBe(1);
     expect(foundResult).toBeInstanceOf(DataCollection);
     expect(foundResult).toBeInstanceOf(TestDataCollection);
@@ -97,7 +97,7 @@ describe('Collections test', () => {
 
     foundResult = collection.find((item) => item.fields.name.includes('model'));
 
-    expect(foundResult.getAll()).toStrictEqual([modelOne, modelTwo]);
+    expect(foundResult.toArray()).toStrictEqual([modelOne, modelTwo]);
     expect(foundResult.length()).toBe(2);
     expect(foundResult).toBeInstanceOf(DataCollection);
     expect(foundResult).toBeInstanceOf(TestDataCollection);
@@ -170,7 +170,11 @@ describe('Collections test', () => {
     const collectionSortedCallback = jest.fn();
     collection.events.onItemsSorted.subscribe(collectionSortedCallback);
 
-    expect(collection.getAll()).toStrictEqual([modelTwo, modelOne, modelThree]);
+    expect(collection.toArray()).toStrictEqual([
+      modelTwo,
+      modelOne,
+      modelThree,
+    ]);
 
     const sortedByIdAscCollection = collection.sort((a, b) => {
       if (a.fields.id < b.fields.id) return -1;
@@ -180,7 +184,7 @@ describe('Collections test', () => {
 
     expect(collectionSortedCallback).toBeCalled();
     expect(collectionSortedCallback).toBeCalledWith(sortedByIdAscCollection);
-    expect(sortedByIdAscCollection.getAll()).toStrictEqual([
+    expect(sortedByIdAscCollection.toArray()).toStrictEqual([
       modelOne,
       modelTwo,
       modelThree,
@@ -194,7 +198,7 @@ describe('Collections test', () => {
 
     expect(collectionSortedCallback).toBeCalled();
     expect(collectionSortedCallback).toBeCalledWith(sortedByIdDescCollection);
-    expect(sortedByIdDescCollection.getAll()).toStrictEqual([
+    expect(sortedByIdDescCollection.toArray()).toStrictEqual([
       modelThree,
       modelTwo,
       modelOne,
