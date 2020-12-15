@@ -88,7 +88,7 @@ class Application {
         }
         return true;
     }
-    extendConfig(config) {
+    updateConfig(config) {
         this.config = Object.assign(Object.assign({}, this.config), config);
         this.baseEvents.onUpdate.fire(this.config);
     }
@@ -265,6 +265,9 @@ class Application {
                 }
             }
         });
+    }
+    update() {
+        this.baseEvents.onUpdate.fire(this.config);
     }
 }
 exports.default = Application;

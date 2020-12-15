@@ -48,7 +48,7 @@ describe('Features test', () => {
       name: 'test',
     });
 
-    feature.extendConfig({
+    feature.updateConfig({
       name: 'edited',
     });
 

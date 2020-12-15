@@ -22,7 +22,7 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     init(): Promise<boolean>;
     abstract initFeature(): Promise<boolean>;
     cfg(): F['config'];
-    extendConfig(newConfig: Partial<F['config']>): void;
+    updateConfig(newConfig: Partial<F['config']>): void;
     isInitialized(): boolean;
     setInitialized(initialized: boolean): void;
     update(): void;

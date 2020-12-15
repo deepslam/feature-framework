@@ -22,6 +22,6 @@ export interface IFeature<F extends FeatureCommonType, A extends IApp<any>> {
     isInitialized(): boolean;
     setInitialized(val: boolean): void;
     cfg(): F['config'];
-    extendConfig(config: Partial<F['config']>): void;
+    updateConfig(config: Partial<F['config']>): void;
     update(): void;
 }

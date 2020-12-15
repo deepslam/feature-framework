@@ -108,7 +108,7 @@ class Feature {
     cfg() {
         return this.config;
     }
-    extendConfig(newConfig) {
+    updateConfig(newConfig) {
         this.config = Object.assign(Object.assign({}, this.config), newConfig);
         this.baseEvents.onUpdate.fire(this.config);
         this.getApp().baseEvents.onFeatureUpdated.fire(this);

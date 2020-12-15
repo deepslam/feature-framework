@@ -166,7 +166,7 @@ describe('Application init test', () => {
 
     expect(app.config).toStrictEqual({ version: '1.2.2' });
 
-    app.extendConfig({
+    app.updateConfig({
       version: '1.0',
     });
 

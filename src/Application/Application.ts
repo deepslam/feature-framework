@@ -122,7 +122,7 @@ export default abstract class Application<T extends AppCommonType>
     return true;
   }
 
-  public extendConfig(config: Partial<T['config']>): void {
+  public updateConfig(config: Partial<T['config']>): void {
     this.config = { ...this.config, ...config };
     this.baseEvents.onUpdate.fire(this.config);
   }
@@ -344,6 +344,10 @@ export default abstract class Application<T extends AppCommonType>
         }
       }
     });
+  }
+
+  update() {
+    this.baseEvents.onUpdate.fire(this.config);
   }
 }
 

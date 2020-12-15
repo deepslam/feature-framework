@@ -152,7 +152,7 @@ export default abstract class Feature<
     return this.config;
   }
 
-  extendConfig(newConfig: Partial<F['config']>): void {
+  updateConfig(newConfig: Partial<F['config']>): void {
     this.config = {
       ...this.config,
       ...newConfig,

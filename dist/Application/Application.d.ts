@@ -24,7 +24,7 @@ export default abstract class Application<T extends AppCommonType> implements IA
     dataProviders: T['dataProviders'];
     constructor(data: Partial<T>, locales?: Partial<DefaultAppConfigType>);
     private setData;
-    extendConfig(config: Partial<T['config']>): void;
+    updateConfig(config: Partial<T['config']>): void;
     setConfig<K extends keyof T['config']>(key: K, value: T['config'][K]): void;
     features(): T['features'];
     setFeatures(features: T['features']): void;
@@ -44,6 +44,7 @@ export default abstract class Application<T extends AppCommonType> implements IA
     t(value: string | TranslationPluralItemType, data?: Record<string, string>, number?: number): string;
     error(err: string): never;
     setAppToFeatures(features: AppFeaturesType): void;
+    update(): void;
 }
 export declare type ApplicationInitSuccessfulType = boolean;
 export declare type ApplicationInitFailedType = {

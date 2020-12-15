@@ -38,7 +38,7 @@ export interface IApp<T extends AppCommonType> {
   setCurrentLocale(locale: Locale): boolean;
   isLocaleAvailable(locale: Locale): boolean;
 
-  extendConfig(config: Partial<T['config']>): void;
+  updateConfig(config: Partial<T['config']>): void;
 
   err(error: string): void;
   throwErr(error: string): void;
@@ -48,4 +48,5 @@ export interface IApp<T extends AppCommonType> {
   info(message: string): void;
 
   isInitialized(): boolean;
+  update(): void;
 }

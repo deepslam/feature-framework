@@ -24,11 +24,12 @@ export interface IApp<T extends AppCommonType> {
     getCurrentLocale: () => Locale;
     setCurrentLocale(locale: Locale): boolean;
     isLocaleAvailable(locale: Locale): boolean;
-    extendConfig(config: Partial<T['config']>): void;
+    updateConfig(config: Partial<T['config']>): void;
     err(error: string): void;
     throwErr(error: string): void;
     warning(error: string): void;
     log(message: string, type: ErrorTypeEnum): void;
     info(message: string): void;
     isInitialized(): boolean;
+    update(): void;
 }
