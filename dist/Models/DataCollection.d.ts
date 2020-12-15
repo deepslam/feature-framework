@@ -11,7 +11,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     clear(): void;
     first(): T | null;
     last(): T | null;
-    getAll(): any[];
+    getAll(): T[];
     length(): number;
     find(callback: (item: T) => boolean): IDataCollection<T>;
     sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T>;

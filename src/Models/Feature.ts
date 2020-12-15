@@ -170,4 +170,8 @@ export default abstract class Feature<
       initialized,
     });
   }
+
+  update() {
+    this.baseEvents.onUpdate.fire(this.config);
+  }
 }

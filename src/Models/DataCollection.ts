@@ -29,7 +29,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     }
   }
 
-  add(item: T) {
+  add(item: T): void {
     this.items.set(item, item);
     this.events.onItemAdded.fire(item);
   }
@@ -41,11 +41,11 @@ export default class DataCollection<T> implements IDataCollection<T> {
     }
   }
 
-  contain(item: T) {
+  contain(item: T): boolean {
     return this.items.has(item);
   }
 
-  clear() {
+  clear(): void {
     this.items.clear();
     this.events.onCollectionCleared.fire(this);
   }
@@ -58,11 +58,11 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return this.getAll()[this.length() - 1] || null;
   }
 
-  getAll() {
+  getAll(): T[] {
     return [...this.items].map(([, value]) => value);
   }
 
-  length() {
+  length(): number {
     return this.items.size;
   }
 

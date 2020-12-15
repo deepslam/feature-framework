@@ -145,6 +145,16 @@ describe('Features test', () => {
     expect(feature.isInitialized()).toBeTruthy();
   });
 
+  test('Manual update test', () => {
+    const updateHandler = jest.fn();
+    const feature = new TestFeature();
+
+    feature.baseEvents.onUpdate.subscribe(updateHandler);
+    expect(updateHandler).not.toHaveBeenCalled();
+    feature.update();
+    expect(updateHandler).toHaveBeenCalledTimes(1);
+  });
+
   test('Set data test', async () => {
     const app = new TestApplication({ config: { version: '3.4.3' } });
     const secondFeature = new TestSubFeature({

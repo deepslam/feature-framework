@@ -25,4 +25,5 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     extendConfig(newConfig: Partial<F['config']>): void;
     isInitialized(): boolean;
     setInitialized(initialized: boolean): void;
+    update(): void;
 }

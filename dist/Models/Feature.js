@@ -122,6 +122,9 @@ class Feature {
             initialized,
         });
     }
+    update() {
+        this.baseEvents.onUpdate.fire(this.config);
+    }
 }
 exports.default = Feature;
 //# sourceMappingURL=Feature.js.map
