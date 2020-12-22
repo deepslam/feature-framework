@@ -204,4 +204,78 @@ describe('Collections test', () => {
       modelOne,
     ]);
   });
+
+  it('Should be fillable', () => {
+    const collectionClearedCallback = jest.fn();
+    const collectionFilledCallback = jest.fn();
+    const modelOne = new TestModel({
+      id: 1,
+      name: 'Test model 1',
+    });
+    const modelTwo = new TestModel({
+      id: 2,
+      name: 'Test model 2',
+    });
+    const modelThree = new TestModel({
+      id: 3,
+      name: 'Test model 3',
+    });
+    const modelFour = new TestModel({
+      id: 4,
+      name: 'Test model 4',
+    });
+    const collection = new TestDataCollection([modelOne]);
+    collection.events.onCollectionCleared.subscribe(collectionClearedCallback);
+    collection.events.onCollectionFilled.subscribe(collectionFilledCallback);
+
+    collection.fill([modelTwo, modelThree]);
+
+    expect(collection.toArray()).toStrictEqual([modelTwo, modelThree]);
+
+    expect(collectionClearedCallback).toBeCalled();
+    expect(collectionFilledCallback).toBeCalled();
+
+    collection.fill([modelFour]);
+
+    expect(collection.toArray()).toStrictEqual([modelFour]);
+    expect(collectionClearedCallback).toBeCalledTimes(2);
+    expect(collectionFilledCallback).toBeCalledTimes(2);
+  });
+
+  it('Should be extendable', () => {
+    const collectionClearedCallback = jest.fn();
+    const collectionExtendedCallback = jest.fn();
+    const modelOne = new TestModel({
+      id: 1,
+      name: 'Test model 1',
+    });
+    const modelTwo = new TestModel({
+      id: 2,
+      name: 'Test model 2',
+    });
+    const modelThree = new TestModel({
+      id: 3,
+      name: 'Test model 3',
+    });
+    const modelFour = new TestModel({
+      id: 4,
+      name: 'Test model 4',
+    });
+    const collection = new TestDataCollection([modelOne]);
+    collection.events.onCollectionCleared.subscribe(collectionClearedCallback);
+    collection.events.onCollectionExtended.subscribe(
+      collectionExtendedCallback,
+    );
+
+    collection.extend([modelTwo, modelThree, modelFour]);
+
+    expect(collection.toArray()).toStrictEqual([
+      modelOne,
+      modelTwo,
+      modelThree,
+      modelFour,
+    ]);
+    expect(collectionClearedCallback).not.toBeCalled();
+    expect(collectionExtendedCallback).toBeCalled();
+  });
 });

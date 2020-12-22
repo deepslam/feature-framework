@@ -1,5 +1,5 @@
 import { IDataCollection, IEvent } from '../Interfaces';
-import { AppErrorEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, AppLoadedEvent, AppLocaleChangedEvent, AppUpdatedEvent, CollectionClearedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
+import { AppErrorEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, AppLoadedEvent, AppLocaleChangedEvent, AppUpdatedEvent, CollectionClearedEvent, CollectionExtendedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
 import { DataManagerErrorsType } from './DataManagerTypes';
 export declare type EventPrivateType<T> = WeakMap<IEvent<unknown>, T[]>;
 export declare type AppStandardEventsType<C> = {
@@ -16,6 +16,8 @@ export declare type DataCollectionStandardEventsType<T> = {
     onCollectionCleared: CollectionClearedEvent<IDataCollection<T>>;
     onItemsFound: CollectionItemsFoundEvent<IDataCollection<T>>;
     onItemsSorted: CollectionItemsSortedEvent<IDataCollection<T>>;
+    onCollectionExtended: CollectionExtendedEvent<IDataCollection<T>>;
+    onCollectionFilled: CollectionExtendedEvent<IDataCollection<T>>;
 };
 export declare type ModelStandardEventsType<T> = {
     updated: ModelWasUpdatedEvent<T>;

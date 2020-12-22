@@ -7,6 +7,7 @@ import {
   AppLocaleChangedEvent,
   AppUpdatedEvent,
   CollectionClearedEvent,
+  CollectionExtendedEvent,
   CollectionItemAddedEvent,
   CollectionItemRemovedEvent,
   CollectionItemsFoundEvent,
@@ -32,6 +33,8 @@ export type DataCollectionStandardEventsType<T> = {
   onCollectionCleared: CollectionClearedEvent<IDataCollection<T>>;
   onItemsFound: CollectionItemsFoundEvent<IDataCollection<T>>;
   onItemsSorted: CollectionItemsSortedEvent<IDataCollection<T>>;
+  onCollectionExtended: CollectionExtendedEvent<IDataCollection<T>>;
+  onCollectionFilled: CollectionExtendedEvent<IDataCollection<T>>;
 };
 
 export type ModelStandardEventsType<T> = {

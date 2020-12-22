@@ -21,4 +21,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
         currentPage: number;
         items: T[];
     };
+    fill(data: T[]): void;
+    extend(data: T[]): void;
+    updateData(data: T[]): void;
 }

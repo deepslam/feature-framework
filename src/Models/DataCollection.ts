@@ -1,6 +1,8 @@
 import { IDataCollection } from '../Interfaces';
 import {
   CollectionClearedEvent,
+  CollectionExtendedEvent,
+  CollectionFilledEvent,
   CollectionItemAddedEvent,
   CollectionItemRemovedEvent,
   CollectionItemsFoundEvent,
@@ -18,6 +20,8 @@ export default class DataCollection<T> implements IDataCollection<T> {
     onCollectionCleared: new CollectionClearedEvent(),
     onItemsFound: new CollectionItemsFoundEvent(),
     onItemsSorted: new CollectionItemsSortedEvent(),
+    onCollectionExtended: new CollectionExtendedEvent(),
+    onCollectionFilled: new CollectionFilledEvent(),
   };
 
   public constructor(items?: T[]) {
@@ -103,5 +107,20 @@ export default class DataCollection<T> implements IDataCollection<T> {
       currentPage: page,
       items: this.toArray().slice((page - 1) * onPage, page * onPage),
     };
+  }
+
+  fill(data: T[]): void {
+    this.clear();
+    this.updateData(data);
+    this.events.onCollectionFilled.fire(this);
+  }
+
+  extend(data: T[]): void {
+    this.updateData(data);
+    this.events.onCollectionExtended.fire(this);
+  }
+
+  updateData(data: T[]): void {
+    data.forEach((item) => this.add(item));
   }
 }

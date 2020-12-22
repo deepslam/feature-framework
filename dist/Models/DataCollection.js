@@ -10,6 +10,8 @@ class DataCollection {
             onCollectionCleared: new DataCollections_1.CollectionClearedEvent(),
             onItemsFound: new DataCollections_1.CollectionItemsFoundEvent(),
             onItemsSorted: new DataCollections_1.CollectionItemsSortedEvent(),
+            onCollectionExtended: new DataCollections_1.CollectionExtendedEvent(),
+            onCollectionFilled: new DataCollections_1.CollectionFilledEvent(),
         };
         this.__class__ = new.target;
         if (items) {
@@ -78,6 +80,18 @@ class DataCollection {
             currentPage: page,
             items: this.toArray().slice((page - 1) * onPage, page * onPage),
         };
+    }
+    fill(data) {
+        this.clear();
+        this.updateData(data);
+        this.events.onCollectionFilled.fire(this);
+    }
+    extend(data) {
+        this.updateData(data);
+        this.events.onCollectionExtended.fire(this);
+    }
+    updateData(data) {
+        data.forEach((item) => this.add(item));
     }
 }
 exports.default = DataCollection;
