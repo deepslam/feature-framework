@@ -10,5 +10,6 @@ export default class Translations<T = TranslationItemType> {
     });
     static template(str: string, data: Record<string, string>): string;
     setApp(app: IApp<any>): void;
+    toArray(): T[];
     get t(): T | null;
 }

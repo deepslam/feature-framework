@@ -8,7 +8,15 @@ type TestTranslationType = {
   plural: TranslationPluralItemType;
 };
 
+type TestTranslationAnotherType = {
+  hello: string;
+  anotherOne: string;
+};
+
 class TestTranslations extends Translations<TestTranslationType> {}
+class TestAnotherTranslations extends Translations<
+  TestTranslationAnotherType
+> {}
 
 describe('Translations test', () => {
   it('Test if everything is correct', () => {
@@ -111,5 +119,29 @@ describe('Translations test', () => {
     expect(app.t(msg.t!.plural, { name: 'iPhone' }, 2)).toBe(
       '2 products (iPhone)',
     );
+  });
+
+  it('Test toArray conversion', () => {
+    const translationsEn: TestTranslationAnotherType = {
+      hello: 'Hello',
+      anotherOne: 'Another string',
+    };
+    const app = new TestApp(
+      { config: { version: '3.4.3' } },
+      {
+        defaultLocale: Locale.it,
+        fallbackLocale: Locale.en,
+        locales: [Locale.ru, Locale.en, Locale.it],
+      },
+    );
+    const msg = new TestAnotherTranslations({
+      [Locale.en]: translationsEn,
+    });
+
+    expect(msg.toArray()).toStrictEqual([]);
+
+    msg.setApp(app);
+
+    expect(msg.toArray()).toStrictEqual(['Hello', 'Another string']);
   });
 });

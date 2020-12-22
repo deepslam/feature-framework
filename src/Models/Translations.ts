@@ -22,6 +22,24 @@ export default class Translations<T = TranslationItemType> {
     this.app = app;
   }
 
+  toArray(): T[] {
+    if (!this.app) {
+      return [];
+    }
+
+    if (this.translations[this.app.locale as LocaleKey]) {
+      return Object.values(this.translations[this.app.locale as LocaleKey]!);
+    }
+
+    if (this.translations[this.app.fallbackLocale as LocaleKey]) {
+      return Object.values(
+        this.translations[this.app.fallbackLocale as LocaleKey]!,
+      );
+    }
+
+    return [];
+  }
+
   get t(): T | null {
     if (!this.app) {
       return null;
@@ -36,9 +54,3 @@ export default class Translations<T = TranslationItemType> {
     return null;
   }
 }
-
-Object.defineProperty(Translations, 'translations', {
-  get: (...args) => {
-    console.log(args);
-  },
-});

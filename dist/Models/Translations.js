@@ -14,6 +14,18 @@ class Translations {
     setApp(app) {
         this.app = app;
     }
+    toArray() {
+        if (!this.app) {
+            return [];
+        }
+        if (this.translations[this.app.locale]) {
+            return Object.values(this.translations[this.app.locale]);
+        }
+        if (this.translations[this.app.fallbackLocale]) {
+            return Object.values(this.translations[this.app.fallbackLocale]);
+        }
+        return [];
+    }
     get t() {
         if (!this.app) {
             return null;
@@ -28,9 +40,4 @@ class Translations {
     }
 }
 exports.default = Translations;
-Object.defineProperty(Translations, 'translations', {
-    get: (...args) => {
-        console.log(args);
-    },
-});
 //# sourceMappingURL=Translations.js.map
