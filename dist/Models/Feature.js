@@ -1,9 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable indent */
 const uuid_1 = require("uuid");
 const Features_1 = require("../Events/Features");
-const Models_1 = require("../Models");
+const Translations_1 = __importDefault(require("../Models/Translations"));
 const privateData = new Map();
 const appData = new Map();
 class Feature {
@@ -111,7 +114,7 @@ class Feature {
         const setAppToTranslations = (translations) => {
             Object.keys(translations).forEach((translationKey) => {
                 const translation = translations[translationKey];
-                if (translation instanceof Models_1.Translations) {
+                if (translation instanceof Translations_1.default) {
                     translation.setApp(this.getApp());
                 }
                 else if (typeof translation === 'object' &&

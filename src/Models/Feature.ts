@@ -6,7 +6,7 @@ import {
   FeatureUpdatedEvent,
 } from '../Events/Features';
 import { IApp, IFeature } from '../Interfaces';
-import { Translations } from '../Models';
+import Translations from '../Models/Translations';
 import { FeatureCommonType, FeatureStandardEventsType } from '../Types';
 
 type AbstractFeaturePrivateDataType = {
