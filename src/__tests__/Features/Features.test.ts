@@ -1,3 +1,4 @@
+import { Locale } from 'locale-enum';
 import LoadedTestFeatureEvent from '../TestData/Events/TestFeatureLoadedEvent';
 import TestFeature from '../TestData/TestFeatures/TestFeature';
 import TestApplication from '../TestData/Application/TestApplication';
@@ -5,6 +6,10 @@ import TestModel from '../TestData/TestModels/TestModel';
 import TestSubFeature from '../TestData/TestFeatures/TestSubFeature';
 import TestCollection from '../TestData/DataCollection/TestDataCollection';
 import TestFactory from '../TestData/TestFactories/TestFactory';
+import {
+  TestTranslationType,
+  TestTranslations,
+} from '../TestData/TestTranslations/TestTranslations';
 
 describe('Features test', () => {
   test('Features config test', () => {
@@ -157,9 +162,26 @@ describe('Features test', () => {
 
   test('Set data test', async () => {
     const app = new TestApplication({ config: { version: '3.4.3' } });
+    const translationsEn: TestTranslationType = {
+      hello: 'Hello',
+      plural: {
+        one: 'Product {name}',
+        plural: (n: number) => `${n} products ({name})`,
+        zero: 'No products ({name})',
+      },
+    };
+    const msgForFeature = new TestTranslations({
+      [Locale.en]: translationsEn,
+    });
+    const msgForSubFeature = new TestTranslations({
+      [Locale.en]: translationsEn,
+    });
     const secondFeature = new TestSubFeature({
       config: {
         enabled: true,
+      },
+      translations: {
+        testTranslations: msgForSubFeature,
       },
     });
 
@@ -192,6 +214,9 @@ describe('Features test', () => {
         features: {
           SubFeature: secondFeature,
         },
+        translations: {
+          testTranslations: msgForFeature,
+        },
       }),
     ).toBeTruthy();
 
@@ -221,6 +246,9 @@ describe('Features test', () => {
         },
         features: {
           SubFeature: secondFeature,
+        },
+        translations: {
+          testTranslations: msgForFeature,
         },
       }),
     ).toBeFalsy();

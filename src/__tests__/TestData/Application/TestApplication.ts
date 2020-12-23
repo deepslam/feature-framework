@@ -4,6 +4,7 @@ import TestErrorHandler from '../TestErrorHandler/TestErrorHandler';
 import TestLogger from '../TestLogger/TestLogger';
 import TestFeature from '../TestFeatures/TestFeature';
 import { IApp } from '../../../Interfaces';
+import { TestTranslations } from '../TestTranslations/TestTranslations';
 
 export type TestApplicationConfigType = {
   version: string;
@@ -22,6 +23,9 @@ export type TestApplicationType = {
   };
   factories: {
     TestFactory: TestFactory;
+  };
+  translations: {
+    testTranslation: TestTranslations;
   };
 };
 

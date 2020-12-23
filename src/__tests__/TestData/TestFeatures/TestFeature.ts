@@ -6,6 +6,7 @@ import TestCollection from '../DataCollection/TestDataCollection';
 import { IFeature } from '../../../Interfaces/IFeature';
 import TestFactory from '../TestFactories/TestFactory';
 import TestApplication from '../Application/TestApplication';
+import { TestTranslations } from '../TestTranslations/TestTranslations';
 
 type TestFeatureConfig = {
   name: string;
@@ -26,6 +27,9 @@ type TestFeatureType = {
   };
   models: {
     my: TestModel;
+  };
+  translations: {
+    testTranslations: TestTranslations;
   };
 };
 

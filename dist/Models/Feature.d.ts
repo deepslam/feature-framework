@@ -20,6 +20,7 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     getApp(): A;
     hasApp(): boolean;
     init(): Promise<boolean>;
+    private initTranslations;
     abstract initFeature(): Promise<boolean>;
     cfg(): F['config'];
     updateConfig(newConfig: Partial<F['config']>): void;

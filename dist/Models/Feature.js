@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable indent */
 const uuid_1 = require("uuid");
 const Features_1 = require("../Events/Features");
+const Models_1 = require("../Models");
 const privateData = new Map();
 const appData = new Map();
 class Feature {
@@ -91,6 +92,7 @@ class Feature {
             Promise.all(promises).then(() => {
                 this.initFeature()
                     .then((result) => {
+                    this.initTranslations();
                     this.setInitialized(result);
                     this.baseEvents.initialized.fire(result);
                     this.getApp().baseEvents.onFeatureInitialized.fire(this);
@@ -104,6 +106,23 @@ class Feature {
                 });
             });
         });
+    }
+    initTranslations() {
+        const setAppToTranslations = (translations) => {
+            Object.keys(translations).forEach((translationKey) => {
+                const translation = translations[translationKey];
+                if (translation instanceof Models_1.Translations) {
+                    translation.setApp(this.getApp());
+                }
+                else if (typeof translation === 'object' &&
+                    Object.keys(translation).length > 0) {
+                    setAppToTranslations(translation);
+                }
+            });
+        };
+        if (this.translations) {
+            setAppToTranslations(this.translations);
+        }
     }
     cfg() {
         return this.config;

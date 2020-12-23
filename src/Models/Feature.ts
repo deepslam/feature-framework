@@ -6,6 +6,7 @@ import {
   FeatureUpdatedEvent,
 } from '../Events/Features';
 import { IApp, IFeature } from '../Interfaces';
+import { Translations } from '../Models';
 import { FeatureCommonType, FeatureStandardEventsType } from '../Types';
 
 type AbstractFeaturePrivateDataType = {
@@ -127,6 +128,7 @@ export default abstract class Feature<
       Promise.all(promises).then(() => {
         this.initFeature()
           .then((result) => {
+            this.initTranslations();
             this.setInitialized(result);
             this.baseEvents.initialized.fire(result);
             this.getApp().baseEvents.onFeatureInitialized.fire(this);
@@ -144,6 +146,28 @@ export default abstract class Feature<
           });
       });
     });
+  }
+
+  private initTranslations(): void {
+    const setAppToTranslations = (
+      translations: Record<string, Translations<unknown>>,
+    ) => {
+      Object.keys(translations).forEach((translationKey) => {
+        const translation = translations[translationKey];
+        if (translation instanceof Translations) {
+          translation.setApp(this.getApp());
+        } else if (
+          typeof translation === 'object' &&
+          Object.keys(translation).length > 0
+        ) {
+          setAppToTranslations(translation);
+        }
+      });
+    };
+
+    if (this.translations) {
+      setAppToTranslations(this.translations!);
+    }
   }
 
   abstract initFeature(): Promise<boolean>;

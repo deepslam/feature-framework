@@ -1,3 +1,4 @@
+import { Locale } from 'locale-enum';
 import TestApp, {
   TestApplicationFeaturesType,
 } from '../TestData/Application/TestApplication';
@@ -7,6 +8,10 @@ import TestFactory from '../TestData/TestFactories/TestFactory';
 import TestFeature from '../TestData/TestFeatures/TestFeature';
 import TestModel from '../TestData/TestModels/TestModel';
 import TestSubFeature from '../TestData/TestFeatures/TestSubFeature';
+import {
+  TestTranslationType,
+  TestTranslations,
+} from '../TestData/TestTranslations/TestTranslations';
 
 describe('Application init test', () => {
   it('Should initialize correctly', async (done) => {
@@ -14,9 +19,29 @@ describe('Application init test', () => {
     const appFeatureInitializedListener = jest.fn();
     const featureLoadedListener = jest.fn();
     const subfeatureLoadedListener = jest.fn();
+    const translationsEn: TestTranslationType = {
+      hello: 'Hello',
+      plural: {
+        one: 'Product {name}',
+        plural: (n: number) => `${n} products ({name})`,
+        zero: 'No products ({name})',
+      },
+    };
+    const msg = new TestTranslations({
+      [Locale.en]: translationsEn,
+    });
+    const msgForFeature = new TestTranslations({
+      [Locale.en]: translationsEn,
+    });
+    const msgForSubFeature = new TestTranslations({
+      [Locale.en]: translationsEn,
+    });
     const SubFeature = new TestSubFeature({
       config: {
         enabled: true,
+      },
+      translations: {
+        testTranslations: msgForSubFeature,
       },
     });
     const Feature = new TestFeature({
@@ -42,13 +67,19 @@ describe('Application init test', () => {
       features: {
         SubFeature,
       },
+      translations: {
+        testTranslations: msgForFeature,
+      },
     });
 
     const features: TestApplicationFeaturesType = {
       TestFeature: Feature,
     };
 
-    const app = new TestApp({ config: { version: '3.4.3' } });
+    const app = new TestApp({
+      config: { version: '3.4.3' },
+      translations: { testTranslation: msg },
+    });
 
     features.TestFeature.baseEvents.initialized.subscribe(
       featureLoadedListener,
@@ -70,6 +101,11 @@ describe('Application init test', () => {
     expect(
       features.TestFeature.features.SubFeature.isInitialized(),
     ).toBeFalsy();
+    expect(app.translations.testTranslation.t).toBeNull();
+    expect(features.TestFeature.translations.testTranslations.t).toBeNull();
+    expect(
+      features.TestFeature.features.SubFeature.translations.testTranslations.t,
+    ).toBeNull();
 
     app
       .init({ features })
@@ -85,6 +121,14 @@ describe('Application init test', () => {
           [Feature],
         ]);
         expect(app.isInitialized()).toBeTruthy();
+        expect(app.translations.testTranslation.t!.hello).toBe('Hello');
+        expect(
+          app.features().TestFeature.translations.testTranslations.t!.hello,
+        ).toBe('Hello');
+        expect(
+          app.features().TestFeature.features.SubFeature.translations
+            .testTranslations.t!.hello,
+        ).toBe('Hello');
         expect(app.features().TestFeature.isInitialized()).toBeTruthy();
         expect(
           app.features().TestFeature.features.SubFeature.isInitialized(),

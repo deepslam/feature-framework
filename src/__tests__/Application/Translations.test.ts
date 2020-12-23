@@ -1,19 +1,15 @@
 import { Locale } from 'locale-enum';
 import { Translations } from '../../Models';
-import { TranslationPluralItemType } from '../../Types';
+import {
+  TestTranslationType,
+  TestTranslations,
+} from '../TestData/TestTranslations/TestTranslations';
 import TestApp from '../TestData/Application/TestApplication';
-
-type TestTranslationType = {
-  hello: string;
-  plural: TranslationPluralItemType;
-};
 
 type TestTranslationAnotherType = {
   hello: string;
   anotherOne: string;
 };
-
-class TestTranslations extends Translations<TestTranslationType> {}
 class TestAnotherTranslations extends Translations<
   TestTranslationAnotherType
 > {}
