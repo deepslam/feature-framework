@@ -2,7 +2,7 @@ import { IDataCollection } from '../Interfaces';
 import { Constructor, DataCollectionStandardEventsType } from '../Types';
 export default class DataCollection<T> implements IDataCollection<T> {
     readonly items: Map<any, any>;
-    readonly __class__: Constructor<IDataCollection<T>>;
+    readonly __class__: Constructor<DataCollection<T>>;
     events: DataCollectionStandardEventsType<T>;
     constructor(items?: T[]);
     add(item: T): void;
@@ -13,9 +13,9 @@ export default class DataCollection<T> implements IDataCollection<T> {
     last(): T | null;
     toArray(): T[];
     length(): number;
-    filter(callback: (item: T, index: number) => boolean): IDataCollection<T>;
-    find(callback: (item: T, index: number) => boolean): IDataCollection<T>;
-    sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T>;
+    filter(callback: (item: T, index: number) => boolean): DataCollection<T>;
+    find(callback: (item: T, index: number) => boolean): DataCollection<T>;
+    sort(callback: (a: T, b: T) => 0 | 1 | -1): DataCollection<T>;
     getByIndex(index: number): T | null;
     hasIndex(index: number): T | null;
     paginate(page?: number, onPage?: number): {

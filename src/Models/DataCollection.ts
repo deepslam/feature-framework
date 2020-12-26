@@ -12,7 +12,7 @@ import { Constructor, DataCollectionStandardEventsType } from '../Types';
 
 export default class DataCollection<T> implements IDataCollection<T> {
   public readonly items = new Map();
-  public readonly __class__: Constructor<IDataCollection<T>>;
+  public readonly __class__: Constructor<DataCollection<T>>;
 
   events: DataCollectionStandardEventsType<T> = {
     onItemAdded: new CollectionItemAddedEvent(),
@@ -70,11 +70,11 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return this.items.size;
   }
 
-  filter(callback: (item: T, index: number) => boolean): IDataCollection<T> {
+  filter(callback: (item: T, index: number) => boolean): DataCollection<T> {
     return this.find(callback);
   }
 
-  find(callback: (item: T, index: number) => boolean): IDataCollection<T> {
+  find(callback: (item: T, index: number) => boolean): DataCollection<T> {
     const result: T[] = [];
     let index = 0;
     this.items.forEach((item) => {
@@ -88,7 +88,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return newCollection;
   }
 
-  sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T> {
+  sort(callback: (a: T, b: T) => 0 | 1 | -1): DataCollection<T> {
     const newCollection = new this.__class__(this.toArray().sort(callback));
     this.events.onItemsSorted.fire(newCollection);
     return newCollection;
