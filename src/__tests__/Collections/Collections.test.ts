@@ -65,6 +65,28 @@ describe('Collections test', () => {
     expect(collection.contain(modelTwo)).toBeFalsy();
   });
 
+  it('Should be able to get element by index', () => {
+    const modelOne = new TestModel({
+      id: 1,
+      name: 'Test model 1',
+    });
+    const modelTwo = new TestModel({
+      id: 2,
+      name: 'Test model 2',
+    });
+    const collection = new TestDataCollection([modelOne, modelTwo]);
+
+    expect(collection.getByIndex(10)).toBe(null);
+    expect(collection.getByIndex(-2)).toBe(null);
+    expect(collection.getByIndex(0)).toStrictEqual(modelOne);
+    expect(collection.getByIndex(1)).toStrictEqual(modelTwo);
+
+    expect(collection.hasIndex(-2)).toBeFalsy();
+    expect(collection.getByIndex(0)).toBeTruthy();
+    expect(collection.getByIndex(1)).toBeTruthy();
+    expect(collection.hasIndex(2)).toBeFalsy();
+  });
+
   it('Should be able to find elements', () => {
     const modelOne = new TestModel({
       id: 1,
@@ -76,6 +98,7 @@ describe('Collections test', () => {
     });
     const collection = new TestDataCollection([modelOne, modelTwo]);
     const itemFoundCallback = jest.fn();
+    const findCallBack = jest.fn();
     collection.events.onItemsFound.subscribe(itemFoundCallback);
 
     let foundResult = collection.find((item) => item.fields.id === 3);
@@ -103,6 +126,11 @@ describe('Collections test', () => {
     expect(foundResult).toBeInstanceOf(TestDataCollection);
     expect(itemFoundCallback).toHaveBeenCalled();
     expect(itemFoundCallback).toHaveBeenCalledWith(foundResult);
+
+    collection.find(findCallBack);
+
+    expect(findCallBack.mock.calls[0]).toEqual([modelOne, 0]);
+    expect(findCallBack.mock.calls[1]).toEqual([modelTwo, 1]);
   });
 
   it('Should be able to paginate results', () => {

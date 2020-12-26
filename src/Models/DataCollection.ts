@@ -70,16 +70,18 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return this.items.size;
   }
 
-  filter(callback: (item: T) => boolean): IDataCollection<T> {
+  filter(callback: (item: T, index: number) => boolean): IDataCollection<T> {
     return this.find(callback);
   }
 
-  find(callback: (item: T) => boolean): IDataCollection<T> {
+  find(callback: (item: T, index: number) => boolean): IDataCollection<T> {
     const result: T[] = [];
+    let index = 0;
     this.items.forEach((item) => {
-      if (callback(item)) {
+      if (callback(item, index)) {
         result.push(item);
       }
+      index++;
     });
     const newCollection = new this.__class__(result);
     this.events.onItemsFound.fire(newCollection);
@@ -90,6 +92,18 @@ export default class DataCollection<T> implements IDataCollection<T> {
     const newCollection = new this.__class__(this.toArray().sort(callback));
     this.events.onItemsSorted.fire(newCollection);
     return newCollection;
+  }
+
+  getByIndex(index: number): T | null {
+    if (this.hasIndex(index)) {
+      return this.toArray()[index];
+    }
+
+    return null;
+  }
+
+  hasIndex(index: number): T | null {
+    return this.toArray()[index];
   }
 
   paginate(

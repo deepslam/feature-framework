@@ -54,10 +54,12 @@ class DataCollection {
     }
     find(callback) {
         const result = [];
+        let index = 0;
         this.items.forEach((item) => {
-            if (callback(item)) {
+            if (callback(item, index)) {
                 result.push(item);
             }
+            index++;
         });
         const newCollection = new this.__class__(result);
         this.events.onItemsFound.fire(newCollection);
@@ -67,6 +69,15 @@ class DataCollection {
         const newCollection = new this.__class__(this.toArray().sort(callback));
         this.events.onItemsSorted.fire(newCollection);
         return newCollection;
+    }
+    getByIndex(index) {
+        if (this.hasIndex(index)) {
+            return this.toArray()[index];
+        }
+        return null;
+    }
+    hasIndex(index) {
+        return this.toArray()[index];
     }
     paginate(page = 1, onPage = 20) {
         if (onPage <= 0) {
