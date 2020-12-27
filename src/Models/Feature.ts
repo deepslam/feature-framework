@@ -126,9 +126,9 @@ export default abstract class Feature<
         });
       }
       Promise.all(promises).then(() => {
+        this.initTranslations();
         this.initFeature()
           .then((result) => {
-            this.initTranslations();
             this.setInitialized(result);
             this.baseEvents.initialized.fire(result);
             this.getApp().baseEvents.onFeatureInitialized.fire(this);
