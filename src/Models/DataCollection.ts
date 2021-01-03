@@ -137,4 +137,14 @@ export default class DataCollection<T> implements IDataCollection<T> {
   updateData(data: T[]): void {
     data.forEach((item) => this.add(item));
   }
+
+  map<R>(callback: (item: T) => R): IDataCollection<R> {
+    const collection = new DataCollection() as IDataCollection<R>;
+
+    this.toArray().forEach((item) => {
+      collection.add(callback(item));
+    });
+
+    return collection;
+  }
 }

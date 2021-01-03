@@ -306,4 +306,41 @@ describe('Collections test', () => {
     expect(collectionClearedCallback).not.toBeCalled();
     expect(collectionExtendedCallback).toBeCalled();
   });
+
+  it('Map test', () => {
+    const modelOne = new TestModel({
+      id: 1,
+      name: 'Test model 1',
+    });
+    const modelTwo = new TestModel({
+      id: 2,
+      name: 'Test model 2',
+    });
+    const modelThree = new TestModel({
+      id: 3,
+      name: 'Test model 3',
+    });
+    const modelFour = new TestModel({
+      id: 4,
+      name: 'Test model 4',
+    });
+
+    const collection = new TestDataCollection([
+      modelOne,
+      modelTwo,
+      modelThree,
+      modelFour,
+    ]);
+
+    const newCollection = collection.map<string>((item) => {
+      return item.fields.name;
+    });
+
+    expect(newCollection.toArray()).toStrictEqual([
+      'Test model 1',
+      'Test model 2',
+      'Test model 3',
+      'Test model 4',
+    ]);
+  });
 });

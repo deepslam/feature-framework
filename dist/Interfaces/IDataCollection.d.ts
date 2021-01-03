@@ -10,6 +10,7 @@ export interface IDataCollection<T> {
     filter(callback: (item: T) => boolean): IDataCollection<T>;
     find(callback: (item: T) => boolean): IDataCollection<T>;
     sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T>;
+    map<R>(callback: (item: T) => R): IDataCollection<R>;
     fill(items: T[]): void;
     extend(items: T[]): void;
     toArray(): T[];

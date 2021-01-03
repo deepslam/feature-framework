@@ -104,6 +104,13 @@ class DataCollection {
     updateData(data) {
         data.forEach((item) => this.add(item));
     }
+    map(callback) {
+        const collection = new DataCollection();
+        this.toArray().forEach((item) => {
+            collection.add(callback(item));
+        });
+        return collection;
+    }
 }
 exports.default = DataCollection;
 //# sourceMappingURL=DataCollection.js.map
