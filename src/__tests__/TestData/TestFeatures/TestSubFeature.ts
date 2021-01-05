@@ -1,12 +1,14 @@
 import Feature from '../../../Models/Feature';
 import TestApplication from '../Application/TestApplication';
 import { TestTranslations } from '../TestTranslations/TestTranslations';
+import TestFeature from './TestFeature';
 
 type TestSubFeatureConfig = {
   enabled: boolean;
 };
 
 type TestSubFeatureType = {
+  parentFeature: TestFeature;
   config: TestSubFeatureConfig;
   translations: {
     testTranslations: TestTranslations;

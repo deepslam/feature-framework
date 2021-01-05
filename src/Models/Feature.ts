@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable indent */
 import { v4 as uuid4 } from 'uuid';
 import {
@@ -37,6 +38,7 @@ export default abstract class Feature<
   public dataManagers: F['dataManagers'];
   public features: F['features'];
   public translations: F['translations'];
+  private parentFeature: F['parentFeature'] | null = null;
 
   constructor(settings?: Partial<F>) {
     this.uuid = uuid4();
@@ -55,11 +57,25 @@ export default abstract class Feature<
     }
   }
 
-  public setData(data: F): boolean {
+  setParentFeature(feature: F['parentFeature']) {
+    this.parentFeature = feature;
+  }
+
+  getParentFeature(): F['parentFeature'] | never {
+    if (this.hasParentFeature()) {
+      return this.parentFeature as F['parentFeature'];
+    }
+  }
+
+  hasParentFeature(): boolean {
+    return this.parentFeature instanceof Feature;
+  }
+
+  public setData(data: Omit<F, 'parentFeature'>): boolean {
     return this.setPartialData(data);
   }
 
-  public setPartialData(data: Partial<F>): boolean {
+  public setPartialData(data: Partial<Omit<F, 'parentFeature'>>): boolean {
     if (this.isInitialized()) return false;
 
     if (data.config) {
@@ -121,6 +137,7 @@ export default abstract class Feature<
         Object.keys(this.features!).forEach((key) => {
           if (this.features && (this.features[key] as IFeature<any, any>)) {
             const feature = this.features[key];
+            feature.setParentFeature(this);
             promises.push(feature.init());
           }
         });

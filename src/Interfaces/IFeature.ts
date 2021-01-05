@@ -32,4 +32,8 @@ export interface IFeature<F extends FeatureCommonType, A extends IApp<any>> {
   updateConfig(config: Partial<F['config']>): void;
 
   update(): void;
+
+  setParentFeature(feature: F['parentFeature']): void;
+  getParentFeature(): F['parentFeature'] | never;
+  hasParentFeature(): boolean;
 }

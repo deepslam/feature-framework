@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable consistent-return */
 /* eslint-disable indent */
 const uuid_1 = require("uuid");
 const Features_1 = require("../Events/Features");
@@ -16,6 +17,7 @@ class Feature {
             onError: new Features_1.FeatureErrorEvent(),
             onUpdate: new Features_1.FeatureUpdatedEvent(),
         };
+        this.parentFeature = null;
         this.uuid = uuid_1.v4();
         this.config = {};
         this.events = {};
@@ -29,6 +31,17 @@ class Feature {
         if (settings) {
             this.setPartialData(settings);
         }
+    }
+    setParentFeature(feature) {
+        this.parentFeature = feature;
+    }
+    getParentFeature() {
+        if (this.hasParentFeature()) {
+            return this.parentFeature;
+        }
+    }
+    hasParentFeature() {
+        return this.parentFeature instanceof Feature;
     }
     setData(data) {
         return this.setPartialData(data);
@@ -88,6 +101,7 @@ class Feature {
                 Object.keys(this.features).forEach((key) => {
                     if (this.features && this.features[key]) {
                         const feature = this.features[key];
+                        feature.setParentFeature(this);
                         promises.push(feature.init());
                     }
                 });

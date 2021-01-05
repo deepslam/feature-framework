@@ -67,7 +67,11 @@ describe('Features test', () => {
   });
 
   test('Init test', async (done) => {
-    const app = new TestApplication({ config: { version: '3.4.3' } });
+    const app = new TestApplication({
+      config: {
+        version: '3.4.3',
+      },
+    });
 
     const secondFeature = new TestSubFeature({
       config: {
@@ -220,9 +224,14 @@ describe('Features test', () => {
       }),
     ).toBeTruthy();
 
+    expect(secondFeature.getParentFeature()).toBeUndefined();
+    expect(secondFeature.hasParentFeature()).toBeFalsy();
     await feature.init();
 
     expect(feature.isInitialized()).toBeTruthy();
+    expect(secondFeature.hasParentFeature()).toBeTruthy();
+    expect(secondFeature.getParentFeature()).toBe(feature);
+
     expect(
       feature.setData({
         config: {

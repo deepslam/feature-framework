@@ -13,9 +13,13 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     dataManagers: F['dataManagers'];
     features: F['features'];
     translations: F['translations'];
+    private parentFeature;
     constructor(settings?: Partial<F>);
-    setData(data: F): boolean;
-    setPartialData(data: Partial<F>): boolean;
+    setParentFeature(feature: F['parentFeature']): void;
+    getParentFeature(): F['parentFeature'] | never;
+    hasParentFeature(): boolean;
+    setData(data: Omit<F, 'parentFeature'>): boolean;
+    setPartialData(data: Partial<Omit<F, 'parentFeature'>>): boolean;
     setApp(app: A): boolean;
     getApp(): A;
     hasApp(): boolean;
