@@ -19,4 +19,5 @@ export interface IDataCollection<T> {
         currentPage: number;
         items: T[];
     };
+    getItems(): Map<T, T>;
 }

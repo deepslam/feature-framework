@@ -102,6 +102,11 @@ describe('Collections test', () => {
     expect(collectionClearedCallback).not.toHaveBeenCalled();
     expect(collection.first()).toStrictEqual(modelTwo);
     expect(collection.last()).toStrictEqual(modelOne);
+
+    expect(collection.getItems()).toBeInstanceOf(Map);
+    expect(collection.getItems().has(modelOne)).toBeTruthy();
+    expect(collection.getItems().has(modelTwo)).toBeTruthy();
+    expect(collection.getItems().size).toBe(2);
   });
 
   it('Should be able to get element by index', () => {

@@ -122,6 +122,9 @@ class DataCollection {
         });
         return collection;
     }
+    getItems() {
+        return this.items;
+    }
 }
 exports.default = DataCollection;
 //# sourceMappingURL=DataCollection.js.map

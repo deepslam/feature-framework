@@ -157,4 +157,8 @@ export default class DataCollection<T> implements IDataCollection<T> {
 
     return collection;
   }
+
+  getItems(): Map<T, T> {
+    return this.items;
+  }
 }
