@@ -65,6 +65,45 @@ describe('Collections test', () => {
     expect(collection.contain(modelTwo)).toBeFalsy();
   });
 
+  it('Should be able to add elements in the beginning', () => {
+    const collection = new TestDataCollection();
+    const modelOne = new TestModel({
+      id: 1,
+      name: 'Test model 1',
+    });
+    const modelTwo = new TestModel({
+      id: 2,
+      name: 'Test model 2',
+    });
+    const itemAddedCallback = jest.fn();
+    const collectionClearedCallback = jest.fn();
+    collection.events.onItemAdded.subscribe(itemAddedCallback);
+    collection.events.onCollectionCleared.subscribe(collectionClearedCallback);
+
+    expect(collection.length()).toBe(0);
+    expect(collection.first()).toBeNull();
+    expect(collection.last()).toBeNull();
+
+    collection.add(modelOne, false);
+
+    expect(collection.length()).toBe(1);
+    expect(collection.contain(modelOne)).toBeTruthy();
+    expect(itemAddedCallback).toHaveBeenCalled();
+    expect(collectionClearedCallback).not.toHaveBeenCalled();
+    expect(collection.first()).toStrictEqual(modelOne);
+    expect(collection.last()).toStrictEqual(modelOne);
+
+    collection.add(modelTwo, false);
+
+    expect(collection.length()).toBe(2);
+    expect(collection.contain(modelOne)).toBeTruthy();
+    expect(collection.contain(modelTwo)).toBeTruthy();
+    expect(itemAddedCallback).toHaveBeenCalled();
+    expect(collectionClearedCallback).not.toHaveBeenCalled();
+    expect(collection.first()).toStrictEqual(modelTwo);
+    expect(collection.last()).toStrictEqual(modelOne);
+  });
+
   it('Should be able to get element by index', () => {
     const modelOne = new TestModel({
       id: 1,

@@ -20,8 +20,19 @@ class DataCollection {
             });
         }
     }
-    add(item) {
-        this.items.set(item, item);
+    add(item, addToTheEnd = true) {
+        if (addToTheEnd) {
+            this.items.set(item, item);
+        }
+        else {
+            const newMap = new Map();
+            newMap.set(item, item);
+            this.items.forEach((item, key) => {
+                newMap.set(key, item);
+            });
+            this.items.clear();
+            this.items = newMap;
+        }
         this.events.onItemAdded.fire(item);
     }
     remove(item) {

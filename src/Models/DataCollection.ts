@@ -11,7 +11,7 @@ import {
 import { Constructor, DataCollectionStandardEventsType } from '../Types';
 
 export default class DataCollection<T> implements IDataCollection<T> {
-  public readonly items = new Map();
+  private items = new Map();
   public readonly __class__: Constructor<DataCollection<T>>;
 
   events: DataCollectionStandardEventsType<T> = {
@@ -33,8 +33,18 @@ export default class DataCollection<T> implements IDataCollection<T> {
     }
   }
 
-  add(item: T): void {
-    this.items.set(item, item);
+  add(item: T, addToTheEnd = true): void {
+    if (addToTheEnd) {
+      this.items.set(item, item);
+    } else {
+      const newMap = new Map();
+      newMap.set(item, item);
+      this.items.forEach((item, key) => {
+        newMap.set(key, item);
+      });
+      this.items.clear();
+      this.items = newMap;
+    }
     this.events.onItemAdded.fire(item);
   }
 

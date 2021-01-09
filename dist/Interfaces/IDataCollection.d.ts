@@ -1,8 +1,8 @@
 import { DataCollectionStandardEventsType } from '../Types/EventTypes';
 export interface IDataCollection<T> {
-    items: Map<T, T>;
     events: DataCollectionStandardEventsType<T>;
-    add(item: T): void;
+    add(item: T, addToTheEnd?: boolean): void;
+    getByIndex(index: number): T | null;
     remove(item: T): void;
     contain(item: T): boolean;
     clear(): void;

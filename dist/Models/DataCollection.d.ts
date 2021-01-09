@@ -1,11 +1,11 @@
 import { IDataCollection } from '../Interfaces';
 import { Constructor, DataCollectionStandardEventsType } from '../Types';
 export default class DataCollection<T> implements IDataCollection<T> {
-    readonly items: Map<any, any>;
+    private items;
     readonly __class__: Constructor<DataCollection<T>>;
     events: DataCollectionStandardEventsType<T>;
     constructor(items?: T[]);
-    add(item: T): void;
+    add(item: T, addToTheEnd?: boolean): void;
     remove(item: T): void;
     contain(item: T): boolean;
     clear(): void;
