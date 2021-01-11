@@ -262,6 +262,14 @@ describe('Collections test', () => {
       modelThree,
     ]);
 
+    expect(collection.toArray()).toStrictEqual([
+      modelOne,
+      modelTwo,
+      modelThree,
+    ]);
+
+    expect(collection).toStrictEqual(sortedByIdAscCollection);
+
     const sortedByIdDescCollection = collection.sort((a, b) => {
       if (a.fields.id > b.fields.id) return -1;
       if (a.fields.id < b.fields.id) return 1;
@@ -275,6 +283,15 @@ describe('Collections test', () => {
       modelTwo,
       modelOne,
     ]);
+
+    expect(collection.toArray()).toStrictEqual([
+      modelThree,
+      modelTwo,
+      modelOne,
+    ]);
+
+    expect(collection).toStrictEqual(sortedByIdDescCollection);
+    expect(sortedByIdAscCollection).toStrictEqual(sortedByIdDescCollection);
   });
 
   it('Should be fillable', () => {

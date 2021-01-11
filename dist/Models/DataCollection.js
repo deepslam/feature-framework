@@ -77,9 +77,11 @@ class DataCollection {
         return newCollection;
     }
     sort(callback) {
-        const newCollection = new this.__class__(this.toArray().sort(callback));
-        this.events.onItemsSorted.fire(newCollection);
-        return newCollection;
+        const newData = this.toArray().sort(callback);
+        this.clear();
+        this.fill(newData);
+        this.events.onItemsSorted.fire(this);
+        return this;
     }
     getByIndex(index) {
         if (this.hasIndex(index)) {
