@@ -119,8 +119,8 @@ class DataCollection {
     }
     map(callback) {
         const collection = new DataCollection();
-        this.toArray().forEach((item) => {
-            collection.add(callback(item));
+        this.toArray().forEach((item, index) => {
+            collection.add(callback(item, index));
         });
         return collection;
     }

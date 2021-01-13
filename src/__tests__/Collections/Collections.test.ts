@@ -393,7 +393,10 @@ describe('Collections test', () => {
       modelFour,
     ]);
 
-    const newCollection = collection.map<string>((item) => {
+    let currentIndex = 0;
+    const newCollection = collection.map<string>((item, index: number) => {
+      expect(index).toBe(currentIndex);
+      currentIndex = currentIndex + 1;
       return item.fields.name;
     });
 

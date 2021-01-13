@@ -150,11 +150,11 @@ export default class DataCollection<T> implements IDataCollection<T> {
     data.forEach((item) => this.add(item));
   }
 
-  map<R>(callback: (item: T) => R): IDataCollection<R> {
+  map<R>(callback: (item: T, index: number) => R): IDataCollection<R> {
     const collection = new DataCollection() as IDataCollection<R>;
 
-    this.toArray().forEach((item) => {
-      collection.add(callback(item));
+    this.toArray().forEach((item, index) => {
+      collection.add(callback(item, index));
     });
 
     return collection;

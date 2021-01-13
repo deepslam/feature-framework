@@ -26,6 +26,6 @@ export default class DataCollection<T> implements IDataCollection<T> {
     fill(data: T[]): void;
     extend(data: T[]): void;
     updateData(data: T[]): void;
-    map<R>(callback: (item: T) => R): IDataCollection<R>;
+    map<R>(callback: (item: T, index: number) => R): IDataCollection<R>;
     getItems(): Map<T, T>;
 }
