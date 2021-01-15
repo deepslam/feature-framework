@@ -29,9 +29,9 @@ export default abstract class Model<T = Record<string, unknown>>
     this.update(updatedValues);
   }
 
-  toJSON<J = T>(): J {
-    return ({
+  toJSON(): Partial<Record<keyof T, unknown>> {
+    return {
       ...this.fields,
-    } as unknown) as J;
+    };
   }
 }

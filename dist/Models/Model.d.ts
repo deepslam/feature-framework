@@ -7,5 +7,5 @@ export default abstract class Model<T = Record<string, unknown>> implements IMod
     constructor(options: T);
     update(fields: Partial<T>): void;
     setField<K extends keyof T>(key: K, value: T[K]): void;
-    toJSON<J = T>(): J;
+    toJSON(): Partial<Record<keyof T, unknown>>;
 }
