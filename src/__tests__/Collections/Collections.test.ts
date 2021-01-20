@@ -30,12 +30,14 @@ describe('Collections test', () => {
     });
 
     expect(collection.length()).toBe(0);
+    expect(collection.isEmpty()).toBeTruthy();
     expect(collection.first()).toBeNull();
     expect(collection.last()).toBeNull();
 
     collection.add(modelOne);
 
     expect(collection.length()).toBe(1);
+    expect(collection.isEmpty()).toBeFalsy();
     expect(collection.contain(modelOne)).toBeTruthy();
     expect(itemAddedCallback).toHaveBeenCalled();
     expect(collection.first()).toStrictEqual(modelOne);
@@ -48,6 +50,7 @@ describe('Collections test', () => {
     expect(collection.toArray()).toBeInstanceOf(Array);
     expect(collection.toArray()).toStrictEqual([modelOne, modelTwo]);
     expect(collection.length()).toBe(2);
+    expect(collection.isEmpty()).toBeFalsy();
     expect(collection.first()).toStrictEqual(modelOne);
     expect(collection.last()).toStrictEqual(modelTwo);
 
@@ -61,6 +64,7 @@ describe('Collections test', () => {
 
     expect(collectionClearedCallback).toHaveBeenCalled();
     expect(collection.length()).toBe(0);
+    expect(collection.isEmpty()).toBeTruthy();
     expect(collection.contain(modelOne)).toBeFalsy();
     expect(collection.contain(modelTwo)).toBeFalsy();
   });

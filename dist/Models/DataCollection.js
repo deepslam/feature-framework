@@ -60,6 +60,9 @@ class DataCollection {
     length() {
         return this.items.size;
     }
+    isEmpty() {
+        return this.length() === 0;
+    }
     filter(callback) {
         return this.find(callback);
     }

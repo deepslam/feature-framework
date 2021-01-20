@@ -13,6 +13,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     last(): T | null;
     toArray(): T[];
     length(): number;
+    isEmpty(): boolean;
     filter(callback: (item: T, index: number) => boolean): DataCollection<T>;
     find(callback: (item: T, index: number) => boolean): DataCollection<T>;
     sort(callback: (a: T, b: T) => 0 | 1 | -1): DataCollection<T>;

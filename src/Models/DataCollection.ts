@@ -80,6 +80,10 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return this.items.size;
   }
 
+  isEmpty(): boolean {
+    return this.length() === 0;
+  }
+
   filter(callback: (item: T, index: number) => boolean): DataCollection<T> {
     return this.find(callback);
   }
