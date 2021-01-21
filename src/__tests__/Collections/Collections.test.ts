@@ -1,5 +1,8 @@
 import { DataCollection } from '../../Models';
 import TestDataCollection from '../TestData/DataCollection/TestDataCollection';
+import TestTypedCollection, {
+  TestType,
+} from '../TestData/DataCollection/TestTypedCollection';
 import TestModel from '../TestData/TestModels/TestModel';
 
 describe('Collections test', () => {
@@ -410,5 +413,45 @@ describe('Collections test', () => {
       'Test model 3',
       'Test model 4',
     ]);
+  });
+
+  it('Find by key and value test', () => {
+    const modelOne: TestType = {
+      id: 1,
+      name: 'Test model 1',
+    };
+    const modelTwo = {
+      id: 2,
+      name: 'Test model 2',
+    };
+    const modelThree = {
+      id: 3,
+      name: 'Test model 3',
+    };
+    const modelFour = {
+      id: 4,
+      name: 'Test model 4',
+    };
+
+    const collection = new TestTypedCollection([
+      modelOne,
+      modelTwo,
+      modelThree,
+      modelFour,
+    ]);
+
+    expect(collection.finyByKeyValue('id', 5)).toBeNull();
+    expect(collection.finyByKeyValue('name', 'test')).toBeNull();
+
+    expect(collection.finyByKeyValue('id', 1)).toStrictEqual(modelOne);
+    expect(collection.finyByKeyValue('name', 'test model 1')).toBeNull();
+    expect(collection.finyByKeyValue('name', 'Test model 1')).toStrictEqual(
+      modelOne,
+    );
+
+    expect(collection.finyByKeyValue('id', 4)).toStrictEqual(modelFour);
+    expect(collection.finyByKeyValue('name', 'Test model 4')).toStrictEqual(
+      modelFour,
+    );
   });
 });

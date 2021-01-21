@@ -79,6 +79,12 @@ class DataCollection {
         this.events.onItemsFound.fire(newCollection);
         return newCollection;
     }
+    finyByKeyValue(key, value) {
+        const foundItems = this.find((item) => item[key] && item[key] === value);
+        if (!foundItems.isEmpty())
+            return foundItems.first();
+        return null;
+    }
     sort(callback) {
         const newData = this.toArray().sort(callback);
         this.clear();

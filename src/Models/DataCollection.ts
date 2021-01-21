@@ -102,6 +102,14 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return newCollection;
   }
 
+  finyByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null {
+    const foundItems = this.find((item) => item[key] && item[key] === value);
+
+    if (!foundItems.isEmpty()) return foundItems.first();
+
+    return null;
+  }
+
   sort(callback: (a: T, b: T) => 0 | 1 | -1): DataCollection<T> {
     const newData = this.toArray().sort(callback);
     this.clear();
