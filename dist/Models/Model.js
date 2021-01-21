@@ -7,7 +7,10 @@ class Model {
             updated: new Events_1.ModelWasUpdatedEvent(),
         };
         this.events = {};
-        this.fields = options;
+        this.fields = Object.assign(Object.assign({}, this.defaultFieldValues), options);
+    }
+    get defaultFieldValues() {
+        return {};
     }
     update(fields) {
         this.fields = Object.assign(Object.assign({}, this.fields), fields);

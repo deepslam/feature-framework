@@ -1,4 +1,5 @@
 import TestModel from '../TestData/TestModels/TestModel';
+import TestModelWithDefaultValues from '../TestData/TestModels/TestModelWithDefaultValues';
 
 describe('Application models test', () => {
   it('Should correctly store and read model fields', () => {
@@ -24,5 +25,19 @@ describe('Application models test', () => {
     instance.setField('name', 'eff');
     expect(eventUpdatedFunc).toBeCalledTimes(2);
     expect(eventUpdatedFunc).toHaveBeenCalledWith(instance);
+  });
+
+  it('Test model default values', () => {
+    const instance = new TestModelWithDefaultValues({
+      id: 223,
+      name: 'Susanna',
+    });
+
+    expect(instance.defaultFieldValues).toStrictEqual({
+      occupation: 'web developer',
+    });
+    expect(instance.fields.name).toBe('Susanna');
+    expect(instance.fields.id).toBe(223);
+    expect(instance.fields.occupation).toBe('web developer');
   });
 });

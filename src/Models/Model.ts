@@ -11,7 +11,14 @@ export default abstract class Model<T = Record<string, unknown>>
   events: Record<string, IEvent<unknown>> = {};
 
   constructor(options: T) {
-    this.fields = options;
+    this.fields = {
+      ...this.defaultFieldValues,
+      ...options,
+    };
+  }
+
+  get defaultFieldValues(): Partial<T> {
+    return {};
   }
 
   update(fields: Partial<T>): void {
