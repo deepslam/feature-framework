@@ -60,7 +60,11 @@ describe('Validation models test', () => {
       name: 'Bruce',
       surname: 'Lee',
     });
-    expect(model.validate()).toHaveProperty('is_passed', false);
+
+    const validationResult = model.validate();
+    expect(validationResult).toHaveProperty('is_passed', false);
+    expect(validationResult.errors.all()).toHaveProperty('name');
+    expect(validationResult.errors.all().name).toHaveLength(1);
 
     modelWithDefaultRules.update({
       surname: 'O',
@@ -74,5 +78,35 @@ describe('Validation models test', () => {
     });
 
     expect(model.validate()).toHaveProperty('is_passed', false);
+  });
+
+  it('Should work with custom validation messages', () => {
+    const model = new TestModel({
+      id: 2,
+      name: 'Jacob',
+    });
+
+    model.setValidationRules({
+      id: 'required|digits_between:100,200',
+      name: 'required|min:7',
+      surname: 'required|min:10',
+    });
+    model.setValidationMessages({
+      'digits_between.id': 'Incorrect id because this is the test',
+      'min.name': 'Incorrect name because this is the test',
+      'required.surname': 'Incorrect surname because this is the test',
+    });
+
+    const validationResult = model.validate();
+    expect(validationResult).toHaveProperty('is_passed', false);
+    expect(validationResult.errors.errors['id'][0]).toBe(
+      'Incorrect id because this is the test',
+    );
+    expect(validationResult.errors.errors['name'][0]).toBe(
+      'Incorrect name because this is the test',
+    );
+    expect(validationResult.errors.errors['surname'][0]).toBe(
+      'Incorrect surname because this is the test',
+    );
   });
 });

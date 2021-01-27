@@ -1,4 +1,4 @@
-import Validator from 'validatorjs';
+import Validator, { ErrorMessages } from 'validatorjs';
 import { IEvent, IModel, IDataManager } from '../Interfaces';
 import { ModelWasUpdatedEvent } from '../Events';
 import Event from '../Models/Event';
@@ -17,7 +17,8 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     onLoad: new Event(),
     onSave: new Event(),
   };
-  rules: Record<keyof T, ModelValidationRule> = {} as Record<
+  protected customValidationMessages?: ErrorMessages;
+  protected rules: Record<keyof T, ModelValidationRule> = {} as Record<
     keyof T,
     ModelValidationRule
   >;
@@ -53,8 +54,16 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     return this.rules;
   }
 
+  setValidationMessages(messages: ErrorMessages): void {
+    this.customValidationMessages = messages;
+  }
+
   validate(): ModelValidationResultType {
-    const validation = new Validator(this.fields, this.getValidationRules());
+    const validation = new Validator(
+      this.fields,
+      this.getValidationRules(),
+      this.customValidationMessages,
+    );
     const isValidationPassed = validation.passes() as boolean;
 
     if (isValidationPassed) {
@@ -97,7 +106,9 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
           this.baseEvents.onLoad.fire(false);
           return resolve(false);
         })
-        .catch((e) => reject(e));
+        .catch((e) => {
+          reject(e);
+        });
     });
   }
 

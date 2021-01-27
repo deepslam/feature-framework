@@ -1,5 +1,7 @@
 import TestModel from '../TestData/TestModels/TestModel';
 import TestDataManager from '../TestData/TestDataManager/TestDataManager';
+import FailedDataProvider from '../TestData/TestDataProviders/FailedDataProvider';
+import BrokenDataProvider from '../TestData/TestDataProviders/BrokenDataProvider';
 
 describe('Loading and saving models test', () => {
   it('Should be able to save and load models correctly', async () => {
@@ -34,5 +36,23 @@ describe('Loading and saving models test', () => {
     loadingResult = await restoredModel.load(manager, savingKey);
     expect(restoredModelLoadedEventListener).toBeCalledWith(true);
     expect(restoredModel).toStrictEqual(model);
+  });
+
+  it('Check incorrect scenarious', async () => {
+    const savingKey = 'TestModelSaveKey2';
+    const manager = new TestDataManager();
+    manager.provider = new FailedDataProvider();
+    const model = new TestModel({
+      id: 111,
+      name: 'Sandy',
+    });
+
+    expect(model.load(manager, savingKey)).rejects;
+    expect(model.save(manager, savingKey)).rejects;
+
+    manager.provider = new BrokenDataProvider();
+
+    expect(model.load(manager, savingKey)).rejects;
+    expect(model.save(manager, savingKey)).rejects;
   });
 });

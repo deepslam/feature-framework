@@ -5,6 +5,7 @@ import {
   ModelValidationRule,
   ModelValidationResultType,
 } from '../Types';
+import { ErrorMessages } from 'validatorjs';
 
 export interface IModel<T = Record<string, unknown>> {
   baseEvents: ModelStandardEventsType<T>;
@@ -13,6 +14,7 @@ export interface IModel<T = Record<string, unknown>> {
 
   setValidationRules(rules: Record<keyof T, ModelValidationRule>): void;
   getValidationRules(): Record<keyof T, ModelValidationRule>;
+  setValidationMessages(messages: ErrorMessages): void;
   validate(): ModelValidationResultType;
 
   save(dataManager: IDataManager<IModel<T>>, key: string): Promise<boolean>;

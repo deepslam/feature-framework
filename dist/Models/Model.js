@@ -32,8 +32,11 @@ class Model {
     getValidationRules() {
         return this.rules;
     }
+    setValidationMessages(messages) {
+        this.customValidationMessages = messages;
+    }
     validate() {
-        const validation = new validatorjs_1.default(this.fields, this.getValidationRules());
+        const validation = new validatorjs_1.default(this.fields, this.getValidationRules(), this.customValidationMessages);
         const isValidationPassed = validation.passes();
         if (isValidationPassed) {
             this.baseEvents.onValidationPassed.fire(this.fields);
@@ -73,7 +76,9 @@ class Model {
                 this.baseEvents.onLoad.fire(false);
                 return resolve(false);
             })
-                .catch((e) => reject(e));
+                .catch((e) => {
+                reject(e);
+            });
         });
     }
     setField(key, value) {
