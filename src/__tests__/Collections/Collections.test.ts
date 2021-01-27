@@ -440,17 +440,17 @@ describe('Collections test', () => {
       modelFour,
     ]);
 
-    expect(collection.finyByKeyValue('id', 5)).toBeNull();
-    expect(collection.finyByKeyValue('name', 'test')).toBeNull();
+    expect(collection.findByKeyValue('id', 5)).toBeNull();
+    expect(collection.findByKeyValue('name', 'test')).toBeNull();
 
-    expect(collection.finyByKeyValue('id', 1)).toStrictEqual(modelOne);
-    expect(collection.finyByKeyValue('name', 'test model 1')).toBeNull();
-    expect(collection.finyByKeyValue('name', 'Test model 1')).toStrictEqual(
+    expect(collection.findByKeyValue('id', 1)).toStrictEqual(modelOne);
+    expect(collection.findByKeyValue('name', 'test model 1')).toBeNull();
+    expect(collection.findByKeyValue('name', 'Test model 1')).toStrictEqual(
       modelOne,
     );
 
-    expect(collection.finyByKeyValue('id', 4)).toStrictEqual(modelFour);
-    expect(collection.finyByKeyValue('name', 'Test model 4')).toStrictEqual(
+    expect(collection.findByKeyValue('id', 4)).toStrictEqual(modelFour);
+    expect(collection.findByKeyValue('name', 'Test model 4')).toStrictEqual(
       modelFour,
     );
   });

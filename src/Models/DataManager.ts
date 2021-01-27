@@ -44,7 +44,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
           key,
           result: false,
         });
-        resolve(null);
+        return resolve(null);
       }
 
       try {
@@ -65,7 +65,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
               message: e,
               result: false,
             });
-            reject(e);
+            return reject(e);
           });
       } catch (e) {
         this.events.DataLoadingError.fire({
@@ -73,8 +73,9 @@ export default abstract class DataManager<T> implements IDataManager<T> {
           message: e,
           result: false,
         });
-        reject(e);
+        return reject(e);
       }
+      return null;
     });
   }
 
@@ -105,7 +106,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
             if (result) {
               this.events.DataSaved.fire(key);
             }
-            resolve(result);
+            return resolve(result);
           })
           .catch((e) => {
             this.events.DataSavingError.fire({
@@ -113,7 +114,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
               message: e,
               result: false,
             });
-            reject(e);
+            return reject(e);
           });
       } catch (e) {
         this.events.DataSavingError.fire({
@@ -121,8 +122,9 @@ export default abstract class DataManager<T> implements IDataManager<T> {
           message: e,
           result: false,
         });
-        reject(e);
+        return reject(e);
       }
+      return null;
     });
   }
 
@@ -157,7 +159,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
                 result: false,
               });
             }
-            resolve(result);
+            return resolve(result);
           })
           .catch((e) => {
             this.events.DataRemovingError.fire({
@@ -165,7 +167,7 @@ export default abstract class DataManager<T> implements IDataManager<T> {
               key,
               result: false,
             });
-            reject(e);
+            return reject(e);
           });
       } catch (e) {
         this.events.DataRemovingError.fire({
@@ -173,8 +175,9 @@ export default abstract class DataManager<T> implements IDataManager<T> {
           key,
           result: false,
         });
-        reject(e);
+        return reject(e);
       }
+      return null;
     });
   }
 }

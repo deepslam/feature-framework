@@ -1,3 +1,4 @@
+import { Errors } from 'validatorjs';
 import { IDataCollection, IEvent } from '../Interfaces';
 import { AppErrorEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, AppLoadedEvent, AppLocaleChangedEvent, AppUpdatedEvent, CollectionClearedEvent, CollectionExtendedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
 import { DataManagerErrorsType } from './DataManagerTypes';
@@ -20,7 +21,14 @@ export declare type DataCollectionStandardEventsType<T> = {
     onCollectionFilled: CollectionExtendedEvent<IDataCollection<T>>;
 };
 export declare type ModelStandardEventsType<T> = {
-    updated: ModelWasUpdatedEvent<T>;
+    onUpdate: ModelWasUpdatedEvent<T>;
+    onValidationFailed: IEvent<{
+        errors: Errors;
+        fields: T;
+    }>;
+    onValidationPassed: IEvent<T>;
+    onSave: IEvent<boolean>;
+    onLoad: IEvent<boolean>;
 };
 export declare type DataManagerStandardEventsType<T> = {
     DataLoaded: IEvent<T>;

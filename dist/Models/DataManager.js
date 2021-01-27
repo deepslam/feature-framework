@@ -40,7 +40,7 @@ class DataManager {
                     key,
                     result: false,
                 });
-                resolve(null);
+                return resolve(null);
             }
             try {
                 this.provider
@@ -59,7 +59,7 @@ class DataManager {
                         message: e,
                         result: false,
                     });
-                    reject(e);
+                    return reject(e);
                 });
             }
             catch (e) {
@@ -68,8 +68,9 @@ class DataManager {
                     message: e,
                     result: false,
                 });
-                reject(e);
+                return reject(e);
             }
+            return null;
         });
     }
     save(key, data) {
@@ -98,7 +99,7 @@ class DataManager {
                     if (result) {
                         this.events.DataSaved.fire(key);
                     }
-                    resolve(result);
+                    return resolve(result);
                 })
                     .catch((e) => {
                     this.events.DataSavingError.fire({
@@ -106,7 +107,7 @@ class DataManager {
                         message: e,
                         result: false,
                     });
-                    reject(e);
+                    return reject(e);
                 });
             }
             catch (e) {
@@ -115,8 +116,9 @@ class DataManager {
                     message: e,
                     result: false,
                 });
-                reject(e);
+                return reject(e);
             }
+            return null;
         });
     }
     remove(key) {
@@ -150,7 +152,7 @@ class DataManager {
                             result: false,
                         });
                     }
-                    resolve(result);
+                    return resolve(result);
                 })
                     .catch((e) => {
                     this.events.DataRemovingError.fire({
@@ -158,7 +160,7 @@ class DataManager {
                         key,
                         result: false,
                     });
-                    reject(e);
+                    return reject(e);
                 });
             }
             catch (e) {
@@ -167,8 +169,9 @@ class DataManager {
                     key,
                     result: false,
                 });
-                reject(e);
+                return reject(e);
             }
+            return null;
         });
     }
 }

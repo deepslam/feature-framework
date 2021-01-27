@@ -114,12 +114,12 @@ class Feature {
                     this.baseEvents.initialized.fire(result);
                     this.getApp().baseEvents.onFeatureInitialized.fire(this);
                     this.getApp().info(`Feature '${this.name}' successfully initialized`);
-                    resolve(result);
+                    return resolve(result);
                 })
                     .catch((e) => {
                     this.baseEvents.onError.fire(false);
                     this.getApp().err(`Failed to initialize the feature '${this.name}' (${e})`);
-                    reject(e);
+                    return reject(e);
                 });
             });
         });

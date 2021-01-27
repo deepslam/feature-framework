@@ -10,7 +10,7 @@ export interface IDataCollection<T> {
     isEmpty(): boolean;
     filter(callback: (item: T) => boolean): IDataCollection<T>;
     find(callback: (item: T) => boolean): IDataCollection<T>;
-    finyByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null;
+    findByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null;
     sort(callback: (a: T, b: T) => 0 | 1 | -1): IDataCollection<T>;
     map<R>(callback: (item: T, index: number) => R): IDataCollection<R>;
     fill(items: T[]): void;

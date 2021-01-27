@@ -16,7 +16,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     isEmpty(): boolean;
     filter(callback: (item: T, index: number) => boolean): DataCollection<T>;
     find(callback: (item: T, index: number) => boolean): DataCollection<T>;
-    finyByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null;
+    findByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null;
     sort(callback: (a: T, b: T) => 0 | 1 | -1): DataCollection<T>;
     getByIndex(index: number): T | null;
     hasIndex(index: number): T | null;

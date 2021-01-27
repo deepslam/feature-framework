@@ -2,8 +2,8 @@ import Application from './Application/Application';
 
 export { Application };
 
-export * from './Models';
+export * from './DataProviders';
 export * from './Events';
+export * from './Models';
 export * from './Interfaces';
 export * from './Types';
-export * from './DataProviders';

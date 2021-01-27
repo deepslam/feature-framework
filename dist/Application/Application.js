@@ -109,7 +109,7 @@ class Application {
         return new Promise((resolve, reject) => {
             try {
                 if (this.isInitialized()) {
-                    reject('App is already initialized!');
+                    return reject('App is already initialized!');
                 }
                 if (data) {
                     this.setData(data);
@@ -128,13 +128,11 @@ class Application {
                     if (falseArgs.length === 0) {
                         this.initialized = true;
                         this.baseEvents.onAppLoaded.fire(true);
-                        resolve(true);
+                        return resolve(true);
                     }
-                    else {
-                        this.throwErr('App initialization failed');
-                        this.baseEvents.onAppLoaded.fire(false);
-                        resolve(false);
-                    }
+                    this.throwErr('App initialization failed');
+                    this.baseEvents.onAppLoaded.fire(false);
+                    return resolve(false);
                 })
                     .catch((e) => {
                     this.throwErr(`Unexpected error happened during app initialization (${e})`);
@@ -144,6 +142,7 @@ class Application {
             catch (e) {
                 reject(e);
             }
+            return null;
         });
     }
     initTranslations() {

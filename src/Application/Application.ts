@@ -154,7 +154,7 @@ export default abstract class Application<T extends AppCommonType>
     return new Promise((resolve, reject) => {
       try {
         if (this.isInitialized()) {
-          reject('App is already initialized!');
+          return reject('App is already initialized!');
         }
         if (data) {
           this.setData(data);
@@ -173,12 +173,12 @@ export default abstract class Application<T extends AppCommonType>
             if (falseArgs.length === 0) {
               this.initialized = true;
               this.baseEvents.onAppLoaded.fire(true);
-              resolve(true);
-            } else {
-              this.throwErr('App initialization failed');
-              this.baseEvents.onAppLoaded.fire(false);
-              resolve(false);
+              return resolve(true);
             }
+
+            this.throwErr('App initialization failed');
+            this.baseEvents.onAppLoaded.fire(false);
+            return resolve(false);
           })
           .catch((e) => {
             this.throwErr(
@@ -191,6 +191,7 @@ export default abstract class Application<T extends AppCommonType>
       } catch (e) {
         reject(e);
       }
+      return null;
     });
   }
 

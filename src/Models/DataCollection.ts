@@ -102,7 +102,7 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return newCollection;
   }
 
-  finyByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null {
+  findByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null {
     const foundItems = this.find((item) => item[key] && item[key] === value);
 
     if (!foundItems.isEmpty()) return foundItems.first();

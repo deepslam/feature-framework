@@ -5,28 +5,24 @@ class DefaultDataProvider {
     save(key, saveData) {
         return new Promise((resolve) => {
             data.set(key, saveData);
-            resolve(true);
+            return resolve(true);
         });
     }
     load(key) {
         return new Promise((resolve) => {
             if (data.has(key)) {
-                resolve(data.get(key));
+                return resolve(data.get(key));
             }
-            else {
-                resolve(null);
-            }
+            return resolve(null);
         });
     }
     remove(key) {
         return new Promise((resolve) => {
             if (data.has(key)) {
                 data.delete(key);
-                resolve(true);
+                return resolve(true);
             }
-            else {
-                resolve(false);
-            }
+            return resolve(false);
         });
     }
 }

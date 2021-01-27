@@ -16,9 +16,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Application = void 0;
 const Application_1 = __importDefault(require("./Application/Application"));
 exports.Application = Application_1.default;
-__exportStar(require("./Models"), exports);
+__exportStar(require("./DataProviders"), exports);
 __exportStar(require("./Events"), exports);
+__exportStar(require("./Models"), exports);
 __exportStar(require("./Interfaces"), exports);
 __exportStar(require("./Types"), exports);
-__exportStar(require("./DataProviders"), exports);
 //# sourceMappingURL=index.js.map

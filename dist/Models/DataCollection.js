@@ -79,7 +79,7 @@ class DataCollection {
         this.events.onItemsFound.fire(newCollection);
         return newCollection;
     }
-    finyByKeyValue(key, value) {
+    findByKeyValue(key, value) {
         const foundItems = this.find((item) => item[key] && item[key] === value);
         if (!foundItems.isEmpty())
             return foundItems.first();

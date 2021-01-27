@@ -1,3 +1,4 @@
+import { Errors } from 'validatorjs';
 import { IDataCollection, IEvent } from '../Interfaces';
 import {
   AppErrorEvent,
@@ -38,7 +39,11 @@ export type DataCollectionStandardEventsType<T> = {
 };
 
 export type ModelStandardEventsType<T> = {
-  updated: ModelWasUpdatedEvent<T>;
+  onUpdate: ModelWasUpdatedEvent<T>;
+  onValidationFailed: IEvent<{ errors: Errors; fields: T }>;
+  onValidationPassed: IEvent<T>;
+  onSave: IEvent<boolean>;
+  onLoad: IEvent<boolean>;
 };
 
 export type DataManagerStandardEventsType<T> = {

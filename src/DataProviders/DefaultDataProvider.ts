@@ -6,17 +6,17 @@ export default class DefaultDataProvider implements IDataProvider {
   save(key: string, saveData: unknown): Promise<boolean> {
     return new Promise((resolve) => {
       data.set(key, saveData);
-      resolve(true);
+      return resolve(true);
     });
   }
 
   load(key: string): Promise<unknown | null> {
     return new Promise((resolve) => {
       if (data.has(key)) {
-        resolve(data.get(key));
-      } else {
-        resolve(null);
+        return resolve(data.get(key));
       }
+
+      return resolve(null);
     });
   }
 
@@ -24,10 +24,10 @@ export default class DefaultDataProvider implements IDataProvider {
     return new Promise((resolve) => {
       if (data.has(key)) {
         data.delete(key);
-        resolve(true);
-      } else {
-        resolve(false);
+        return resolve(true);
       }
+
+      return resolve(false);
     });
   }
 }

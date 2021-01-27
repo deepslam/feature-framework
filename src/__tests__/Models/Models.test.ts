@@ -9,7 +9,7 @@ describe('Application models test', () => {
     });
 
     const eventUpdatedFunc = jest.fn();
-    instance.baseEvents.updated.subscribe(eventUpdatedFunc);
+    instance.baseEvents.onUpdate.subscribe(eventUpdatedFunc);
     expect(instance.fields.id).toBe(2);
     expect(instance.fields.name).toBe('test');
 
