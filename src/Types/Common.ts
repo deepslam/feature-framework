@@ -8,4 +8,5 @@ export type ConfigType =
   | number
   | ConfigType[]
   | undefined
+  | any
   | { [name: string]: ConfigType };
