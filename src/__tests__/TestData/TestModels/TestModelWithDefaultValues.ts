@@ -6,9 +6,7 @@ export type TestModelFieldsType = {
   occupation?: string;
 };
 
-export default class TestModelWithDefaultValues extends Model<
-  TestModelFieldsType
-> {
+export default class TestModelWithDefaultValues extends Model<TestModelFieldsType> {
   public readonly events = {};
 
   get defaultFieldValues(): Partial<TestModelFieldsType> {

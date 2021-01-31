@@ -3,7 +3,8 @@ import { FeatureCommonType, FeatureStandardEventsType } from '../Types';
 export default abstract class Feature<F extends FeatureCommonType, A extends IApp<any>> implements IFeature<F, A> {
     abstract name: string;
     readonly uuid: string;
-    readonly baseEvents: FeatureStandardEventsType<F['config']>;
+    readonly baseEvents: FeatureStandardEventsType<IFeature<F, A>>;
+    data: F['data'];
     config: F['config'];
     events: F['events'];
     factories: F['factories'];
@@ -18,8 +19,8 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     setParentFeature(feature: F['parentFeature']): void;
     getParentFeature(): F['parentFeature'] | never;
     hasParentFeature(): boolean;
-    setData(data: Omit<F, 'parentFeature'>): boolean;
-    setPartialData(data: Partial<Omit<F, 'parentFeature'>>): boolean;
+    setInitialData(data: Omit<F, 'parentFeature'>): boolean;
+    setInitialDataPartly(data: Partial<Omit<F, 'parentFeature'>>): boolean;
     setApp(app: A): boolean;
     getApp(): A;
     hasApp(): boolean;
@@ -28,6 +29,7 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     abstract initFeature(): Promise<boolean>;
     cfg(): F['config'];
     updateConfig(newConfig: Partial<F['config']>): void;
+    updateData(data: Partial<F['data']>): void;
     isInitialized(): boolean;
     setInitialized(initialized: boolean): void;
     update(): void;

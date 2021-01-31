@@ -27,6 +27,7 @@ export type AppConfig =
 
 export type AppCommonType = {
   config?: Record<string, ConfigType>;
+  data?: Record<string, any>;
   events?: Record<string, IEvent<unknown>>;
   factories?: Record<string, Factory<any>>;
   views?: Record<string, IView<unknown>>;

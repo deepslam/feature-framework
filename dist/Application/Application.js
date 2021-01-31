@@ -21,6 +21,7 @@ class Application {
             onAppError: new App_1.AppErrorEvent(),
             onAppLocaleChanged: new App_1.AppLocaleChangedEvent(),
             onUpdate: new App_1.AppUpdatedEvent(),
+            onDataUpdated: new App_1.AppDataUpdatedEvent(),
             onFeatureInitialized: new App_1.AppFeatureInitializedEvent(),
             onFeatureUpdated: new App_1.AppFeatureUpdatedEvent(),
         };
@@ -37,6 +38,7 @@ class Application {
         this.factories = {};
         this.views = {};
         this.models = {};
+        this.data = {};
         this.dataManagers = {};
         this.dataProviders = {};
         this.translations = {};
@@ -52,6 +54,9 @@ class Application {
             return false;
         if (data.features) {
             privateFeatures.set(this, data.features);
+        }
+        if (data.data) {
+            this.data = data.data;
         }
         if (data.config) {
             this.config = data.config;
@@ -88,13 +93,17 @@ class Application {
         }
         return true;
     }
+    updateData(data) {
+        this.data = Object.assign(Object.assign({}, this.data), data);
+        this.baseEvents.onDataUpdated.fire(this);
+    }
     updateConfig(config) {
         this.config = Object.assign(Object.assign({}, this.config), config);
-        this.baseEvents.onUpdate.fire(this.config);
+        this.baseEvents.onUpdate.fire(this);
     }
     setConfig(key, value) {
         this.config = Object.assign(Object.assign({}, this.config), { [key]: value });
-        this.baseEvents.onUpdate.fire(this.config);
+        this.baseEvents.onUpdate.fire(this);
     }
     features() {
         if (privateFeatures.has(this)) {
@@ -266,7 +275,7 @@ class Application {
         });
     }
     update() {
-        this.baseEvents.onUpdate.fire(this.config);
+        this.baseEvents.onUpdate.fire(this);
     }
 }
 exports.default = Application;

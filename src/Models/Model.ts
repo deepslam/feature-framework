@@ -83,32 +83,40 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
 
   save(dataManager: IDataManager<IModel<T>>, key: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      dataManager
-        .save(key, this)
-        .then((result) => {
-          this.baseEvents.onSave.fire(result);
-          return resolve(result);
-        })
-        .catch((e) => reject(e));
+      try {
+        dataManager
+          .save(key, this)
+          .then((result) => {
+            this.baseEvents.onSave.fire(result);
+            return resolve(result);
+          })
+          .catch((e) => reject(e));
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 
   load(dataManager: IDataManager<IModel<T>>, key: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      dataManager
-        .load(key)
-        .then((item) => {
-          if (item) {
-            this.baseEvents.onLoad.fire(true);
-            this.update(item.fields);
-            return resolve(true);
-          }
-          this.baseEvents.onLoad.fire(false);
-          return resolve(false);
-        })
-        .catch((e) => {
-          reject(e);
-        });
+      try {
+        dataManager
+          .load(key)
+          .then((item) => {
+            if (item) {
+              this.baseEvents.onLoad.fire(true);
+              this.update(item.fields);
+              return resolve(true);
+            }
+            this.baseEvents.onLoad.fire(false);
+            return resolve(false);
+          })
+          .catch((e) => {
+            reject(e);
+          });
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 

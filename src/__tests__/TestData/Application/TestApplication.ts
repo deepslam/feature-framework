@@ -18,6 +18,10 @@ export type TestApplicationType = {
   config: {
     version: string;
   };
+  data: {
+    purchased: boolean;
+    appName: string;
+  };
   features: {
     TestFeature: TestFeature;
   };

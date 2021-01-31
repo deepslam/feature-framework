@@ -4,6 +4,7 @@ import { Factory, Translations } from '../Models';
 export declare type FeatureCommonType = {
     parentFeature?: IFeature<any, any>;
     config?: Record<string, ConfigType>;
+    data?: Record<string, any>;
     events?: Record<string, IEvent<unknown>>;
     factories?: Record<string, Factory<any>>;
     views?: Record<string, IView<unknown>>;

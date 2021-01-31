@@ -10,9 +10,7 @@ type TestTranslationAnotherType = {
   hello: string;
   anotherOne: string;
 };
-class TestAnotherTranslations extends Translations<
-  TestTranslationAnotherType
-> {}
+class TestAnotherTranslations extends Translations<TestTranslationAnotherType> {}
 
 describe('Translations test', () => {
   it('Test if everything is correct', () => {

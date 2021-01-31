@@ -1,11 +1,12 @@
 import { Errors } from 'validatorjs';
 import { IDataCollection, IEvent } from '../Interfaces';
-import { AppErrorEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, AppLoadedEvent, AppLocaleChangedEvent, AppUpdatedEvent, CollectionClearedEvent, CollectionExtendedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
+import { AppDataUpdatedEvent, AppErrorEvent, AppFeatureInitializedEvent, AppFeatureUpdatedEvent, AppLoadedEvent, AppLocaleChangedEvent, AppUpdatedEvent, CollectionClearedEvent, CollectionExtendedEvent, CollectionItemAddedEvent, CollectionItemRemovedEvent, CollectionItemsFoundEvent, CollectionItemsSortedEvent, ModelWasUpdatedEvent } from '../Events';
 import { DataManagerErrorsType } from './DataManagerTypes';
 export declare type EventPrivateType<T> = WeakMap<IEvent<unknown>, T[]>;
 export declare type AppStandardEventsType<C> = {
     onAppLoaded: AppLoadedEvent;
     onUpdate: AppUpdatedEvent<C>;
+    onDataUpdated: AppDataUpdatedEvent<C>;
     onAppError: AppErrorEvent;
     onAppLocaleChanged: AppLocaleChangedEvent;
     onFeatureInitialized: AppFeatureInitializedEvent;
@@ -42,4 +43,5 @@ export declare type FeatureStandardEventsType<C> = {
     initialized: IEvent<boolean>;
     onError: IEvent<boolean>;
     onUpdate: IEvent<C>;
+    onDataUpdated: IEvent<C>;
 };

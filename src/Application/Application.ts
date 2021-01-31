@@ -18,6 +18,7 @@ import {
   AppLoadedEvent,
   AppLocaleChangedEvent,
   AppUpdatedEvent,
+  AppDataUpdatedEvent,
 } from '../Events/App';
 
 const privateFeatures = new Map();
@@ -29,11 +30,12 @@ export default abstract class Application<T extends AppCommonType>
   public locale: Locale = Locale.en;
   public readonly fallbackLocale: Locale = Locale.en;
   public debug = false;
-  public readonly baseEvents: AppStandardEventsType<T['config']> = {
+  public readonly baseEvents: AppStandardEventsType<IApp<T>> = {
     onAppLoaded: new AppLoadedEvent(),
     onAppError: new AppErrorEvent(),
     onAppLocaleChanged: new AppLocaleChangedEvent(),
     onUpdate: new AppUpdatedEvent(),
+    onDataUpdated: new AppDataUpdatedEvent(),
     onFeatureInitialized: new AppFeatureInitializedEvent(),
     onFeatureUpdated: new AppFeatureUpdatedEvent(),
   };
@@ -42,6 +44,7 @@ export default abstract class Application<T extends AppCommonType>
   public additionalLoggers: ILogger[] = [];
   public additionalErrorHandlers: IErrorHandler[] = [];
   config: T['config'];
+  data: T['data'];
   events: T['events'];
   factories: T['factories'];
   translations: T['translations'];
@@ -69,6 +72,7 @@ export default abstract class Application<T extends AppCommonType>
     this.factories = {};
     this.views = {};
     this.models = {};
+    this.data = {};
     this.dataManagers = {};
     this.dataProviders = {};
     this.translations = {};
@@ -85,6 +89,9 @@ export default abstract class Application<T extends AppCommonType>
     if (this.isInitialized()) return false;
     if (data.features) {
       privateFeatures.set(this, data.features);
+    }
+    if (data.data) {
+      this.data = data.data;
     }
     if (data.config) {
       this.config = data.config;
@@ -122,9 +129,14 @@ export default abstract class Application<T extends AppCommonType>
     return true;
   }
 
+  public updateData(data: Partial<T['data']>): void {
+    this.data = { ...this.data, ...data };
+    this.baseEvents.onDataUpdated.fire(this);
+  }
+
   public updateConfig(config: Partial<T['config']>): void {
     this.config = { ...this.config, ...config };
-    this.baseEvents.onUpdate.fire(this.config);
+    this.baseEvents.onUpdate.fire(this);
   }
 
   public setConfig<K extends keyof T['config']>(
@@ -135,7 +147,7 @@ export default abstract class Application<T extends AppCommonType>
       ...this.config,
       [key]: value,
     };
-    this.baseEvents.onUpdate.fire(this.config);
+    this.baseEvents.onUpdate.fire(this);
   }
 
   features(): T['features'] {
@@ -348,7 +360,7 @@ export default abstract class Application<T extends AppCommonType>
   }
 
   update() {
-    this.baseEvents.onUpdate.fire(this.config);
+    this.baseEvents.onUpdate.fire(this);
   }
 }
 

@@ -15,6 +15,10 @@ type TestFeatureConfig = {
 
 type TestFeatureType = {
   config: TestFeatureConfig;
+  data: {
+    name: string;
+    phone: string;
+  };
   features: {
     SubFeature: TestSubFeature;
   };

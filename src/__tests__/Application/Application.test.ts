@@ -149,6 +149,15 @@ describe('Application init test', () => {
       });
   });
 
+  it('Should update app correctly', () => {
+    const app = new TestApp({ config: { version: '3.4.3' } });
+    const updateEventListener = jest.fn();
+    app.baseEvents.onUpdate.subscribe(updateEventListener);
+    app.update();
+    expect(updateEventListener).toBeCalled();
+    expect(updateEventListener).toBeCalledWith(app);
+  });
+
   it('Application set features without initialization test', () => {
     const app = new TestApp({ config: { version: '3.4.3' } });
     const SubFeature = new TestSubFeature({
@@ -217,12 +226,12 @@ describe('Application init test', () => {
     expect(appUpdatedListener).toBeCalled();
 
     expect(app.config).toStrictEqual({ version: '1.0' });
-    expect(appUpdatedListener).toBeCalledWith({ version: '1.0' });
+    expect(appUpdatedListener).toBeCalledWith(app);
 
     app.setConfig('version', '1.1');
 
     expect(app.config).toStrictEqual({ version: '1.1' });
     expect(appUpdatedListener).toBeCalledTimes(2);
-    expect(appUpdatedListener).toBeCalledWith({ version: '1.1' });
+    expect(appUpdatedListener).toBeCalledWith(app);
   });
 });

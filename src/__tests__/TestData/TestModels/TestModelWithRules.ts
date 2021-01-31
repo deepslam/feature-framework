@@ -6,9 +6,7 @@ export type TestModelWithRulesFieldsType = {
   surname?: string;
 };
 
-export default class TestModelWithRules extends Model<
-  TestModelWithRulesFieldsType
-> {
+export default class TestModelWithRules extends Model<TestModelWithRulesFieldsType> {
   public readonly events = {};
   rules = {
     id: 'required|integer',

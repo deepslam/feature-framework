@@ -66,6 +66,15 @@ describe('Features test', () => {
     });
   });
 
+  test('Feature update test', () => {
+    const feature = new TestFeature();
+    const updateFeatureListener = jest.fn();
+    feature.baseEvents.onUpdate.subscribe(updateFeatureListener);
+    feature.update();
+    expect(updateFeatureListener).toBeCalled();
+    expect(updateFeatureListener).toBeCalledWith(feature);
+  });
+
   test('Init test', async (done) => {
     const app = new TestApplication({
       config: {
@@ -195,10 +204,14 @@ describe('Features test', () => {
 
     expect(feature.isInitialized()).toBeFalsy();
     expect(
-      feature.setData({
+      feature.setInitialData({
         config: {
           name: 'test',
           id: 222,
+        },
+        data: {
+          name: 'Daniel',
+          phone: '+44822332255',
         },
         collections: {
           test: new TestCollection(),
@@ -233,10 +246,14 @@ describe('Features test', () => {
     expect(secondFeature.getParentFeature()).toBe(feature);
 
     expect(
-      feature.setData({
+      feature.setInitialData({
         config: {
           name: 'test2',
           id: 223,
+        },
+        data: {
+          name: 'Daniel',
+          phone: '+44822332255',
         },
         collections: {
           test: new TestCollection(),
@@ -275,7 +292,7 @@ describe('Features test', () => {
 
     expect(feature.isInitialized()).toBeFalsy();
     expect(
-      feature.setPartialData({
+      feature.setInitialDataPartly({
         config: {
           name: 'test',
           id: 222,
@@ -287,7 +304,7 @@ describe('Features test', () => {
 
     expect(feature.isInitialized()).toBeTruthy();
     expect(
-      feature.setPartialData({
+      feature.setInitialDataPartly({
         config: {
           name: 'test2',
           id: 2245,

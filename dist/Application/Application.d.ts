@@ -8,12 +8,13 @@ export default abstract class Application<T extends AppCommonType> implements IA
     locale: Locale;
     readonly fallbackLocale: Locale;
     debug: boolean;
-    readonly baseEvents: AppStandardEventsType<T['config']>;
+    readonly baseEvents: AppStandardEventsType<IApp<T>>;
     readonly logger: ILogger;
     readonly errorHandler: ErrorHandler;
     additionalLoggers: ILogger[];
     additionalErrorHandlers: IErrorHandler[];
     config: T['config'];
+    data: T['data'];
     events: T['events'];
     factories: T['factories'];
     translations: T['translations'];
@@ -24,6 +25,7 @@ export default abstract class Application<T extends AppCommonType> implements IA
     dataProviders: T['dataProviders'];
     constructor(data: Partial<T>, locales?: Partial<DefaultAppConfigType>);
     private setData;
+    updateData(data: Partial<T['data']>): void;
     updateConfig(config: Partial<T['config']>): void;
     setConfig<K extends keyof T['config']>(key: K, value: T['config'][K]): void;
     features(): T['features'];

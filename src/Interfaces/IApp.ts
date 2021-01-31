@@ -13,8 +13,9 @@ export interface IApp<T extends AppCommonType> {
   fallbackLocale: Locale;
 
   config: T['config'];
+  data: T['data'];
   debug: boolean;
-  baseEvents: AppStandardEventsType<T['config']>;
+  baseEvents: AppStandardEventsType<IApp<T>>;
   events?: T['events'];
   factories?: T['factories'];
   translations?: T['translations'];
@@ -39,6 +40,8 @@ export interface IApp<T extends AppCommonType> {
   isLocaleAvailable(locale: Locale): boolean;
 
   updateConfig(config: Partial<T['config']>): void;
+
+  updateData(data: Partial<T['data']>): void;
 
   err(error: string): void;
   throwErr(error: string): void;

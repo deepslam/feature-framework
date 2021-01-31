@@ -16,6 +16,7 @@ class Feature {
             initialized: new Features_1.FeatureInitializedEvent(),
             onError: new Features_1.FeatureErrorEvent(),
             onUpdate: new Features_1.FeatureUpdatedEvent(),
+            onDataUpdated: new Features_1.FeatureDataUpdatedEvent(),
         };
         this.parentFeature = null;
         this.uuid = uuid_1.v4();
@@ -28,8 +29,9 @@ class Feature {
         this.dataManagers = {};
         this.features = {};
         this.translations = {};
+        this.data = {};
         if (settings) {
-            this.setPartialData(settings);
+            this.setInitialDataPartly(settings);
         }
     }
     setParentFeature(feature) {
@@ -43,10 +45,10 @@ class Feature {
     hasParentFeature() {
         return this.parentFeature instanceof Feature;
     }
-    setData(data) {
-        return this.setPartialData(data);
+    setInitialData(data) {
+        return this.setInitialDataPartly(data);
     }
-    setPartialData(data) {
+    setInitialDataPartly(data) {
         if (this.isInitialized())
             return false;
         if (data.config) {
@@ -75,6 +77,9 @@ class Feature {
         }
         if (data.views) {
             this.views = data.views;
+        }
+        if (data.data) {
+            this.data = data.data;
         }
         return true;
     }
@@ -146,8 +151,12 @@ class Feature {
     }
     updateConfig(newConfig) {
         this.config = Object.assign(Object.assign({}, this.config), newConfig);
-        this.baseEvents.onUpdate.fire(this.config);
+        this.baseEvents.onUpdate.fire(this);
         this.getApp().baseEvents.onFeatureUpdated.fire(this);
+    }
+    updateData(data) {
+        this.data = Object.assign(Object.assign({}, this.data), data);
+        this.baseEvents.onDataUpdated.fire(this);
     }
     isInitialized() {
         var _a;
@@ -159,7 +168,7 @@ class Feature {
         });
     }
     update() {
-        this.baseEvents.onUpdate.fire(this.config);
+        this.baseEvents.onUpdate.fire(this);
     }
 }
 exports.default = Feature;

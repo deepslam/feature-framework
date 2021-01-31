@@ -2,6 +2,7 @@
 /* eslint-disable indent */
 import { v4 as uuid4 } from 'uuid';
 import {
+  FeatureDataUpdatedEvent,
   FeatureErrorEvent,
   FeatureInitializedEvent,
   FeatureUpdatedEvent,
@@ -23,12 +24,14 @@ export default abstract class Feature<
 > implements IFeature<F, A> {
   public abstract name: string;
   public readonly uuid: string;
-  public readonly baseEvents: FeatureStandardEventsType<F['config']> = {
+  public readonly baseEvents: FeatureStandardEventsType<IFeature<F, A>> = {
     initialized: new FeatureInitializedEvent(),
     onError: new FeatureErrorEvent(),
     onUpdate: new FeatureUpdatedEvent(),
+    onDataUpdated: new FeatureDataUpdatedEvent(),
   };
 
+  public data: F['data'];
   public config: F['config'];
   public events: F['events'];
   public factories: F['factories'];
@@ -51,9 +54,10 @@ export default abstract class Feature<
     this.dataManagers = {};
     this.features = {};
     this.translations = {};
+    this.data = {};
 
     if (settings) {
-      this.setPartialData(settings);
+      this.setInitialDataPartly(settings);
     }
   }
 
@@ -71,11 +75,13 @@ export default abstract class Feature<
     return this.parentFeature instanceof Feature;
   }
 
-  public setData(data: Omit<F, 'parentFeature'>): boolean {
-    return this.setPartialData(data);
+  public setInitialData(data: Omit<F, 'parentFeature'>): boolean {
+    return this.setInitialDataPartly(data);
   }
 
-  public setPartialData(data: Partial<Omit<F, 'parentFeature'>>): boolean {
+  public setInitialDataPartly(
+    data: Partial<Omit<F, 'parentFeature'>>,
+  ): boolean {
     if (this.isInitialized()) return false;
 
     if (data.config) {
@@ -104,6 +110,9 @@ export default abstract class Feature<
     }
     if (data.views) {
       this.views = data.views;
+    }
+    if (data.data) {
+      this.data = data.data;
     }
 
     return true;
@@ -198,8 +207,16 @@ export default abstract class Feature<
       ...this.config,
       ...newConfig,
     };
-    this.baseEvents.onUpdate.fire(this.config);
+    this.baseEvents.onUpdate.fire(this);
     this.getApp().baseEvents.onFeatureUpdated.fire(this);
+  }
+
+  updateData(data: Partial<F['data']>): void {
+    this.data = {
+      ...this.data,
+      ...data,
+    };
+    this.baseEvents.onDataUpdated.fire(this);
   }
 
   isInitialized(): boolean {
@@ -213,6 +230,6 @@ export default abstract class Feature<
   }
 
   update() {
-    this.baseEvents.onUpdate.fire(this.config);
+    this.baseEvents.onUpdate.fire(this);
   }
 }

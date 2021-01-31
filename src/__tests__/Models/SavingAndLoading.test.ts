@@ -47,12 +47,12 @@ describe('Loading and saving models test', () => {
       name: 'Sandy',
     });
 
-    expect(model.load(manager, savingKey)).rejects;
-    expect(model.save(manager, savingKey)).rejects;
+    expect(() => model.load(manager, savingKey)).rejects;
+    expect(() => model.save(manager, savingKey)).rejects;
 
     manager.provider = new BrokenDataProvider();
 
-    expect(model.load(manager, savingKey)).rejects;
-    expect(model.save(manager, savingKey)).rejects;
+    expect(() => model.load(manager, savingKey)).rejects;
+    expect(() => model.save(manager, savingKey)).rejects;
   });
 });
