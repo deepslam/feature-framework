@@ -16,7 +16,7 @@ class Feature {
             initialized: new Features_1.FeatureInitializedEvent(),
             onError: new Features_1.FeatureErrorEvent(),
             onUpdate: new Features_1.FeatureUpdatedEvent(),
-            onDataUpdated: new Features_1.FeatureDataUpdatedEvent(),
+            onDataUpdate: new Features_1.FeatureDataUpdatedEvent(),
         };
         this.parentFeature = null;
         this.uuid = uuid_1.v4();
@@ -156,7 +156,7 @@ class Feature {
     }
     updateData(data) {
         this.data = Object.assign(Object.assign({}, this.data), data);
-        this.baseEvents.onDataUpdated.fire(this);
+        this.baseEvents.onDataUpdate.fire(this);
     }
     isInitialized() {
         var _a;

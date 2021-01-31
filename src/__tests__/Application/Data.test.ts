@@ -6,7 +6,7 @@ describe('Application data manipulation test', () => {
       config: { version: '3.4.3' },
     });
     const appDataUpdatedEventListener = jest.fn();
-    app.baseEvents.onDataUpdated.subscribe(appDataUpdatedEventListener);
+    app.baseEvents.onDataUpdate.subscribe(appDataUpdatedEventListener);
 
     expect(app.data).toStrictEqual({});
     expect(app.data.appName).toBeUndefined();

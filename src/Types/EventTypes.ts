@@ -23,7 +23,7 @@ export type EventPrivateType<T> = WeakMap<IEvent<unknown>, T[]>;
 export type AppStandardEventsType<C> = {
   onAppLoaded: AppLoadedEvent;
   onUpdate: AppUpdatedEvent<C>;
-  onDataUpdated: AppDataUpdatedEvent<C>;
+  onDataUpdate: AppDataUpdatedEvent<C>;
   onAppError: AppErrorEvent;
   onAppLocaleChanged: AppLocaleChangedEvent;
   onFeatureInitialized: AppFeatureInitializedEvent;
@@ -61,5 +61,5 @@ export type FeatureStandardEventsType<C> = {
   initialized: IEvent<boolean>;
   onError: IEvent<boolean>;
   onUpdate: IEvent<C>;
-  onDataUpdated: IEvent<C>;
+  onDataUpdate: IEvent<C>;
 };

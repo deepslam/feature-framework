@@ -5,7 +5,7 @@ describe('Features data test', () => {
     const feature = new TestFeature();
     const onUpdateDataEventListener = jest.fn();
 
-    feature.baseEvents.onDataUpdated.subscribe(onUpdateDataEventListener);
+    feature.baseEvents.onDataUpdate.subscribe(onUpdateDataEventListener);
 
     expect(feature.data).toStrictEqual({});
     expect(feature.data.name).toBeUndefined();

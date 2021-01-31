@@ -21,7 +21,7 @@ class Application {
             onAppError: new App_1.AppErrorEvent(),
             onAppLocaleChanged: new App_1.AppLocaleChangedEvent(),
             onUpdate: new App_1.AppUpdatedEvent(),
-            onDataUpdated: new App_1.AppDataUpdatedEvent(),
+            onDataUpdate: new App_1.AppDataUpdatedEvent(),
             onFeatureInitialized: new App_1.AppFeatureInitializedEvent(),
             onFeatureUpdated: new App_1.AppFeatureUpdatedEvent(),
         };
@@ -95,7 +95,7 @@ class Application {
     }
     updateData(data) {
         this.data = Object.assign(Object.assign({}, this.data), data);
-        this.baseEvents.onDataUpdated.fire(this);
+        this.baseEvents.onDataUpdate.fire(this);
     }
     updateConfig(config) {
         this.config = Object.assign(Object.assign({}, this.config), config);

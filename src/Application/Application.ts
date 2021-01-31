@@ -35,7 +35,7 @@ export default abstract class Application<T extends AppCommonType>
     onAppError: new AppErrorEvent(),
     onAppLocaleChanged: new AppLocaleChangedEvent(),
     onUpdate: new AppUpdatedEvent(),
-    onDataUpdated: new AppDataUpdatedEvent(),
+    onDataUpdate: new AppDataUpdatedEvent(),
     onFeatureInitialized: new AppFeatureInitializedEvent(),
     onFeatureUpdated: new AppFeatureUpdatedEvent(),
   };
@@ -131,7 +131,7 @@ export default abstract class Application<T extends AppCommonType>
 
   public updateData(data: Partial<T['data']>): void {
     this.data = { ...this.data, ...data };
-    this.baseEvents.onDataUpdated.fire(this);
+    this.baseEvents.onDataUpdate.fire(this);
   }
 
   public updateConfig(config: Partial<T['config']>): void {

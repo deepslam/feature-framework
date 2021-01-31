@@ -28,7 +28,7 @@ export default abstract class Feature<
     initialized: new FeatureInitializedEvent(),
     onError: new FeatureErrorEvent(),
     onUpdate: new FeatureUpdatedEvent(),
-    onDataUpdated: new FeatureDataUpdatedEvent(),
+    onDataUpdate: new FeatureDataUpdatedEvent(),
   };
 
   public data: F['data'];
@@ -216,7 +216,7 @@ export default abstract class Feature<
       ...this.data,
       ...data,
     };
-    this.baseEvents.onDataUpdated.fire(this);
+    this.baseEvents.onDataUpdate.fire(this);
   }
 
   isInitialized(): boolean {
