@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Application = void 0;
+var locale_enum_1 = require("locale-enum");
+Object.defineProperty(exports, "Locale", { enumerable: true, get: function () { return locale_enum_1.Locale; } });
 const Application_1 = __importDefault(require("./Application/Application"));
 exports.Application = Application_1.default;
 __exportStar(require("./DataProviders"), exports);

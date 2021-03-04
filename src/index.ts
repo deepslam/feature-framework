@@ -1,3 +1,4 @@
+export { Locale } from 'locale-enum';
 import Application from './Application/Application';
 
 export { Application };
