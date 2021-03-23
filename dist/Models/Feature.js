@@ -20,7 +20,7 @@ class Feature {
         };
         this.parentFeature = null;
         this.uuid = uuid_1.v4();
-        this.config = {};
+        this.config = Object.assign({}, this.defaultConfig);
         this.events = {};
         this.collections = {};
         this.factories = {};
@@ -29,10 +29,16 @@ class Feature {
         this.dataManagers = {};
         this.features = {};
         this.translations = {};
-        this.data = {};
+        this.data = Object.assign({}, this.defaultData);
         if (settings) {
             this.setInitialDataPartly(settings);
         }
+    }
+    get defaultData() {
+        return {};
+    }
+    get defaultConfig() {
+        return {};
     }
     setParentFeature(feature) {
         this.parentFeature = feature;
@@ -152,7 +158,9 @@ class Feature {
     updateConfig(newConfig) {
         this.config = Object.assign(Object.assign({}, this.config), newConfig);
         this.baseEvents.onUpdate.fire(this);
-        this.getApp().baseEvents.onFeatureUpdated.fire(this);
+        if (this.hasApp()) {
+            this.getApp().baseEvents.onFeatureUpdated.fire(this);
+        }
     }
     updateData(data) {
         this.data = Object.assign(Object.assign({}, this.data), data);

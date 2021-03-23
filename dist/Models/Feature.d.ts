@@ -16,6 +16,8 @@ export default abstract class Feature<F extends FeatureCommonType, A extends IAp
     translations: F['translations'];
     private parentFeature;
     constructor(settings?: Partial<F>);
+    get defaultData(): Partial<F['data']>;
+    get defaultConfig(): Partial<F['config']>;
     setParentFeature(feature: F['parentFeature']): void;
     getParentFeature(): F['parentFeature'] | never;
     hasParentFeature(): boolean;

@@ -1,15 +1,22 @@
 import TestFeature from '../TestData/TestFeatures/TestFeature';
 
 describe('Features data test', () => {
+  test('Default data test', () => {
+    const feature = new TestFeature();
+
+    expect(feature.data).toStrictEqual({
+      phone: '111111',
+    });
+  });
   test('Should update data correctly', () => {
     const feature = new TestFeature();
     const onUpdateDataEventListener = jest.fn();
 
     feature.baseEvents.onDataUpdate.subscribe(onUpdateDataEventListener);
 
-    expect(feature.data).toStrictEqual({});
+    expect(feature.data).toStrictEqual(feature.defaultData);
     expect(feature.data.name).toBeUndefined();
-    expect(feature.data.phone).toBeUndefined();
+    expect(feature.data.phone).not.toBeUndefined();
 
     feature.updateData({
       name: 'John',
@@ -20,6 +27,7 @@ describe('Features data test', () => {
 
     expect(feature.data).toStrictEqual({
       name: 'John',
+      phone: '111111',
     });
 
     feature.updateData({

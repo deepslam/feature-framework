@@ -45,7 +45,9 @@ export default abstract class Feature<
 
   constructor(settings?: Partial<F>) {
     this.uuid = uuid4();
-    this.config = {};
+    this.config = {
+      ...this.defaultConfig,
+    };
     this.events = {};
     this.collections = {};
     this.factories = {};
@@ -54,11 +56,21 @@ export default abstract class Feature<
     this.dataManagers = {};
     this.features = {};
     this.translations = {};
-    this.data = {};
+    this.data = {
+      ...this.defaultData,
+    };
 
     if (settings) {
       this.setInitialDataPartly(settings);
     }
+  }
+
+  get defaultData(): Partial<F['data']> {
+    return {};
+  }
+
+  get defaultConfig(): Partial<F['config']> {
+    return {};
   }
 
   setParentFeature(feature: F['parentFeature']) {
@@ -208,7 +220,9 @@ export default abstract class Feature<
       ...newConfig,
     };
     this.baseEvents.onUpdate.fire(this);
-    this.getApp().baseEvents.onFeatureUpdated.fire(this);
+    if (this.hasApp()) {
+      this.getApp().baseEvents.onFeatureUpdated.fire(this);
+    }
   }
 
   updateData(data: Partial<F['data']>): void {

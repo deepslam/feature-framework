@@ -13,12 +13,14 @@ type TestFeatureConfig = {
   id: number;
 };
 
+type TestFeatureData = {
+  name: string;
+  phone: string;
+};
+
 type TestFeatureType = {
   config: TestFeatureConfig;
-  data: {
-    name: string;
-    phone: string;
-  };
+  data: TestFeatureData;
   features: {
     SubFeature: TestSubFeature;
   };
@@ -43,6 +45,18 @@ export default class TestFeature
   name = 'TestFeature';
   components() {
     return {};
+  }
+
+  get defaultData(): Partial<TestFeatureData> {
+    return {
+      phone: '111111',
+    };
+  }
+
+  get defaultConfig(): Partial<TestFeatureConfig> {
+    return {
+      name: 'default_name',
+    };
   }
 
   initFeature() {
