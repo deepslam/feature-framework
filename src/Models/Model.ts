@@ -3,6 +3,7 @@ import { IEvent, IModel, IDataManager } from '../Interfaces';
 import { ModelWasUpdatedEvent } from '../Events';
 import Event from '../Models/Event';
 import {
+  Constructor,
   ModelStandardEventsType,
   ModelValidationRule,
   ModelValidationResultType,
@@ -23,8 +24,10 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     ModelValidationRule
   >;
   events: Record<string, IEvent<unknown>> = {};
+  public readonly __class__: Constructor<this>;
 
   constructor(options: T) {
+    this.__class__ = new.target as Constructor<this>;
     this.fields = {
       ...this.defaultFieldValues,
       ...options,
@@ -131,5 +134,10 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     return {
       ...this.fields,
     };
+  }
+
+  clone(): this {
+    const clonedObject = new this.__class__(JSON.parse(JSON.stringify(this)));
+    return clonedObject;
   }
 }

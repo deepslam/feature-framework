@@ -17,6 +17,7 @@ class Model {
         };
         this.rules = {};
         this.events = {};
+        this.__class__ = (new.target);
         this.fields = Object.assign(Object.assign({}, this.defaultFieldValues), options);
     }
     get defaultFieldValues() {
@@ -99,6 +100,10 @@ class Model {
     }
     toJSON() {
         return Object.assign({}, this.fields);
+    }
+    clone() {
+        const clonedObject = new this.__class__(JSON.parse(JSON.stringify(this)));
+        return clonedObject;
     }
 }
 exports.default = Model;
