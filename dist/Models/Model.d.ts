@@ -14,7 +14,8 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     setValidationRules(rules: Record<keyof T, ModelValidationRule>): void;
     getValidationRules(): Record<keyof T, ModelValidationRule>;
     setValidationMessages(messages: ErrorMessages): void;
-    validate(): ModelValidationResultType;
+    validate(triggerEvents?: boolean): ModelValidationResultType;
+    isValid(): boolean;
     save(dataManager: IDataManager<IModel<T>>, key: string): Promise<boolean>;
     load(dataManager: IDataManager<IModel<T>>, key: string): Promise<boolean>;
     setField<K extends keyof T>(key: K, value: T[K]): void;

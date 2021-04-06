@@ -109,4 +109,82 @@ describe('Validation models test', () => {
       'Incorrect surname because this is the test',
     );
   });
+
+  it('isValid function should work properly', () => {
+    const model = new TestModel({
+      id: 2,
+      name: 'Jacob',
+    });
+
+    const validationFailedListener = jest.fn();
+    model.baseEvents.onValidationFailed.subscribe(validationFailedListener);
+
+    const validationPassedListener = jest.fn();
+    model.baseEvents.onValidationPassed.subscribe(validationPassedListener);
+
+    model.setValidationRules({
+      id: 'required',
+      name: 'required|min:3',
+      surname: 'required|min:7',
+    });
+
+    expect(model.isValid()).toBeFalsy();
+    expect(validationFailedListener).not.toHaveBeenCalled();
+    expect(validationPassedListener).not.toHaveBeenCalled();
+
+    model.update({
+      id: 101,
+      surname: 'Wolfkerson',
+    });
+
+    expect(model.isValid()).toBeTruthy();
+    expect(validationFailedListener).not.toHaveBeenCalled();
+    expect(validationPassedListener).not.toHaveBeenCalled();
+  });
+
+  it('isValid function should work properly', () => {
+    const model = new TestModel({
+      id: 2,
+      name: 'Jacob',
+    });
+
+    model.setValidationRules({
+      id: 'required',
+      name: 'required|min:3',
+      surname: 'required|min:7',
+    });
+
+    const validationFailedListener = jest.fn();
+    model.baseEvents.onValidationFailed.subscribe(validationFailedListener);
+
+    const validationPassedListener = jest.fn();
+    model.baseEvents.onValidationPassed.subscribe(validationPassedListener);
+
+    model.validate(false);
+
+    expect(validationFailedListener).not.toHaveBeenCalled();
+    expect(validationPassedListener).not.toHaveBeenCalled();
+
+    model.validate(true);
+
+    expect(validationFailedListener).toHaveBeenCalled();
+    expect(validationPassedListener).not.toHaveBeenCalled();
+
+    model.update({
+      id: 101,
+      surname: 'Wolfkerson',
+    });
+
+    jest.resetAllMocks();
+
+    model.validate(false);
+
+    expect(validationFailedListener).not.toHaveBeenCalled();
+    expect(validationPassedListener).not.toHaveBeenCalled();
+
+    model.validate(true);
+
+    expect(validationFailedListener).not.toHaveBeenCalled();
+    expect(validationPassedListener).toHaveBeenCalled();
+  });
 });

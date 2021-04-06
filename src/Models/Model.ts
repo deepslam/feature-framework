@@ -61,7 +61,7 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     this.customValidationMessages = messages;
   }
 
-  validate(): ModelValidationResultType {
+  validate(triggerEvents = true): ModelValidationResultType {
     const validation = new Validator(
       this.fields,
       this.getValidationRules(),
@@ -69,19 +69,25 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     );
     const isValidationPassed = validation.passes() as boolean;
 
-    if (isValidationPassed) {
-      this.baseEvents.onValidationPassed.fire(this.fields);
-    } else {
-      this.baseEvents.onValidationFailed.fire({
-        errors: validation.errors,
-        fields: this.fields,
-      });
+    if (triggerEvents) {
+      if (isValidationPassed) {
+        this.baseEvents.onValidationPassed.fire(this.fields);
+      } else {
+        this.baseEvents.onValidationFailed.fire({
+          errors: validation.errors,
+          fields: this.fields,
+        });
+      }
     }
 
     return {
       is_passed: isValidationPassed,
       errors: validation.errors,
     };
+  }
+
+  isValid(): boolean {
+    return this.validate(false).is_passed;
   }
 
   save(dataManager: IDataManager<IModel<T>>, key: string): Promise<boolean> {

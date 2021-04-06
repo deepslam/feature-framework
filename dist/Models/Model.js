@@ -36,22 +36,27 @@ class Model {
     setValidationMessages(messages) {
         this.customValidationMessages = messages;
     }
-    validate() {
+    validate(triggerEvents = true) {
         const validation = new validatorjs_1.default(this.fields, this.getValidationRules(), this.customValidationMessages);
         const isValidationPassed = validation.passes();
-        if (isValidationPassed) {
-            this.baseEvents.onValidationPassed.fire(this.fields);
-        }
-        else {
-            this.baseEvents.onValidationFailed.fire({
-                errors: validation.errors,
-                fields: this.fields,
-            });
+        if (triggerEvents) {
+            if (isValidationPassed) {
+                this.baseEvents.onValidationPassed.fire(this.fields);
+            }
+            else {
+                this.baseEvents.onValidationFailed.fire({
+                    errors: validation.errors,
+                    fields: this.fields,
+                });
+            }
         }
         return {
             is_passed: isValidationPassed,
             errors: validation.errors,
         };
+    }
+    isValid() {
+        return this.validate(false).is_passed;
     }
     save(dataManager, key) {
         return new Promise((resolve, reject) => {
