@@ -37,7 +37,7 @@ class Model {
         this.customValidationMessages = messages;
     }
     validate(triggerEvents = true) {
-        const validation = new validatorjs_1.default(this.fields, this.getValidationRules(), this.customValidationMessages);
+        const validation = new validatorjs_1.default(this.fields, this.getValidationRules(), this.customValidationMessages || {});
         const isValidationPassed = validation.passes();
         if (triggerEvents) {
             if (isValidationPassed) {

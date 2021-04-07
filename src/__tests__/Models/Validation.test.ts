@@ -122,6 +122,8 @@ describe('Validation models test', () => {
     const validationPassedListener = jest.fn();
     model.baseEvents.onValidationPassed.subscribe(validationPassedListener);
 
+    expect(model.isValid()).toBeTruthy();
+
     model.setValidationRules({
       id: 'required',
       name: 'required|min:3',
@@ -142,7 +144,7 @@ describe('Validation models test', () => {
     expect(validationPassedListener).not.toHaveBeenCalled();
   });
 
-  it('isValid function should work properly', () => {
+  it('validate function events should work properly', () => {
     const model = new TestModel({
       id: 2,
       name: 'Jacob',

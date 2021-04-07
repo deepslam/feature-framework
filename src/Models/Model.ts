@@ -65,7 +65,7 @@ export default class Model<T = Record<string, unknown>> implements IModel<T> {
     const validation = new Validator(
       this.fields,
       this.getValidationRules(),
-      this.customValidationMessages,
+      this.customValidationMessages || {},
     );
     const isValidationPassed = validation.passes() as boolean;
 
