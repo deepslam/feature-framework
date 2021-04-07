@@ -79,6 +79,11 @@ class DataCollection {
         this.events.onItemsFound.fire(newCollection);
         return newCollection;
     }
+    forEach(callback) {
+        this.items.forEach((item) => {
+            callback(item);
+        });
+    }
     findByKeyValue(key, value) {
         const foundItems = this.find((item) => item[key] && item[key] === value);
         if (!foundItems.isEmpty())

@@ -102,6 +102,12 @@ export default class DataCollection<T> implements IDataCollection<T> {
     return newCollection;
   }
 
+  forEach(callback: (item: T) => void): void {
+    this.items.forEach((item) => {
+      callback(item);
+    });
+  }
+
   findByKeyValue<K extends keyof T>(key: K, value: T[K]): T | null {
     const foundItems = this.find((item) => item[key] && item[key] === value);
 

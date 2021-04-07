@@ -142,6 +142,13 @@ describe('Validation models test', () => {
     expect(model.isValid()).toBeTruthy();
     expect(validationFailedListener).not.toHaveBeenCalled();
     expect(validationPassedListener).not.toHaveBeenCalled();
+
+    const modelWithDefaultRules = new TestModelWithRules({
+      id: 2,
+      name: 'A',
+    });
+
+    expect(modelWithDefaultRules.isValid()).toBeFalsy();
   });
 
   it('validate function events should work properly', () => {

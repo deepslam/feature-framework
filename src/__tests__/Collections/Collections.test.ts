@@ -232,6 +232,16 @@ describe('Collections test', () => {
     }).toThrowError();
   });
 
+  it('Should be able to iterate through collection with forEach function', () => {
+    const collection = new DataCollection<string>(['1', '2', '3']);
+    const array: string[] = [];
+    collection.forEach((item) => {
+      array.push(`element_${item}`);
+    });
+
+    expect(array).toStrictEqual(['element_1', 'element_2', 'element_3']);
+  });
+
   it('Should be able to sort results', () => {
     const modelOne = new TestModel({
       id: 1,

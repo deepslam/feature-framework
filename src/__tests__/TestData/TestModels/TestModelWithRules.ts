@@ -8,7 +8,7 @@ export type TestModelWithRulesFieldsType = {
 
 export default class TestModelWithRules extends Model<TestModelWithRulesFieldsType> {
   public readonly events = {};
-  rules = {
+  public rules = {
     id: 'required|integer',
     name: 'required|min:3',
     surname: 'min:5',
